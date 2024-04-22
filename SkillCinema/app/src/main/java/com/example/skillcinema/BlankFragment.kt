@@ -26,7 +26,18 @@ class BlankFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         arguments?.takeIf { it.containsKey(PAGE_NUMBER) }?.apply {
             when (getInt(PAGE_NUMBER)) {
-
+                1 -> {
+                    binding.introductionPicture.setImageResource(R.drawable.firstscreen)
+                    binding.explainText.text = getText(R.string.explanation_Page1)
+                }
+                2 -> {
+                    binding.introductionPicture.setImageResource(R.drawable.secondscreen)
+                    binding.explainText.text = getText(R.string.explanation_Page2)
+                }
+                3 -> {
+                    binding.introductionPicture.setImageResource(R.drawable.thirdscreen)
+                    binding.explainText.text = getText(R.string.explanation_Page3)
+                }
             }
         }
     }

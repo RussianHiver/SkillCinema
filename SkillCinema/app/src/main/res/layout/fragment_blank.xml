@@ -7,26 +7,28 @@
     android:layout_height="match_parent"
     tools:context=".BlankFragment">
 
-    <RelativeLayout
-        android:id="@+id/nameAndSkip"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+    <LinearLayout
+        android:id="@+id/container"
         android:layout_width="0dp"
-        android:layout_height="60dp">
+        android:orientation="horizontal"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/introductionPicture"
+        app:layout_constraintVertical_bias="0">
+
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/appName"
             android:text="@string/appName"
-            android:layout_alignParentStart="true"
             android:textAlignment="center"
-            android:padding="15dp"
-            android:paddingStart="15dp"
-            android:textSize="25sp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentBottom="true"
+            android:padding="25dp"
+            android:textSize="30sp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            app:layout_constraintHorizontal_bias="0"/>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/skipButton"
@@ -35,13 +37,15 @@
             android:textSize="20sp"
             android:background="@null"
             android:alpha="0.4"
-            android:padding="15dp"
+            android:padding="25dp"
+            android:layout_margin="5dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentBottom="true"/>
-    </RelativeLayout>
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+
+
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/introductionPicture"
@@ -51,15 +55,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@tools:sample/backgrounds/scenic" />
+        android:src="@drawable/firstscreen"/>
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/explainText"
-        android:layout_width="0dp"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:text="@string/explanation_Page1"
         android:textSize="40sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/introductionPicture" />

@@ -2,6 +2,8 @@
     <string name="app_name">SkillCinema</string>
     <string name="number">1</string>
     <string name="skipButton">Пропустить</string>
-    <string name="appName">Skill Cinema</string>
-    <string name="explanation_Page1">Делитесь с друзьями</string>
+    <string name="appName">Skillcinema</string>
+    <string name="explanation_Page1">Узнавай о премьерах</string>
+    <string name="explanation_Page2">Создавай коллекции</string>
+    <string name="explanation_Page3">Делись с друзьями</string>
 </resources>
