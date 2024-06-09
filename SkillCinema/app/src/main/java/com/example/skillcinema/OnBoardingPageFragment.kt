@@ -5,20 +5,25 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.skillcinema.databinding.FragmentBlankBinding
+import com.example.skillcinema.databinding.FragmentOnboardingPageBinding
 
 
 const val PAGE_NUMBER = "number"
+
+private const val PAGE_ONE = 1
+private const val PAGE_TWO = 2
+private const val PAGE_THREE = 3
+
 class BlankFragment : Fragment() {
 
-    private var _binding: FragmentBlankBinding? = null
+    private var _binding: FragmentOnboardingPageBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentBlankBinding.inflate(inflater, container, false)
+        _binding = FragmentOnboardingPageBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -26,15 +31,15 @@ class BlankFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         arguments?.takeIf { it.containsKey(PAGE_NUMBER) }?.apply {
             when (getInt(PAGE_NUMBER)) {
-                1 -> {
+                PAGE_ONE -> {
                     binding.introductionPicture.setImageResource(R.drawable.firstscreen)
                     binding.explainText.text = getText(R.string.explanation_Page1)
                 }
-                2 -> {
+                PAGE_TWO -> {
                     binding.introductionPicture.setImageResource(R.drawable.secondscreen)
                     binding.explainText.text = getText(R.string.explanation_Page2)
                 }
-                3 -> {
+                PAGE_THREE -> {
                     binding.introductionPicture.setImageResource(R.drawable.thirdscreen)
                     binding.explainText.text = getText(R.string.explanation_Page3)
                 }
@@ -42,9 +47,8 @@ class BlankFragment : Fragment() {
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
         _binding = null
     }
-
 }
