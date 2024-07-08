@@ -6,6 +6,14 @@
     <string name="explanation_Page1">Узнавай о премьерах</string>
     <string name="explanation_Page2">Создавай коллекции</string>
     <string name="explanation_Page3">Делись с друзьями</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- Names for recyclerview in homepage -->
+    <string name="preview">Премьеры</string>
+    <string name="popular">Популярное</string>
+    <string name="usaAction">Боевики США</string>
+    <string name="topMovies">Топ-250</string>
+    <string name="frenchDramas">Драмы Франции</string>
+    <string name="tvSeries">Сериалы</string>
+    <string name="all">Все</string>
 </resources>
