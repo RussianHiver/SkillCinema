@@ -18,7 +18,11 @@
         android:id="@+id/homepageFragment"
         android:name="com.example.skillcinema.HomepageFragment"
         android:label="fragment_homepage"
-        tools:layout="@layout/fragment_homepage" />
+        tools:layout="@layout/fragment_homepage" >
+        <action
+            android:id="@+id/action_homepageFragment_to_listOfEverythingFragment"
+            app:destination="@id/listOfEverythingFragment" />
+    </fragment>
     <fragment
         android:id="@+id/searchPageFragment"
         android:name="com.example.skillcinema.SearchPageFragment"
@@ -29,4 +33,9 @@
         android:name="com.example.skillcinema.ProfilePageFragment"
         android:label="fragment_profile_page"
         tools:layout="@layout/fragment_profile_page" />
+    <fragment
+        android:id="@+id/listOfEverythingFragment"
+        android:name="com.example.skillcinema.ListOfEverythingFragment"
+        android:label="fragment_list_of_everything"
+        tools:layout="@layout/fragment_list_of_everything" />
 </navigation>

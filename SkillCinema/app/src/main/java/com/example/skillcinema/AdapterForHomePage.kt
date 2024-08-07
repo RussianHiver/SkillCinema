@@ -1,38 +1,52 @@
 package com.example.skillcinema
 
-import android.graphics.Color
-import android.opengl.Visibility
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.bumptech.glide.Glide
 import com.example.skillcinema.data.Filtered
 import com.example.skillcinema.data.Popular
 import com.example.skillcinema.data.Premieres
 import com.example.skillcinema.databinding.MoviePreviewViewBinding
+import com.example.skillcinema.databinding.ShowEverythingButtonViewBinding
 
-class Adapter() : RecyclerView.Adapter<MovieViewHolder>() {
+class AdapterForHomePage(
+    val onClick:() -> Unit
+) : RecyclerView.Adapter<ViewHolder>() {
 
-    var listPremier: List<Premieres.Item> = emptyList()
-    var listPopular: List<Popular.Item> = emptyList()
-    var listFiltered: List<Filtered.Item> = emptyList()
+    private var listPremier: List<Premieres.Item> = emptyList()
+    private var listPopular: List<Popular.Item> = emptyList()
+    private var listFiltered: List<Filtered.Item> = emptyList()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
-        val binding = MoviePreviewViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return MovieViewHolder(binding)
+    private var numberOfItems = 11
+    fun checkTheNumberOfItems(number: Int) {
+        numberOfItems = if (number < 20) number else 21
     }
 
-    override fun getItemCount(): Int  = 9
+    override fun getItemViewType(position: Int): Int {
+        return if (position == 20) 0 else 1
+    }
 
-    override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
-        if (position == 8) {
-            holder.binding.poster.visibility = View.GONE
-            holder.binding.movieTitle.visibility = View.GONE
-            holder.binding.movieGenre.visibility = View.GONE
-        } else {
+        return when (viewType) {
+            1 -> {
+                val movieBinding = MoviePreviewViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                MovieViewHolder(movieBinding)
+            }
+            else -> {
+                val buttonBinding = ShowEverythingButtonViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                ButtonViewHolder(buttonBinding)
+            }
+        }
+    }
+
+    override fun getItemCount(): Int  = numberOfItems
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+
+        if (holder is MovieViewHolder) {
             when {
                 listPremier.isNotEmpty() -> {
                     val item = listPremier.getOrNull(position)
@@ -73,6 +87,12 @@ class Adapter() : RecyclerView.Adapter<MovieViewHolder>() {
                 }
             }
         }
+
+        if (holder is ButtonViewHolder) {
+            holder.binding.root.setOnClickListener {
+                onClick()
+            }
+        }
     }
 
 
@@ -90,4 +110,6 @@ class Adapter() : RecyclerView.Adapter<MovieViewHolder>() {
 
 }
 
-class MovieViewHolder (val binding: MoviePreviewViewBinding) : RecyclerView.ViewHolder(binding.root)
+class MovieViewHolder (val binding: MoviePreviewViewBinding) : ViewHolder(binding.root)
+
+class ButtonViewHolder (val binding: ShowEverythingButtonViewBinding) : ViewHolder(binding.root)
