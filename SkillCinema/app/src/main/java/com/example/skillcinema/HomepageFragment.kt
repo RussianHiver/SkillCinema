@@ -43,6 +43,7 @@ class HomepageFragment : Fragment() {
 
             val popular = RetrofitInstance.searchDataApi.getPopular().items
             val popularAdapterForHomePage = AdapterForHomePage() {openAllList()}
+            popularAdapterForHomePage.checkTheNumberOfItems(popular.size)
             popularAdapterForHomePage.addPopular(popular)
             binding.recyclerPopular.adapter = popularAdapterForHomePage
             binding.allButtonPopular.setOnClickListener {
@@ -51,6 +52,7 @@ class HomepageFragment : Fragment() {
 
             val usaAction = RetrofitInstance.searchDataApi.getFilteredMovies().items
             val usaActionAdapterForHomePage = AdapterForHomePage() {openAllList()}
+            usaActionAdapterForHomePage.checkTheNumberOfItems(usaAction.size)
             usaActionAdapterForHomePage.addFiltered(usaAction)
             binding.recyclerUsaAction.adapter = usaActionAdapterForHomePage
             binding.allButtonUsaAction.setOnClickListener {
@@ -71,6 +73,7 @@ class HomepageFragment : Fragment() {
             ), countries = arrayOf(getCountryByFilter("Франция"))
             ).items
             val frenchDramasAdapterForHomePage = AdapterForHomePage() {openAllList()}
+            frenchDramasAdapterForHomePage.checkTheNumberOfItems(frenchDramas.size)
             frenchDramasAdapterForHomePage.addFiltered(frenchDramas)
             binding.recyclerFrenchDramas.adapter = frenchDramasAdapterForHomePage
             binding.allButtonFrenchDramas.setOnClickListener {

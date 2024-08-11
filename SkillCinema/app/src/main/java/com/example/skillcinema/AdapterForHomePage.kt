@@ -19,7 +19,7 @@ class AdapterForHomePage(
     private var listPopular: List<Popular.Item> = emptyList()
     private var listFiltered: List<Filtered.Item> = emptyList()
 
-    private var numberOfItems = 11
+    private var numberOfItems = 15
     fun checkTheNumberOfItems(number: Int) {
         numberOfItems = if (number < 20) number else 21
     }
