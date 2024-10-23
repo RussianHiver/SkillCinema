@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/film_page_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:context=".FilmPage">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/film_photo"
+            android:layout_width="0dp"
+            android:layout_height="400dp"
+            android:scaleType="fitXY"
+            app:layout_constraintBottom_toTopOf="@id/film_premise"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@tools:sample/avatars" />
+
+        <LinearLayout
+            android:id="@+id/film_info"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="@id/film_photo"
+            app:layout_constraintEnd_toEndOf="@id/film_photo"
+            app:layout_constraintStart_toStartOf="@+id/film_photo"
+            app:layout_constraintTop_toTopOf="@+id/film_photo"
+            app:layout_constraintVertical_bias="0.9">
+
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/film_rating_and_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textSize="20sp"
+                android:textColor="@color/white"
+                tools:text="@tools:sample/lorem" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/film_year_and_genre"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textSize="20sp"
+                android:textColor="@color/white"
+                tools:text="@tools:sample/lorem" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/film_country_length_and_age"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textSize="20sp"
+                android:textColor="@color/white"
+                app:layout_constraintVertical_bias="0"
+                tools:text="@tools:sample/lorem" />
+
+        </LinearLayout>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/film_premise"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:maxLines="200"
+            android:ellipsize="end"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            android:padding="20dp"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@id/film_actor_header"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/film_photo" />
+
+        <LinearLayout
+            android:id="@+id/film_actor_header"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toTopOf="@id/recycler_film_actors"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/film_premise"
+            app:layout_constraintVertical_bias="0">
+
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/allActorsTitle"
+                android:layout_width="210dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:text="@string/filmActorList"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintHorizontal_bias="0" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/allActorsButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="100dp"
+                android:background="@null"
+                android:text="@string/all"
+                android:textAllCaps="false"
+                android:textColor="#3F51B5"
+                android:textSize="15sp" />
+
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_film_actors"
+            android:layout_width="0dp"
+            android:layout_height="200dp"
+            android:orientation="horizontal"
+            android:paddingStart="28dp"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:spanCount="3"
+            app:layout_constraintBottom_toTopOf="@id/film_staff_header"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/film_actor_header" />
+
+        <LinearLayout
+            android:id="@+id/film_staff_header"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toTopOf="@id/recyclerStaff"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/recycler_film_actors"
+            app:layout_constraintVertical_bias="0">
+
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/filmStaffTitle"
+                android:layout_width="230dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:text="@string/filmStaffList"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintHorizontal_bias="0" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/filmStaffButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="80dp"
+                android:background="@null"
+                android:text="@string/all"
+                android:textAllCaps="false"
+                android:textColor="#3F51B5"
+                android:textSize="15sp" />
+
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerStaff"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingStart="28dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toTopOf="@+id/film_gallery_header"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/film_staff_header" />
+
+        <LinearLayout
+            android:id="@+id/film_gallery_header"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toTopOf="@id/recyclerGallery"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/recyclerStaff"
+            app:layout_constraintVertical_bias="0">
+
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/filmGalleryTitle"
+                android:layout_width="230dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:text="@string/gallery"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintHorizontal_bias="0" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/filmGalleryButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="80dp"
+                android:background="@null"
+                android:text="@string/all"
+                android:textAllCaps="false"
+                android:textColor="#3F51B5"
+                android:textSize="15sp" />
+
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerGallery"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingStart="28dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/film_gallery_header" />
+
+        <LinearLayout
+            android:id="@+id/similar_films_header"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toTopOf="@id/recycler_similar_films"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/recyclerGallery"
+            app:layout_constraintVertical_bias="0">
+
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/similarFilmsTitle"
+                android:layout_width="230dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:text="@string/similarFilms"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintHorizontal_bias="0" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/similarFilmsAll"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="80dp"
+                android:background="@null"
+                android:text="@string/all"
+                android:textAllCaps="false"
+                android:textColor="#3F51B5"
+                android:textSize="15sp" />
+
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_similar_films"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingStart="28dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/similar_films_header"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</ScrollView>

@@ -9,8 +9,10 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list_of_everything_recycler"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-        app:spanCount="2"
+        app:spanCount="3"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="@string/hello_blank_fragment" />

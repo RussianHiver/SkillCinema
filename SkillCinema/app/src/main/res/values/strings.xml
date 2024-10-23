@@ -16,4 +16,14 @@
     <string name="frenchDramas">Драмы Франции</string>
     <string name="tvSeries">Сериалы</string>
     <string name="all">Все</string>
+
+    <!-- Names for recyclerview in listofallpage -->
+    <string name="filmActorList">В фильме снимались</string>
+    <string name="filmStaffList">Над фильмом работали</string>
+    <string name="gallery">Галерея</string>
+    <string name="similarFilms">Похожие фильмы</string>
+
+    <!-- String resources -->
+    <string name="film_year_and_genre"> %1$s, %2$s</string>
+    <string name="film_length">%1$d ч, %2$d мин</string>
 </resources>

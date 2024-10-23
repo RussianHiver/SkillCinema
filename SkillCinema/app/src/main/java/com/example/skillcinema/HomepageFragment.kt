@@ -12,6 +12,12 @@ import com.example.skillcinema.data.GenresAndCountries
 import com.example.skillcinema.databinding.FragmentHomepageBinding
 import kotlinx.coroutines.launch
 
+private const val PREMIERS = "premiers"
+private const val POPULAR_ALL_TIME = "popular"
+private const val TOP_MOVIES = "TOP_250_MOVIES"
+private const val FILTERED = "filtered"
+private const val FRENCH_DRAMAS = "french_dramas"
+private const val TOP_TV = "TOP_250_TV_SHOWS"
 class HomepageFragment : Fragment() {
 
     private var _binding: FragmentHomepageBinding? = null
@@ -33,67 +39,81 @@ class HomepageFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             val premier = RetrofitInstance.searchDataApi.getMoviePremieres().items
-            val premierAdapterForHomePage = AdapterForHomePage {openAllList()}
+            val premierAdapterForHomePage = AdapterForHomePage(PREMIERS, {id -> openMoviePage(id)}) {list -> openAllList(list)}
             premierAdapterForHomePage.checkTheNumberOfItems(premier.size)
             premierAdapterForHomePage.addPremiers(premier)
             binding.recyclerPreview.adapter = premierAdapterForHomePage
+            if (premier.size < 20) binding.allButtonPreview.isEnabled = false
             binding.allButtonPreview.setOnClickListener {
-                openAllList()
+                openAllList(PREMIERS)
             }
 
             val popular = RetrofitInstance.searchDataApi.getPopular().items
-            val popularAdapterForHomePage = AdapterForHomePage() {openAllList()}
+            val popularAdapterForHomePage = AdapterForHomePage(POPULAR_ALL_TIME, {id -> openMoviePage(id)}) { list -> openAllList(list)}
             popularAdapterForHomePage.checkTheNumberOfItems(popular.size)
             popularAdapterForHomePage.addPopular(popular)
             binding.recyclerPopular.adapter = popularAdapterForHomePage
+            if (premier.size < 20) binding.allButtonPopular.isEnabled = false
             binding.allButtonPopular.setOnClickListener {
-                openAllList()
+                openAllList(POPULAR_ALL_TIME)
             }
 
             val usaAction = RetrofitInstance.searchDataApi.getFilteredMovies().items
-            val usaActionAdapterForHomePage = AdapterForHomePage() {openAllList()}
+            val usaActionAdapterForHomePage = AdapterForHomePage(FILTERED, {id -> openMoviePage(id)}) {list -> openAllList(list)}
             usaActionAdapterForHomePage.checkTheNumberOfItems(usaAction.size)
             usaActionAdapterForHomePage.addFiltered(usaAction)
             binding.recyclerUsaAction.adapter = usaActionAdapterForHomePage
+            if (premier.size < 20) binding.allButtonUsaAction.isEnabled = false
             binding.allButtonUsaAction.setOnClickListener {
-                openAllList()
+                openAllList(FILTERED)
             }
 
             val topMovies = RetrofitInstance.searchDataApi.getPopular(type = "TOP_250_MOVIES").items
-            val topMoviesAdapterForHomePage = AdapterForHomePage {openAllList()}
+            val topMoviesAdapterForHomePage = AdapterForHomePage(POPULAR_ALL_TIME, {id -> openMoviePage(id)}) { list -> openAllList(list)}
             topMoviesAdapterForHomePage.checkTheNumberOfItems(topMovies.size)
             topMoviesAdapterForHomePage.addPopular(topMovies)
             binding.recyclerTop.adapter = topMoviesAdapterForHomePage
+            if (premier.size < 20) binding.allButtonTop.isEnabled = false
             binding.allButtonTop.setOnClickListener {
-                openAllList()
+                openAllList(TOP_MOVIES)
             }
 
             val frenchDramas = RetrofitInstance.searchDataApi.getFilteredMovies(genres = arrayOf(
                 getGenreByFilter("драма")
             ), countries = arrayOf(getCountryByFilter("Франция"))
             ).items
-            val frenchDramasAdapterForHomePage = AdapterForHomePage() {openAllList()}
+            val frenchDramasAdapterForHomePage = AdapterForHomePage(FILTERED, {id -> openMoviePage(id)}) {list -> openAllList(list)}
             frenchDramasAdapterForHomePage.checkTheNumberOfItems(frenchDramas.size)
             frenchDramasAdapterForHomePage.addFiltered(frenchDramas)
             binding.recyclerFrenchDramas.adapter = frenchDramasAdapterForHomePage
+            if (premier.size < 20) binding.allButtonFrenchDramas.isEnabled = false
             binding.allButtonFrenchDramas.setOnClickListener {
-                openAllList()
+                openAllList(FRENCH_DRAMAS)
             }
 
             val tvSeries = RetrofitInstance.searchDataApi.getPopular(type = "TOP_250_TV_SHOWS").items
-            val tvSeriesAdapterForHomePage = AdapterForHomePage {openAllList()}
+            val tvSeriesAdapterForHomePage = AdapterForHomePage(POPULAR_ALL_TIME, {id -> openMoviePage(id)}) { list -> openAllList(list)}
             tvSeriesAdapterForHomePage.checkTheNumberOfItems(tvSeries.size)
             tvSeriesAdapterForHomePage.addPopular(tvSeries)
             binding.recyclerTVSeries.adapter = tvSeriesAdapterForHomePage
+            if (premier.size < 20) binding.allButtonTVSeries.isEnabled = false
             binding.allButtonTVSeries.setOnClickListener {
-                openAllList()
+                openAllList(TOP_TV)
             }
         }
 
     }
 
-    fun openAllList() {
-        findNavController().navigate(R.id.listOfEverythingFragment)
+    fun openMoviePage(id: Int?) {
+        id?.let {
+            val action = HomepageFragmentDirections.actionHomepageFragmentToFilmPage(it)
+            findNavController().navigate(action)
+        }
+
+    }
+    fun openAllList(list: String) {
+        val action = HomepageFragmentDirections.actionHomepageFragmentToListOfEverythingFragment(list)
+        findNavController().navigate(action)
     }
 
     override fun onDestroyView() {

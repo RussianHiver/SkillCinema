@@ -12,7 +12,9 @@ import com.example.skillcinema.databinding.MoviePreviewViewBinding
 import com.example.skillcinema.databinding.ShowEverythingButtonViewBinding
 
 class AdapterForHomePage(
-    val onClick:() -> Unit
+    val nameForList: String,
+    val onClickMoviePage:(Int?) -> Unit,
+    val onClickAllButton:(String) -> Unit
 ) : RecyclerView.Adapter<ViewHolder>() {
 
     private var listPremier: List<Premieres.Item> = emptyList()
@@ -59,6 +61,10 @@ class AdapterForHomePage(
                                 .into(poster)
                         }
                     }
+
+                    holder.binding.root.setOnClickListener {
+                        onClickMoviePage(item?.kinopoiskId)
+                    }
                 }
                 listPopular.isNotEmpty() -> {
                     val item = listPopular.getOrNull(position)
@@ -70,6 +76,10 @@ class AdapterForHomePage(
                                 .load(it.posterUrlPreview)
                                 .into(poster)
                         }
+                    }
+
+                    holder.binding.root.setOnClickListener {
+                        onClickMoviePage(item?.kinopoiskId)
                     }
                 }
 
@@ -84,13 +94,17 @@ class AdapterForHomePage(
                                 .into(poster)
                         }
                     }
+
+                    holder.binding.root.setOnClickListener {
+                        onClickMoviePage(item?.kinopoiskId)
+                    }
                 }
             }
         }
 
         if (holder is ButtonViewHolder) {
             holder.binding.root.setOnClickListener {
-                onClick()
+                onClickAllButton(nameForList)
             }
         }
     }

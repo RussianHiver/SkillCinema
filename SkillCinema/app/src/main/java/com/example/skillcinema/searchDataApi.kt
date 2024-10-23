@@ -2,12 +2,15 @@ package com.example.skillcinema
 
 import com.example.skillcinema.data.Filtered
 import com.example.skillcinema.data.GenresAndCountries
+import com.example.skillcinema.data.MovieData
 import com.example.skillcinema.data.Popular
 import com.example.skillcinema.data.Premieres
+import com.example.skillcinema.data.Staff
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Headers
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 
@@ -56,4 +59,16 @@ interface SearchDataApi {
         @Query("yearTo") yearTo: Int = 3000,
         @Query("page") page: Int = 1
     ): Filtered
+
+    @Headers(API_KEY)
+    @GET("/api/v2.2/films/{id}")
+    suspend fun getOneMovie(
+        @Path("id") id: Int = 301
+    ): MovieData
+
+    @Headers(API_KEY)
+    @GET("/api/v1/staff")
+    suspend fun getFilmStaff(
+        @Query("filmId") filmId: Int = 66539
+    ): Staff
 }

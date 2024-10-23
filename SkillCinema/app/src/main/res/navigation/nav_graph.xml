@@ -22,6 +22,9 @@
         <action
             android:id="@+id/action_homepageFragment_to_listOfEverythingFragment"
             app:destination="@id/listOfEverythingFragment" />
+        <action
+            android:id="@+id/action_homepageFragment_to_filmPage"
+            app:destination="@id/filmPage" />
     </fragment>
     <fragment
         android:id="@+id/searchPageFragment"
@@ -37,5 +40,21 @@
         android:id="@+id/listOfEverythingFragment"
         android:name="com.example.skillcinema.ListOfEverythingFragment"
         android:label="fragment_list_of_everything"
-        tools:layout="@layout/fragment_list_of_everything" />
+        tools:layout="@layout/fragment_list_of_everything" >
+        <argument
+            android:name="listOfMovies"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_listOfEverythingFragment_to_filmPage"
+            app:destination="@id/filmPage" />
+    </fragment>
+    <fragment
+        android:id="@+id/filmPage"
+        android:name="com.example.skillcinema.FilmPage"
+        android:label="fragment_film_page"
+        tools:layout="@layout/fragment_film_page" >
+        <argument
+            android:name="kinopoiskID"
+            app:argType="integer" />
+    </fragment>
 </navigation>
