@@ -70,5 +70,5 @@ interface SearchDataApi {
     @GET("/api/v1/staff")
     suspend fun getFilmStaff(
         @Query("filmId") filmId: Int = 66539
-    ): Staff
+    ): List<Staff.StaffItem>
 }

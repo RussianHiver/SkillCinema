@@ -4,15 +4,15 @@ package com.example.skillcinema.data
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
-class Staff : ArrayList<Staff.StaffItem>(){
+class Staff{
     @JsonClass(generateAdapter = true)
     data class StaffItem(
         @Json(name = "description")
-        val description: String,
+        val description: String?,
         @Json(name = "nameEn")
-        val nameEn: String,
+        val nameEn: String?,
         @Json(name = "nameRu")
-        val nameRu: String,
+        val nameRu: String?,
         @Json(name = "posterUrl")
         val posterUrl: String,
         @Json(name = "professionKey")
