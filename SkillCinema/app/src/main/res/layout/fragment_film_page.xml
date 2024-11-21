@@ -11,7 +11,7 @@
         android:id="@+id/film_page_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context=".FilmPage">
+        tools:context=".presentation.FilmPage">
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/film_photo"
@@ -41,8 +41,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:textSize="20sp"
                 android:textColor="@color/white"
+                android:textSize="20sp"
                 tools:text="@tools:sample/lorem" />
 
             <androidx.appcompat.widget.AppCompatTextView
@@ -50,8 +50,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:textSize="20sp"
                 android:textColor="@color/white"
+                android:textSize="20sp"
                 tools:text="@tools:sample/lorem" />
 
             <androidx.appcompat.widget.AppCompatTextView
@@ -59,8 +59,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:textSize="20sp"
                 android:textColor="@color/white"
+                android:textSize="20sp"
                 app:layout_constraintVertical_bias="0"
                 tools:text="@tools:sample/lorem" />
 
@@ -70,11 +70,11 @@
             android:id="@+id/film_premise"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:maxLines="200"
-            android:ellipsize="end"
             android:adjustViewBounds="true"
-            android:scaleType="centerCrop"
+            android:ellipsize="end"
+            android:maxLines="200"
             android:padding="20dp"
+            android:scaleType="centerCrop"
             android:textSize="20sp"
             app:layout_constraintBottom_toTopOf="@id/film_actor_header"
             app:layout_constraintEnd_toEndOf="parent"
@@ -94,7 +94,7 @@
 
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/allActorsTitle"
+                android:id="@+id/all_actors_title"
                 android:layout_width="210dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
@@ -104,7 +104,7 @@
                 app:layout_constraintHorizontal_bias="0" />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/allActorsButton"
+                android:id="@+id/all_actors_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="100dp"
@@ -119,15 +119,15 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_film_actors"
             android:layout_width="0dp"
-            android:layout_height="200dp"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:paddingStart="28dp"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-            app:spanCount="3"
             app:layout_constraintBottom_toTopOf="@id/film_staff_header"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/film_actor_header" />
+            app:layout_constraintTop_toBottomOf="@id/film_actor_header"
+            app:spanCount="3" />
 
         <LinearLayout
             android:id="@+id/film_staff_header"
@@ -142,7 +142,7 @@
 
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/filmStaffTitle"
+                android:id="@+id/film_staff_title"
                 android:layout_width="230dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
@@ -152,7 +152,7 @@
                 app:layout_constraintHorizontal_bias="0" />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/filmStaffButton"
+                android:id="@+id/film_staff_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="80dp"
@@ -166,22 +166,23 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerStaff"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:paddingStart="28dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:layout_constraintBottom_toTopOf="@+id/film_gallery_header"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/film_staff_header" />
+            app:layout_constraintTop_toBottomOf="@id/film_staff_header"
+            app:spanCount="2" />
 
         <LinearLayout
             android:id="@+id/film_gallery_header"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintBottom_toTopOf="@id/recyclerGallery"
+            app:layout_constraintBottom_toTopOf="@id/recycler_gallery"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/recyclerStaff"
@@ -189,7 +190,7 @@
 
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/filmGalleryTitle"
+                android:id="@+id/film_gallery_title"
                 android:layout_width="230dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
@@ -199,7 +200,7 @@
                 app:layout_constraintHorizontal_bias="0" />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/filmGalleryButton"
+                android:id="@+id/film_gallery_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="80dp"
@@ -212,30 +213,30 @@
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerGallery"
+            android:id="@+id/recycler_gallery"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingStart="28dp"
+            android:paddingStart="20dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/film_gallery_header" />
 
         <LinearLayout
-            android:id="@+id/similar_films_header"
+            android:id="@+id/similar_film_header"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintBottom_toTopOf="@id/recycler_similar_films"
+            app:layout_constraintBottom_toTopOf="@id/recycler_similar_film"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/recyclerGallery"
+            app:layout_constraintTop_toBottomOf="@id/recycler_gallery"
             app:layout_constraintVertical_bias="0">
 
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/similarFilmsTitle"
+                android:id="@+id/similar_film_title"
                 android:layout_width="230dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
@@ -245,7 +246,7 @@
                 app:layout_constraintHorizontal_bias="0" />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/similarFilmsAll"
+                android:id="@+id/similar_film_all"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="80dp"
@@ -258,16 +259,16 @@
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_similar_films"
+            android:id="@+id/recycler_similar_film"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingStart="28dp"
+            android:paddingStart="10dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/similar_films_header"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintTop_toBottomOf="@id/similar_film_header" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

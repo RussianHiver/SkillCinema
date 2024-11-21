@@ -1,10 +1,11 @@
-package com.example.skillcinema
+package com.example.skillcinema.presentation
 
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.FragmentActivity
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
+import com.example.skillcinema.R
 import com.example.skillcinema.databinding.ActivityMainBinding
 
 class MainActivity : FragmentActivity() {

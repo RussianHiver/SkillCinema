@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".presentation.GalleryFragment">
+
+    <com.google.android.material.chip.ChipGroup
+        style="@style/Widget.MaterialComponents.Chip.Choice"
+        android:id="@+id/gallery_chip_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:singleLine="true"
+        android:layout_marginStart="10dp"
+        app:chipSpacingHorizontal="60dp">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_still_images"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/chip_still_images" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_shooting_images"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/chip_shooting_images" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_poster_images"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/chip_poster_images" />
+
+    </com.google.android.material.chip.ChipGroup>
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/full_list_of_photos"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:spanCount="3" />
+
+</LinearLayout>

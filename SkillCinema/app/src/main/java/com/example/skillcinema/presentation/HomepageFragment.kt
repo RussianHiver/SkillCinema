@@ -1,4 +1,4 @@
-package com.example.skillcinema
+package com.example.skillcinema.presentation
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -8,7 +8,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.example.skillcinema.data.AdapterForHomePage
 import com.example.skillcinema.data.GenresAndCountries
+import com.example.skillcinema.data.RetrofitInstance
 import com.example.skillcinema.databinding.FragmentHomepageBinding
 import kotlinx.coroutines.launch
 
@@ -39,7 +41,7 @@ class HomepageFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             val premier = RetrofitInstance.searchDataApi.getMoviePremieres().items
-            val premierAdapterForHomePage = AdapterForHomePage(PREMIERS, {id -> openMoviePage(id)}) {list -> openAllList(list)}
+            val premierAdapterForHomePage = AdapterForHomePage(PREMIERS, { id -> openMoviePage(id)}) { list -> openAllList(list)}
             premierAdapterForHomePage.checkTheNumberOfItems(premier.size)
             premierAdapterForHomePage.addPremiers(premier)
             binding.recyclerPreview.adapter = premierAdapterForHomePage
@@ -49,7 +51,7 @@ class HomepageFragment : Fragment() {
             }
 
             val popular = RetrofitInstance.searchDataApi.getPopular().items
-            val popularAdapterForHomePage = AdapterForHomePage(POPULAR_ALL_TIME, {id -> openMoviePage(id)}) { list -> openAllList(list)}
+            val popularAdapterForHomePage = AdapterForHomePage(POPULAR_ALL_TIME, { id -> openMoviePage(id)}) { list -> openAllList(list)}
             popularAdapterForHomePage.checkTheNumberOfItems(popular.size)
             popularAdapterForHomePage.addPopular(popular)
             binding.recyclerPopular.adapter = popularAdapterForHomePage
@@ -59,7 +61,7 @@ class HomepageFragment : Fragment() {
             }
 
             val usaAction = RetrofitInstance.searchDataApi.getFilteredMovies().items
-            val usaActionAdapterForHomePage = AdapterForHomePage(FILTERED, {id -> openMoviePage(id)}) {list -> openAllList(list)}
+            val usaActionAdapterForHomePage = AdapterForHomePage(FILTERED, { id -> openMoviePage(id)}) { list -> openAllList(list)}
             usaActionAdapterForHomePage.checkTheNumberOfItems(usaAction.size)
             usaActionAdapterForHomePage.addFiltered(usaAction)
             binding.recyclerUsaAction.adapter = usaActionAdapterForHomePage
@@ -69,7 +71,7 @@ class HomepageFragment : Fragment() {
             }
 
             val topMovies = RetrofitInstance.searchDataApi.getPopular(type = "TOP_250_MOVIES").items
-            val topMoviesAdapterForHomePage = AdapterForHomePage(POPULAR_ALL_TIME, {id -> openMoviePage(id)}) { list -> openAllList(list)}
+            val topMoviesAdapterForHomePage = AdapterForHomePage(POPULAR_ALL_TIME, { id -> openMoviePage(id)}) { list -> openAllList(list)}
             topMoviesAdapterForHomePage.checkTheNumberOfItems(topMovies.size)
             topMoviesAdapterForHomePage.addPopular(topMovies)
             binding.recyclerTop.adapter = topMoviesAdapterForHomePage
@@ -82,7 +84,7 @@ class HomepageFragment : Fragment() {
                 getGenreByFilter("драма")
             ), countries = arrayOf(getCountryByFilter("Франция"))
             ).items
-            val frenchDramasAdapterForHomePage = AdapterForHomePage(FILTERED, {id -> openMoviePage(id)}) {list -> openAllList(list)}
+            val frenchDramasAdapterForHomePage = AdapterForHomePage(FILTERED, { id -> openMoviePage(id)}) { list -> openAllList(list)}
             frenchDramasAdapterForHomePage.checkTheNumberOfItems(frenchDramas.size)
             frenchDramasAdapterForHomePage.addFiltered(frenchDramas)
             binding.recyclerFrenchDramas.adapter = frenchDramasAdapterForHomePage
@@ -92,7 +94,7 @@ class HomepageFragment : Fragment() {
             }
 
             val tvSeries = RetrofitInstance.searchDataApi.getPopular(type = "TOP_250_TV_SHOWS").items
-            val tvSeriesAdapterForHomePage = AdapterForHomePage(POPULAR_ALL_TIME, {id -> openMoviePage(id)}) { list -> openAllList(list)}
+            val tvSeriesAdapterForHomePage = AdapterForHomePage(POPULAR_ALL_TIME, { id -> openMoviePage(id)}) { list -> openAllList(list)}
             tvSeriesAdapterForHomePage.checkTheNumberOfItems(tvSeries.size)
             tvSeriesAdapterForHomePage.addPopular(tvSeries)
             binding.recyclerTVSeries.adapter = tvSeriesAdapterForHomePage

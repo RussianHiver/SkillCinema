@@ -1,13 +1,10 @@
-package com.example.skillcinema
+package com.example.skillcinema.data
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.bumptech.glide.Glide
-import com.example.skillcinema.data.Filtered
-import com.example.skillcinema.data.Popular
-import com.example.skillcinema.data.Premieres
 import com.example.skillcinema.databinding.MoviePreviewViewBinding
 import com.example.skillcinema.databinding.ShowEverythingButtonViewBinding
 

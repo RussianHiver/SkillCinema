@@ -1,4 +1,4 @@
-package com.example.skillcinema
+package com.example.skillcinema.data
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -6,10 +6,11 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.bumptech.glide.Glide
-import com.example.skillcinema.data.Popular
 import com.example.skillcinema.databinding.MoviePreviewViewBinding
 
-class AdapterListOfAllPopular(val onClickMoviePage:(Int?) -> Unit): PagingDataAdapter<Popular.Item, PopularViewHolder>(DiffUtilCallback()) {
+class AdapterListOfAllPopular(val onClickMoviePage:(Int?) -> Unit): PagingDataAdapter<Popular.Item, PopularViewHolder>(
+    DiffUtilCallback()
+) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PopularViewHolder {
         val binding = MoviePreviewViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)

@@ -3,8 +3,6 @@ package com.example.skillcinema.data
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-
-class Staff{
     @JsonClass(generateAdapter = true)
     data class StaffItem(
         @Json(name = "description")
@@ -22,4 +20,3 @@ class Staff{
         @Json(name = "staffId")
         val staffId: Int
     )
-}

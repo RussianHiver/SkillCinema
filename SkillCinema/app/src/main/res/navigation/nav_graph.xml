@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/onBoardingFragment"
-        android:name="com.example.skillcinema.OnBoardingFragment"
+        android:name="com.example.skillcinema.presentation.OnBoardingFragment"
         android:label="fragment_on_boarding"
         tools:layout="@layout/fragment_on_boarding">
         <action
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/homepageFragment"
-        android:name="com.example.skillcinema.HomepageFragment"
+        android:name="com.example.skillcinema.presentation.HomepageFragment"
         android:label="fragment_homepage"
         tools:layout="@layout/fragment_homepage" >
         <action
@@ -28,17 +28,17 @@
     </fragment>
     <fragment
         android:id="@+id/searchPageFragment"
-        android:name="com.example.skillcinema.SearchPageFragment"
+        android:name="com.example.skillcinema.presentation.SearchPageFragment"
         android:label="fragment_search_page"
         tools:layout="@layout/fragment_search_page" />
     <fragment
         android:id="@+id/profilePageFragment"
-        android:name="com.example.skillcinema.ProfilePageFragment"
+        android:name="com.example.skillcinema.presentation.ProfilePageFragment"
         android:label="fragment_profile_page"
         tools:layout="@layout/fragment_profile_page" />
     <fragment
         android:id="@+id/listOfEverythingFragment"
-        android:name="com.example.skillcinema.ListOfEverythingFragment"
+        android:name="com.example.skillcinema.presentation.ListOfEverythingFragment"
         android:label="fragment_list_of_everything"
         tools:layout="@layout/fragment_list_of_everything" >
         <argument
@@ -50,11 +50,65 @@
     </fragment>
     <fragment
         android:id="@+id/filmPage"
-        android:name="com.example.skillcinema.FilmPage"
+        android:name="com.example.skillcinema.presentation.FilmPage"
         android:label="fragment_film_page"
         tools:layout="@layout/fragment_film_page" >
         <argument
             android:name="kinopoiskID"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_filmPage_to_listOfStaffFragment"
+            app:destination="@id/listOfStaffFragment" />
+        <action
+            android:id="@+id/action_filmPage_to_galleryFragment"
+            app:destination="@id/galleryFragment" />
+        <action
+            android:id="@+id/action_filmPage_to_similarsFragment"
+            app:destination="@id/similarsFragment" />
+        <action
+            android:id="@+id/action_filmPage_to_actorPageFragment"
+            app:destination="@id/actorPageFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/listOfStaffFragment"
+        android:name="com.example.skillcinema.presentation.ListOfStaffFragment"
+        android:label="fragment_list_of_staff"
+        tools:layout="@layout/fragment_list_of_staff" >
+        <argument
+            android:name="TypeOfStaff"
+            app:argType="boolean" />
+        <argument
+            android:name="FilmId"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_listOfStaffFragment_to_actorPageFragment"
+            app:destination="@id/actorPageFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/galleryFragment"
+        android:name="com.example.skillcinema.presentation.GalleryFragment"
+        android:label="fragment_gallery"
+        tools:layout="@layout/fragment_gallery" >
+        <argument
+            android:name="FilmId"
+            app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/similarsFragment"
+        android:name="com.example.skillcinema.presentation.ListOfSimilarsFragment"
+        android:label="fragment_similars"
+        tools:layout="@layout/fragment_list_of_similars" >
+        <argument
+            android:name="FilmId"
+            app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/actorPageFragment"
+        android:name="com.example.skillcinema.presentation.StaffMemberPageFragment"
+        android:label="fragment_actor_page"
+        tools:layout="@layout/fragment_actor_page" >
+        <argument
+            android:name="PersonId"
             app:argType="integer" />
     </fragment>
 </navigation>

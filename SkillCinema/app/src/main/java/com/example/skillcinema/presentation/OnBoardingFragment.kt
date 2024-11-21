@@ -1,4 +1,4 @@
-package com.example.skillcinema
+package com.example.skillcinema.presentation
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
+import com.example.skillcinema.R
+import com.example.skillcinema.data.FragmentAdapter
 import com.example.skillcinema.databinding.FragmentOnBoardingBinding
 
 class OnBoardingFragment : Fragment() {

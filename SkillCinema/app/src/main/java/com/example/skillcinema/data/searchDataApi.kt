@@ -1,11 +1,5 @@
-package com.example.skillcinema
+package com.example.skillcinema.data
 
-import com.example.skillcinema.data.Filtered
-import com.example.skillcinema.data.GenresAndCountries
-import com.example.skillcinema.data.MovieData
-import com.example.skillcinema.data.Popular
-import com.example.skillcinema.data.Premieres
-import com.example.skillcinema.data.Staff
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
@@ -70,5 +64,25 @@ interface SearchDataApi {
     @GET("/api/v1/staff")
     suspend fun getFilmStaff(
         @Query("filmId") filmId: Int = 66539
-    ): List<Staff.StaffItem>
+    ): List<StaffItem>
+
+    @Headers(API_KEY)
+    @GET("/api/v2.2/films/{id}/images")
+    suspend fun getFilmGallery(
+        @Path("id") id: Int = 263531,
+        @Query("page") page: Int = 1,
+        @Query("type") type: String = "STILL"
+    ): Gallery
+
+    @Headers(API_KEY)
+    @GET("/api/v2.2/films/{id}/similars")
+    suspend fun getSimilars(
+        @Path("id") id: Int = 263531
+    ): Similars
+
+    @Headers(API_KEY)
+    @GET("/api/v1/staff/{id}")
+    suspend fun getIndividualStaffMember(
+        @Path("id") id: Int = 66539
+    ): StaffMember
 }

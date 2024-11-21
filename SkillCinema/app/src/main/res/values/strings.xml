@@ -1,4 +1,5 @@
 <resources>
+    <!--  Names for viewpage  -->
     <string name="app_name">SkillCinema</string>
     <string name="number">1</string>
     <string name="skipButton">Пропустить</string>
@@ -8,7 +9,7 @@
     <string name="explanation_Page3">Делись с друзьями</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
-    <!-- Names for recyclerview in homepage -->
+    <!-- Names for homepage -->
     <string name="preview">Премьеры</string>
     <string name="popular">Популярное</string>
     <string name="usaAction">Боевики США</string>
@@ -17,7 +18,7 @@
     <string name="tvSeries">Сериалы</string>
     <string name="all">Все</string>
 
-    <!-- Names for recyclerview in listofallpage -->
+    <!-- Names for filmPage -->
     <string name="filmActorList">В фильме снимались</string>
     <string name="filmStaffList">Над фильмом работали</string>
     <string name="gallery">Галерея</string>
@@ -26,4 +27,23 @@
     <!-- String resources -->
     <string name="film_year_and_genre"> %1$s, %2$s</string>
     <string name="film_length">%1$d ч, %2$d мин</string>
+
+    <!--  Names for actorPage  -->
+    <string name="best">Лучшее</string>
+    <string name="filmography_title">Фильмография</string>
+    <string name="filmography_all_button">К списку</string>
+    
+    <!--  Names for TVSeriesPage   -->
+    <string name="seasons_and_episode">Сезоны и серии</string>
+    <string name="tvSeriesActorList">В сериале снимались</string>
+    <string name="tvSeriesStaffList">Над сериалом работали</string>
+    <string name="similarTVSeries">Похожие сериалы</string>
+
+    <!--  Item load state string  -->
+    <string name="retry">Retry</string>
+
+    <!-- Chip strings -->
+    <string name="chip_still_images">Кадры</string>
+    <string name="chip_shooting_images">Со съёмок</string>
+    <string name="chip_poster_images">Постеры</string>
 </resources>

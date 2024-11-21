@@ -1,8 +1,9 @@
-package com.example.skillcinema
+package com.example.skillcinema.presentation
 
 import android.content.Context
 import android.util.AttributeSet
 import android.widget.FrameLayout
+import com.example.skillcinema.R
 import com.example.skillcinema.databinding.ShowEverythingButtonBinding
 
 class ShowEverythingButtonView @JvmOverloads constructor(
