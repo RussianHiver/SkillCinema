@@ -12,10 +12,12 @@ import com.example.skillcinema.data.PagingSourceFiltered
 import com.example.skillcinema.data.PagingSourceGallery
 import com.example.skillcinema.data.Popular
 import com.example.skillcinema.data.PagingSourcePopular
+import com.example.skillcinema.data.PagingSourceSearchResult
+import com.example.skillcinema.data.SearchResult
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 
-class MainViewModel: ViewModel() {
+class MainViewModel : ViewModel() {
 
     private var popularType = "TOP_POPULAR_ALL"
     private var filteredGenre = "боевик"
@@ -23,6 +25,7 @@ class MainViewModel: ViewModel() {
 
     val filmId: MutableStateFlow<Int> = MutableStateFlow(263531)
     val imagesType: MutableStateFlow<String> = MutableStateFlow("STILL")
+
     fun choosePopularType(type: String) {
         popularType = when (type) {
             "TOP_250_MOVIES" -> type
@@ -45,6 +48,15 @@ class MainViewModel: ViewModel() {
         }
     }
 
+    var pagingDataSearchResult: Flow<PagingData<SearchResult.Item>>? = null
+
+    fun getNewPagerForSearchResult(keyword: String) {
+        pagingDataSearchResult = Pager(config = PagingConfig(pageSize = 20),
+            pagingSourceFactory = { PagingSourceSearchResult(keyword) }).flow.cachedIn(
+            viewModelScope
+        )
+    }
+
     val pagingDataPopular: Flow<PagingData<Popular.Item>> = Pager(
         config = PagingConfig(pageSize = 10),
         pagingSourceFactory = { PagingSourcePopular(popularType) }
@@ -59,4 +71,6 @@ class MainViewModel: ViewModel() {
         config = PagingConfig(pageSize = 20),
         pagingSourceFactory = { PagingSourceGallery(filmId.value, imagesType.value) }
     ).flow.cachedIn(viewModelScope)
+
+
 }

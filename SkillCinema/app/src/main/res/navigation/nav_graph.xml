@@ -30,7 +30,14 @@
         android:id="@+id/searchPageFragment"
         android:name="com.example.skillcinema.presentation.SearchPageFragment"
         android:label="fragment_search_page"
-        tools:layout="@layout/fragment_search_page" />
+        tools:layout="@layout/fragment_search_page" >
+        <action
+            android:id="@+id/action_searchPageFragment_to_searchFilterFragment"
+            app:destination="@id/searchFilterFragment" />
+        <action
+            android:id="@+id/action_searchPageFragment_to_filmPage"
+            app:destination="@id/filmPage" />
+    </fragment>
     <fragment
         android:id="@+id/profilePageFragment"
         android:name="com.example.skillcinema.presentation.ProfilePageFragment"
@@ -111,4 +118,9 @@
             android:name="PersonId"
             app:argType="integer" />
     </fragment>
+    <fragment
+        android:id="@+id/searchFilterFragment"
+        android:name="com.example.skillcinema.presentation.SearchFilterFragment"
+        android:label="fragment_search_filter"
+        tools:layout="@layout/fragment_search_filter" />
 </navigation>

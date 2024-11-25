@@ -36,4 +36,8 @@ class Repository {
             filters.countries.filter { it.country == country }
         return if (country == "США") 1 else neededCountry.first().id
     }
+
+    suspend fun getSearchResultsMovies(page: Int, keyword: String): SearchResult {
+        return RetrofitInstance.searchDataApi.getSearchResults(page, keyword)
+    }
 }

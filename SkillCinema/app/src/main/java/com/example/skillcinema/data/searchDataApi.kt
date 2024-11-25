@@ -85,4 +85,11 @@ interface SearchDataApi {
     suspend fun getIndividualStaffMember(
         @Path("id") id: Int = 66539
     ): StaffMember
+
+    @Headers(API_KEY)
+    @GET("/api/v2.2/films")
+    suspend fun getSearchResults(
+        @Query("page") page: Int = 1,
+        @Query("keyword") keyword: String
+    ): SearchResult
 }

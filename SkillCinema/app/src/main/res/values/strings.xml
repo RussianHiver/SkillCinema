@@ -32,7 +32,7 @@
     <string name="best">Лучшее</string>
     <string name="filmography_title">Фильмография</string>
     <string name="filmography_all_button">К списку</string>
-    
+
     <!--  Names for TVSeriesPage   -->
     <string name="seasons_and_episode">Сезоны и серии</string>
     <string name="tvSeriesActorList">В сериале снимались</string>
@@ -46,4 +46,8 @@
     <string name="chip_still_images">Кадры</string>
     <string name="chip_shooting_images">Со съёмок</string>
     <string name="chip_poster_images">Постеры</string>
+
+    <!-- Search page strings -->
+    <string name="search_hint">Фильмы</string>
+    <string name="no_search_result_text">К сожалению, по вашему запросу ничего не найдено</string>
 </resources>
