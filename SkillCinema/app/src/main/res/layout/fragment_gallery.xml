@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".presentation.GalleryFragment">
+    tools:context=".presentation.fragments.GalleryFragment">
 
     <com.google.android.material.chip.ChipGroup
         style="@style/Widget.MaterialComponents.Chip.Choice"
@@ -37,11 +37,41 @@
     </com.google.android.material.chip.ChipGroup>
 
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/full_list_of_photos"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-        app:spanCount="3" />
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/full_list_of_photos"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:spanCount="3" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center">
+            <ProgressBar
+                android:id="@+id/search_page_progress"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/search_page_retry_button"
+                android:layout_width="wrap_content"
+                android:visibility="gone"
+                android:text="@string/retry"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+
+
+    </FrameLayout>
+
+
 
 </LinearLayout>

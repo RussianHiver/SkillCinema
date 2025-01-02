@@ -10,7 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context=".presentation.HomepageFragment">
+        tools:context=".presentation.fragments.HomepageFragment">
 
         <LinearLayout
             android:id="@+id/appName"

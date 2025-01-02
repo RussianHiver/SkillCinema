@@ -11,7 +11,7 @@
         android:id="@+id/film_page_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context=".presentation.FilmPage">
+        tools:context=".presentation.fragments.FilmPage">
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/film_photo"

@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/onBoardingFragment"
-        android:name="com.example.skillcinema.presentation.OnBoardingFragment"
+        android:name="com.example.skillcinema.presentation.fragments.OnBoardingFragment"
         android:label="fragment_on_boarding"
         tools:layout="@layout/fragment_on_boarding">
         <action
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/homepageFragment"
-        android:name="com.example.skillcinema.presentation.HomepageFragment"
+        android:name="com.example.skillcinema.presentation.fragments.HomepageFragment"
         android:label="fragment_homepage"
         tools:layout="@layout/fragment_homepage" >
         <action
@@ -28,7 +28,7 @@
     </fragment>
     <fragment
         android:id="@+id/searchPageFragment"
-        android:name="com.example.skillcinema.presentation.SearchPageFragment"
+        android:name="com.example.skillcinema.presentation.fragments.SearchPageFragment"
         android:label="fragment_search_page"
         tools:layout="@layout/fragment_search_page" >
         <action
@@ -40,12 +40,12 @@
     </fragment>
     <fragment
         android:id="@+id/profilePageFragment"
-        android:name="com.example.skillcinema.presentation.ProfilePageFragment"
+        android:name="com.example.skillcinema.presentation.fragments.ProfilePageFragment"
         android:label="fragment_profile_page"
         tools:layout="@layout/fragment_profile_page" />
     <fragment
         android:id="@+id/listOfEverythingFragment"
-        android:name="com.example.skillcinema.presentation.ListOfEverythingFragment"
+        android:name="com.example.skillcinema.presentation.fragments.ListOfEverythingFragment"
         android:label="fragment_list_of_everything"
         tools:layout="@layout/fragment_list_of_everything" >
         <argument
@@ -57,7 +57,7 @@
     </fragment>
     <fragment
         android:id="@+id/filmPage"
-        android:name="com.example.skillcinema.presentation.FilmPage"
+        android:name="com.example.skillcinema.presentation.fragments.FilmPage"
         android:label="fragment_film_page"
         tools:layout="@layout/fragment_film_page" >
         <argument
@@ -78,7 +78,7 @@
     </fragment>
     <fragment
         android:id="@+id/listOfStaffFragment"
-        android:name="com.example.skillcinema.presentation.ListOfStaffFragment"
+        android:name="com.example.skillcinema.presentation.fragments.ListOfStaffFragment"
         android:label="fragment_list_of_staff"
         tools:layout="@layout/fragment_list_of_staff" >
         <argument
@@ -93,7 +93,7 @@
     </fragment>
     <fragment
         android:id="@+id/galleryFragment"
-        android:name="com.example.skillcinema.presentation.GalleryFragment"
+        android:name="com.example.skillcinema.presentation.fragments.GalleryFragment"
         android:label="fragment_gallery"
         tools:layout="@layout/fragment_gallery" >
         <argument
@@ -102,7 +102,7 @@
     </fragment>
     <fragment
         android:id="@+id/similarsFragment"
-        android:name="com.example.skillcinema.presentation.ListOfSimilarsFragment"
+        android:name="com.example.skillcinema.presentation.fragments.ListOfSimilarsFragment"
         android:label="fragment_similars"
         tools:layout="@layout/fragment_list_of_similars" >
         <argument
@@ -111,7 +111,7 @@
     </fragment>
     <fragment
         android:id="@+id/actorPageFragment"
-        android:name="com.example.skillcinema.presentation.StaffMemberPageFragment"
+        android:name="com.example.skillcinema.presentation.fragments.StaffMemberPageFragment"
         android:label="fragment_actor_page"
         tools:layout="@layout/fragment_actor_page" >
         <argument
@@ -120,7 +120,63 @@
     </fragment>
     <fragment
         android:id="@+id/searchFilterFragment"
-        android:name="com.example.skillcinema.presentation.SearchFilterFragment"
+        android:name="com.example.skillcinema.presentation.fragments.SearchFilterFragment"
         android:label="fragment_search_filter"
-        tools:layout="@layout/fragment_search_filter" />
+        tools:layout="@layout/fragment_search_filter" >
+        <action
+            android:id="@+id/action_searchFilterFragment_to_searchPageFragment"
+            app:destination="@id/searchPageFragment"
+            app:popUpTo="@id/searchPageFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_searchFilterFragment_to_searchFilterCountryFragment"
+            app:destination="@id/searchFilterCountryFragment" />
+        <action
+            android:id="@+id/action_searchFilterFragment_to_searchFilterGenreFragment"
+            app:destination="@id/searchFilterGenreFragment" />
+        <action
+            android:id="@+id/action_searchFilterFragment_to_searchFilterYearFragment"
+            app:destination="@id/searchFilterYearFragment" />
+        <argument
+            android:name="CountryFilter"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="GenreFilter"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/searchFilterCountryFragment"
+        android:name="com.example.skillcinema.presentation.fragments.SearchFilterCountryFragment"
+        android:label="fragment_search_filter_country"
+        tools:layout="@layout/fragment_search_filter_country" >
+        <action
+            android:id="@+id/action_searchFilterCountryFragment_to_searchFilterFragment"
+            app:destination="@id/searchFilterFragment"
+            app:popUpTo="@id/searchFilterFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/searchFilterGenreFragment"
+        android:name="com.example.skillcinema.presentation.fragments.SearchFilterGenreFragment"
+        android:label="fragment_search_filter_genre"
+        tools:layout="@layout/fragment_search_filter_genre" >
+        <action
+            android:id="@+id/action_searchFilterGenreFragment_to_searchFilterFragment"
+            app:destination="@id/searchFilterFragment"
+            app:popUpTo="@id/searchFilterFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/searchFilterYearFragment"
+        android:name="com.example.skillcinema.presentation.fragments.SearchFilterYearFragment"
+        android:label="fragment_search_filter_year"
+        tools:layout="@layout/fragment_search_filter_year" >
+        <action
+            android:id="@+id/action_searchFilterYearFragment_to_searchFilterFragment"
+            app:destination="@id/searchFilterFragment"
+            app:popUpTo="@id/searchFilterFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
 </navigation>
