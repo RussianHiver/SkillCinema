@@ -44,7 +44,6 @@ class HomepageFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewLifecycleOwner.lifecycleScope.launch {
-
             val premier = viewModel.givePremierList()
             val premierAdapterForHomePage = AdapterForHomePage(
                 PREMIERS,

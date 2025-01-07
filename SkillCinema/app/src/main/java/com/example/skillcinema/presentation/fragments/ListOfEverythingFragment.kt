@@ -15,6 +15,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
+import com.example.skillcinema.R
 import com.example.skillcinema.databinding.FragmentListOfEverythingBinding
 import com.example.skillcinema.di.DaggerAppComponent
 import com.example.skillcinema.presentation.MainViewModel
@@ -37,7 +38,7 @@ class ListOfEverythingFragment : Fragment() {
     private var _binding: FragmentListOfEverythingBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: MainViewModel by viewModels{
+    private val viewModel: MainViewModel by viewModels {
         DaggerAppComponent.create().mainViewModelFactory()
     }
 
@@ -60,122 +61,163 @@ class ListOfEverythingFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+
+                binding.headerBackButton.setOnClickListener {
+                    val action =
+                        ListOfEverythingFragmentDirections.actionListOfEverythingFragmentToHomepageFragment()
+                    findNavController().navigate(action)
+                }
+
                 when (args.listOfMovies) {
                     PREMIERS -> {
-                        val premier = viewModel.givePremierList()
-                        binding.listOfEverythingRecycler.adapter =
-                            AdapterListOfAllPremiers(premier) { id -> openMoviePage(id) }
+                        fillPremierList()
                     }
 
                     POPULAR_ALL_TIME -> {
-                        binding.listOfEverythingRecycler.adapter =
-                            adapterPopular.withLoadStateHeaderAndFooter(
-                                header = MovieDataLoadStateAdapter { adapterPopular.retry() },
-                                footer = MovieDataLoadStateAdapter { adapterPopular.retry() }
-                            )
-                        adapterPopular.addLoadStateListener { loadState ->
-                            binding.listOfEverythingRecycler.isVisible =
-                                loadState.source.refresh is LoadState.NotLoading
-                            binding.stateProgress.isVisible =
-                                loadState.source.refresh is LoadState.Loading
-                            binding.stateRetryButton.isVisible =
-                                loadState.source.refresh is LoadState.Error
-                            handleError(loadState)
-                        }
-                        viewModel.pagingDataPopular.collectLatest {
-                            adapterPopular.submitData(it)
-                        }
-                    }
-
-                    TOP_MOVIES -> {
-                        binding.listOfEverythingRecycler.adapter =
-                            adapterPopular.withLoadStateHeaderAndFooter(
-                                header = MovieDataLoadStateAdapter { adapterPopular.retry() },
-                                footer = MovieDataLoadStateAdapter { adapterPopular.retry() }
-                            )
-                        adapterPopular.addLoadStateListener { loadState ->
-                            binding.listOfEverythingRecycler.isVisible =
-                                loadState.source.refresh is LoadState.NotLoading
-                            binding.stateProgress.isVisible =
-                                loadState.source.refresh is LoadState.Loading
-                            binding.stateRetryButton.isVisible =
-                                loadState.source.refresh is LoadState.Error
-                            handleError(loadState)
-                        }
-                        viewModel.choosePopularType(TOP_MOVIES)
-                        viewModel.pagingDataPopular.collectLatest {
-                            adapterPopular.submitData(it)
-                        }
+                        fillPopularList()
                     }
 
                     FILTERED -> {
-                        binding.listOfEverythingRecycler.adapter =
-                            adapterFiltered.withLoadStateHeaderAndFooter(
-                                header = MovieDataLoadStateAdapter { adapterFiltered.retry() },
-                                footer = MovieDataLoadStateAdapter { adapterFiltered.retry() }
-                            )
-                        adapterFiltered.addLoadStateListener { loadState ->
-                            binding.listOfEverythingRecycler.isVisible =
-                                loadState.source.refresh is LoadState.NotLoading
-                            binding.stateProgress.isVisible =
-                                loadState.source.refresh is LoadState.Loading
-                            binding.stateRetryButton.isVisible =
-                                loadState.source.refresh is LoadState.Error
-                            handleError(loadState)
-                        }
-                        viewModel.pagingDataFiltered.collectLatest {
-                            adapterFiltered.submitData(it)
-                        }
+                        fillUsaActionList()
+                    }
+
+                    TOP_MOVIES -> {
+                        fillTopMovies()
                     }
 
                     FRENCH_DRAMAS -> {
-                        binding.listOfEverythingRecycler.adapter =
-                            adapterFiltered.withLoadStateHeaderAndFooter(
-                                header = MovieDataLoadStateAdapter { adapterFiltered.retry() },
-                                footer = MovieDataLoadStateAdapter { adapterFiltered.retry() }
-                            )
-                        adapterFiltered.addLoadStateListener { loadState ->
-                            binding.listOfEverythingRecycler.isVisible =
-                                loadState.source.refresh is LoadState.NotLoading
-                            binding.stateProgress.isVisible =
-                                loadState.source.refresh is LoadState.Loading
-                            binding.stateRetryButton.isVisible =
-                                loadState.source.refresh is LoadState.Error
-                            handleError(loadState)
-                        }
-                        viewModel.chooseFilteredGenre("драма")
-                        viewModel.chooseFilteredCountry("Франция")
-                        viewModel.pagingDataFiltered.collectLatest {
-                            adapterFiltered.submitData(it)
-                        }
+                        fillFrenchDramas()
                     }
 
                     TOP_TV -> {
-                        binding.listOfEverythingRecycler.adapter =
-                            adapterPopular.withLoadStateHeaderAndFooter(
-                                header = MovieDataLoadStateAdapter { adapterPopular.retry() },
-                                footer = MovieDataLoadStateAdapter { adapterPopular.retry() }
-                            )
-                        adapterPopular.addLoadStateListener { loadState ->
-                            binding.listOfEverythingRecycler.isVisible =
-                                loadState.source.refresh is LoadState.NotLoading
-                            binding.stateProgress.isVisible =
-                                loadState.source.refresh is LoadState.Loading
-                            binding.stateRetryButton.isVisible =
-                                loadState.source.refresh is LoadState.Error
-                            handleError(loadState)
-                        }
-                        viewModel.choosePopularType(TOP_TV)
-                        viewModel.pagingDataPopular.collectLatest {
-                            adapterPopular.submitData(it)
-                        }
+                        fillTopTV()
                     }
                 }
+
             }
         }
     }
 
-    fun openMoviePage(id: Int?) {
+    private suspend fun fillPremierList() {
+        binding.stateProgress.isVisible = true
+        val premier = viewModel.givePremierList()
+        binding.headerTitle.text = getText(R.string.preview)
+        binding.listOfEverythingRecycler.adapter =
+            AdapterListOfAllPremiers(premier) { id -> openMoviePage(id) }
+        binding.stateProgress.isVisible = false
+    }
+
+    private suspend fun fillPopularList() {
+        binding.headerTitle.text = getText(R.string.popular)
+        binding.listOfEverythingRecycler.adapter =
+            adapterPopular.withLoadStateHeaderAndFooter(
+                header = MovieDataLoadStateAdapter { adapterPopular.retry() },
+                footer = MovieDataLoadStateAdapter { adapterPopular.retry() }
+            )
+        adapterPopular.addLoadStateListener { loadState ->
+            binding.listOfEverythingRecycler.isVisible =
+                loadState.source.refresh is LoadState.NotLoading
+            binding.stateProgress.isVisible =
+                loadState.source.refresh is LoadState.Loading
+            binding.stateRetryButton.isVisible =
+                loadState.source.refresh is LoadState.Error
+            handleError(loadState)
+        }
+        viewModel.pagingDataPopular.collectLatest {
+            adapterPopular.submitData(it)
+        }
+    }
+
+    private suspend fun fillUsaActionList() {
+        binding.headerTitle.text = getText(R.string.usaAction)
+        binding.listOfEverythingRecycler.adapter =
+            adapterFiltered.withLoadStateHeaderAndFooter(
+                header = MovieDataLoadStateAdapter { adapterFiltered.retry() },
+                footer = MovieDataLoadStateAdapter { adapterFiltered.retry() }
+            )
+        adapterFiltered.addLoadStateListener { loadState ->
+            binding.listOfEverythingRecycler.isVisible =
+                loadState.source.refresh is LoadState.NotLoading
+            binding.stateProgress.isVisible =
+                loadState.source.refresh is LoadState.Loading
+            binding.stateRetryButton.isVisible =
+                loadState.source.refresh is LoadState.Error
+            handleError(loadState)
+        }
+        viewModel.pagingDataFiltered.collectLatest {
+            adapterFiltered.submitData(it)
+        }
+    }
+
+    private suspend fun fillTopMovies() {
+        binding.headerTitle.text = getText(R.string.topMovies)
+        binding.listOfEverythingRecycler.adapter =
+            adapterPopular.withLoadStateHeaderAndFooter(
+                header = MovieDataLoadStateAdapter { adapterPopular.retry() },
+                footer = MovieDataLoadStateAdapter { adapterPopular.retry() }
+            )
+        adapterPopular.addLoadStateListener { loadState ->
+            binding.listOfEverythingRecycler.isVisible =
+                loadState.source.refresh is LoadState.NotLoading
+            binding.stateProgress.isVisible =
+                loadState.source.refresh is LoadState.Loading
+            binding.stateRetryButton.isVisible =
+                loadState.source.refresh is LoadState.Error
+            handleError(loadState)
+        }
+        viewModel.choosePopularType(TOP_MOVIES)
+        viewModel.pagingDataPopular.collectLatest {
+            adapterPopular.submitData(it)
+        }
+    }
+
+    private suspend fun fillFrenchDramas() {
+        binding.headerTitle.text = getText(R.string.frenchDramas)
+        binding.listOfEverythingRecycler.adapter =
+            adapterFiltered.withLoadStateHeaderAndFooter(
+                header = MovieDataLoadStateAdapter { adapterFiltered.retry() },
+                footer = MovieDataLoadStateAdapter { adapterFiltered.retry() }
+            )
+        adapterFiltered.addLoadStateListener { loadState ->
+            binding.listOfEverythingRecycler.isVisible =
+                loadState.source.refresh is LoadState.NotLoading
+            binding.stateProgress.isVisible =
+                loadState.source.refresh is LoadState.Loading
+            binding.stateRetryButton.isVisible =
+                loadState.source.refresh is LoadState.Error
+            handleError(loadState)
+        }
+        viewModel.chooseFilteredGenre("драма")
+        viewModel.chooseFilteredCountry("Франция")
+        viewModel.pagingDataFiltered.collectLatest {
+            adapterFiltered.submitData(it)
+        }
+    }
+
+    private suspend fun fillTopTV() {
+
+        binding.headerTitle.text = getText(R.string.tvSeries)
+        binding.listOfEverythingRecycler.adapter =
+            adapterPopular.withLoadStateHeaderAndFooter(
+                header = MovieDataLoadStateAdapter { adapterPopular.retry() },
+                footer = MovieDataLoadStateAdapter { adapterPopular.retry() }
+            )
+        adapterPopular.addLoadStateListener { loadState ->
+            binding.listOfEverythingRecycler.isVisible =
+                loadState.source.refresh is LoadState.NotLoading
+            binding.stateProgress.isVisible =
+                loadState.source.refresh is LoadState.Loading
+            binding.stateRetryButton.isVisible =
+                loadState.source.refresh is LoadState.Error
+            handleError(loadState)
+        }
+        viewModel.choosePopularType(TOP_TV)
+        viewModel.pagingDataPopular.collectLatest {
+            adapterPopular.submitData(it)
+        }
+    }
+
+    private fun openMoviePage(id: Int?) {
         id?.let {
             val action =
                 ListOfEverythingFragmentDirections.actionListOfEverythingFragmentToFilmPage(it)
@@ -188,7 +230,7 @@ class ListOfEverythingFragment : Fragment() {
             ?: loadState.source.prepend as? LoadState.Error
 
         errorState?.let {
-            Toast.makeText(activity, "${it.error}", Toast.LENGTH_SHORT).show()
+            Toast.makeText(activity, it.error.localizedMessage, Toast.LENGTH_SHORT).show()
         }
     }
 

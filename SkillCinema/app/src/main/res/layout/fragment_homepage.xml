@@ -26,21 +26,19 @@
                 android:id="@+id/appNameText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:padding="15dp"
+                android:padding="25dp"
                 android:text="@string/appName"
                 android:textAlignment="center"
-                android:textSize="30sp" />
+                android:textSize="25sp" />
 
         </LinearLayout>
 
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/containerPreview"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="10dp"
             app:layout_constraintBottom_toTopOf="@id/recyclerPreview"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -50,46 +48,50 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/titlePreview"
-                android:layout_width="210dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="25dp"
                 android:text="@string/preview"
-                android:textSize="20sp"
+                android:padding="@dimen/main_padding"
+                android:textSize="@dimen/list_names"
                 android:textStyle="bold"
-                app:layout_constraintHorizontal_bias="0" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/allButtonPreview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="90dp"
                 android:background="@null"
-                android:padding="25dp"
                 android:text="@string/all"
+                android:padding="@dimen/main_padding"
                 android:textAllCaps="false"
-                android:textColor="#3F51B5"
-                android:textSize="15sp" />
+                android:textColor="@color/blue_color"
+                android:textSize="@dimen/blue"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerPreview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingStart="28dp"
+            android:paddingStart="25dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/containerPopular"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/containerPreview" />
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/containerPopular"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="10dp"
             app:layout_constraintBottom_toTopOf="@id/recyclerPopular"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -101,11 +103,14 @@
                 android:id="@+id/titlePopular"
                 android:layout_width="210dp"
                 android:layout_height="wrap_content"
-                android:padding="25dp"
                 android:text="@string/popular"
-                android:textSize="20sp"
+                android:padding="@dimen/main_padding"
+                android:textSize="@dimen/list_names"
                 android:textStyle="bold"
-                app:layout_constraintHorizontal_bias="0" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/allButtonPopular"
@@ -113,32 +118,34 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="90dp"
                 android:background="@null"
-                android:padding="25dp"
                 android:text="@string/all"
+                android:padding="@dimen/main_padding"
                 android:textAllCaps="false"
-                android:textColor="#3F51B5"
-                android:textSize="15sp" />
+                android:textColor="@color/blue_color"
+                android:textSize="@dimen/blue"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerPopular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingStart="28dp"
+            android:paddingStart="25dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/containerUsaAction"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/containerPopular" />
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/containerUsaAction"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="10dp"
             app:layout_constraintBottom_toTopOf="@id/recyclerUsaAction"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -150,11 +157,14 @@
                 android:id="@+id/titleUsaAction"
                 android:layout_width="210dp"
                 android:layout_height="wrap_content"
-                android:padding="25dp"
                 android:text="@string/usaAction"
-                android:textSize="19sp"
+                android:padding="@dimen/main_padding"
+                android:textSize="@dimen/list_names"
                 android:textStyle="bold"
-                app:layout_constraintHorizontal_bias="0" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/allButtonUsaAction"
@@ -162,32 +172,34 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="90dp"
                 android:background="@null"
-                android:padding="25dp"
                 android:text="@string/all"
+                android:padding="@dimen/main_padding"
                 android:textAllCaps="false"
-                android:textColor="#3F51B5"
-                android:textSize="15sp" />
+                android:textColor="@color/blue_color"
+                android:textSize="@dimen/blue"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerUsaAction"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingStart="28dp"
+            android:paddingStart="25dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/containerTop"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/containerUsaAction" />
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/containerTop"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="10dp"
             app:layout_constraintBottom_toTopOf="@id/recyclerTop"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -199,11 +211,14 @@
                 android:id="@+id/titleTop"
                 android:layout_width="210dp"
                 android:layout_height="wrap_content"
-                android:padding="25dp"
                 android:text="@string/topMovies"
-                android:textSize="20sp"
+                android:padding="@dimen/main_padding"
+                android:textSize="@dimen/list_names"
                 android:textStyle="bold"
-                app:layout_constraintHorizontal_bias="0" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/allButtonTop"
@@ -211,32 +226,34 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="90dp"
                 android:background="@null"
-                android:padding="25dp"
                 android:text="@string/all"
+                android:padding="@dimen/main_padding"
                 android:textAllCaps="false"
-                android:textColor="#3F51B5"
-                android:textSize="15sp" />
+                android:textColor="@color/blue_color"
+                android:textSize="@dimen/blue"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerTop"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingStart="28dp"
+            android:paddingStart="25dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/containerFrenchDramas"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/containerTop" />
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/containerFrenchDramas"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="10dp"
             app:layout_constraintBottom_toTopOf="@id/recyclerFrenchDramas"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -248,11 +265,14 @@
                 android:id="@+id/titleFrenchDramas"
                 android:layout_width="210dp"
                 android:layout_height="wrap_content"
-                android:padding="25dp"
                 android:text="@string/frenchDramas"
-                android:textSize="20sp"
+                android:padding="@dimen/main_padding"
+                android:textSize="@dimen/list_names"
                 android:textStyle="bold"
-                app:layout_constraintHorizontal_bias="0" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/allButtonFrenchDramas"
@@ -260,32 +280,34 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="90dp"
                 android:background="@null"
-                android:padding="25dp"
                 android:text="@string/all"
+                android:padding="@dimen/main_padding"
                 android:textAllCaps="false"
-                android:textColor="#3F51B5"
-                android:textSize="15sp" />
+                android:textColor="@color/blue_color"
+                android:textSize="@dimen/blue"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerFrenchDramas"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingStart="28dp"
+            android:paddingStart="25dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/containerTVSeries"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/containerFrenchDramas" />
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/containerTVSeries"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="10dp"
             app:layout_constraintBottom_toTopOf="@id/recyclerTVSeries"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -297,11 +319,14 @@
                 android:id="@+id/titleTVSeries"
                 android:layout_width="210dp"
                 android:layout_height="wrap_content"
-                android:padding="25dp"
                 android:text="@string/tvSeries"
-                android:textSize="20sp"
+                android:padding="@dimen/main_padding"
+                android:textSize="@dimen/list_names"
                 android:textStyle="bold"
-                app:layout_constraintHorizontal_bias="0" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/allButtonTVSeries"
@@ -309,25 +334,28 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="90dp"
                 android:background="@null"
-                android:padding="25dp"
                 android:text="@string/all"
+                android:padding="@dimen/main_padding"
                 android:textAllCaps="false"
-                android:textColor="#3F51B5"
-                android:textSize="15sp" />
+                android:textColor="@color/blue_color"
+                android:textSize="@dimen/blue"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerTVSeries"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingStart="28dp"
+            android:paddingStart="25dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/containerTVSeries"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/containerTVSeries" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -12,7 +12,7 @@ data class PremieresDTO(
     @JsonClass(generateAdapter = true)
     data class Item(
         @Json(name = "countries") val countries: List<Country>,
-        @Json(name = "duration") val duration: Int,
+        @Json(name = "duration") val duration: Int?,
         @Json(name = "genres") val genres: List<Genre>,
         @Json(name = "kinopoiskId") override val kinopoiskId: Int,
         @Json(name = "nameEn") override val nameEn: String,

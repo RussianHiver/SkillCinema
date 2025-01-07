@@ -54,6 +54,11 @@
         <action
             android:id="@+id/action_listOfEverythingFragment_to_filmPage"
             app:destination="@id/filmPage" />
+        <action
+            android:id="@+id/action_listOfEverythingFragment_to_homepageFragment"
+            app:destination="@id/homepageFragment"
+            app:popUpTo="@id/homepageFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/filmPage"

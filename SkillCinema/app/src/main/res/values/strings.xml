@@ -77,4 +77,7 @@
     <!-- Profile page strings -->
     <string name="preview_profile">Просмотрено</string>
     <string name="interested">Вам было интересно</string>
+
+    <!-- Content description -->
+    <string name="back_button">Кнопка возврата на предыдущий экран</string>
 </resources>

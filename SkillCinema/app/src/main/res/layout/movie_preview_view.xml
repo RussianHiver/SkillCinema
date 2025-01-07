@@ -2,42 +2,58 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="120dp"
-    android:layout_height="210dp">
+    android:layout_width="111dp"
+    android:layout_height="210dp"
+    android:layout_marginEnd="10dp">
 
-    <androidx.appcompat.widget.AppCompatImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/poster"
-        android:layout_width="120dp"
-        android:layout_height="150dp"
-        app:layout_constraintBottom_toTopOf="@+id/movie_title"
+        android:layout_width="0dp"
+        android:layout_height="156dp"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearanceOverlay="@style/RoundedSquare"
         tools:src="@tools:sample/backgrounds/scenic" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/movie_rating"
+        android:layout_width="17dp"
+        android:layout_height="10dp"
+        android:layout_margin="5dp"
+        android:background="@drawable/ratings"
+        android:gravity="center"
+        android:visibility="gone"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="6sp"
+        app:layout_constraintEnd_toEndOf="@id/poster"
+        app:layout_constraintTop_toTopOf="@id/poster" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/movie_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:maxLines="2"
+        android:layout_marginTop="5dp"
         android:ellipsize="end"
+        android:maxLines="2"
         android:text="Название"
-        android:textSize="15sp"
+        android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/poster"
-        app:layout_constraintBottom_toTopOf="@+id/movie_genre"/>
+        app:layout_constraintTop_toBottomOf="@id/poster" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/movie_genre"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:alpha="0.5"
         android:text="Жанр"
-        android:textSize="11sp"
+        android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/movie_title"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@id/movie_title" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

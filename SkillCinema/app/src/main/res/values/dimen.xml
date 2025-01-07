@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="main_padding">25dp</dimen>
+    <dimen name="list_names">20sp</dimen>
+    <dimen name="blue">15sp</dimen>
+    <dimen name="header_title_size">12sp</dimen>
+    <dimen name="header_height">56dp</dimen>
+    <dimen name="back_button_size">48dp</dimen>
+</resources>

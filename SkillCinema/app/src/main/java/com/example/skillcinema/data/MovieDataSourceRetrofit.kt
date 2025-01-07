@@ -22,7 +22,7 @@ class MovieDataSourceRetrofit @Inject constructor() {
         @Headers(API_KEY)
         @GET("/api/v2.2/films/premieres")
         suspend fun getMoviePremieres(
-            @Query("year") year: Int = 2024,
+            @Query("year") year: Int = 2025,
             @Query("month") month: String = MONTHS[currentMonth]
         ): PremieresDTO
 

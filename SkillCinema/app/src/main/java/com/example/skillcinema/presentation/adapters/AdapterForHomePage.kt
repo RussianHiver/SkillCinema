@@ -2,6 +2,7 @@ package com.example.skillcinema.presentation.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.bumptech.glide.Glide
@@ -71,6 +72,12 @@ class AdapterForHomePage(
                     with(holder.binding) {
                         movieTitle.text = item?.nameRu
                         movieGenre.text = item?.genres?.first()?.genre
+                        item?.ratingKinopoisk?.let {
+                            with(movieRating) {
+                                isVisible = true
+                                text = String.format("%.1f", it)
+                            }
+                        }
                         item?.let {
                             Glide.with(poster.context)
                                 .load(it.posterUrlPreview)
@@ -88,6 +95,12 @@ class AdapterForHomePage(
                     with(holder.binding) {
                         movieTitle.text = item?.nameRu
                         movieGenre.text = item?.genres?.first()?.genre
+                        item?.ratingKinopoisk?.let {
+                            with(movieRating) {
+                                isVisible = true
+                                text = String.format("%.1f", it)
+                            }
+                        }
                         item?.let {
                             Glide.with(poster.context)
                                 .load(it.posterUrlPreview)

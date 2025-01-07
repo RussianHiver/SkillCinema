@@ -5,6 +5,7 @@ import androidx.paging.PagingConfig
 import com.example.skillcinema.data.MainRepository
 import com.example.skillcinema.data.PopularDTO
 import com.example.skillcinema.di.DaggerAppComponent
+import com.example.skillcinema.presentation.pagingsources.PagingSourcePopular
 import javax.inject.Inject
 
 class PopularMovieUseCase @Inject constructor (private val mainRepository: MainRepository) {
@@ -14,11 +15,9 @@ class PopularMovieUseCase @Inject constructor (private val mainRepository: MainR
     }
 
     fun getMoviesPopularPager(popularType: String): Pager<Int, PopularDTO.Item> {
-        val pagingSourcePopular = DaggerAppComponent.create().pagingSourcePopular()
-        pagingSourcePopular.inputPopularType(popularType)
         return Pager(
             config = PagingConfig(pageSize = 10),
-            pagingSourceFactory = { pagingSourcePopular }
+            pagingSourceFactory = { PagingSourcePopular(popularType) }
         )
     }
 
