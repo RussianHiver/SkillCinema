@@ -29,8 +29,8 @@ class MovieDataSourceRetrofit @Inject constructor() {
         @Headers(API_KEY)
         @GET("/api/v2.2/films/collections")
         suspend fun getPopular(
-            @Query("type") type: String = "TOP_POPULAR_ALL",
-            @Query("page") page: Int = 1
+            @Query("type") type: String,
+            @Query("page") page: Int
         ): PopularDTO
 
         @Headers(API_KEY)
@@ -40,8 +40,8 @@ class MovieDataSourceRetrofit @Inject constructor() {
         @Headers(API_KEY)
         @GET("/api/v2.2/films")
         suspend fun getFilteredMovies(
-            @Query("countries") countries: Array<Int> = arrayOf(1),
-            @Query("genres") genres: Array<Int> = arrayOf(1),
+            @Query("countries") countries: Array<Int>,
+            @Query("genres") genres: Array<Int>,
             @Query("order") order: String = "RATING",
             @Query("type") type: String = "ALL",
             @Query("ratingFrom") ratingFrom: Number = 0,

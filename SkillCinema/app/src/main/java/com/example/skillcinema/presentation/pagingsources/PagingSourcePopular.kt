@@ -4,8 +4,10 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.skillcinema.data.MovieDataSourceRetrofit
 import com.example.skillcinema.data.PopularDTO
+import javax.inject.Inject
 
-class PagingSourcePopular (val popularType: String) : PagingSource<Int, PopularDTO.Item>() {
+class PagingSourcePopular @Inject constructor(private val movieDataSourceRetrofit: MovieDataSourceRetrofit) :
+    PagingSource<Int, PopularDTO.Item>() {
 
     override fun getRefreshKey(state: PagingState<Int, PopularDTO.Item>): Int = FIRST_PAGE
 
@@ -13,7 +15,7 @@ class PagingSourcePopular (val popularType: String) : PagingSource<Int, PopularD
         val page = params.key ?: FIRST_PAGE
 
         return kotlin.runCatching {
-            MovieDataSourceRetrofit().searchDataApi.getPopular(page = page, type = popularType)
+            movieDataSourceRetrofit.searchDataApi.getPopular(page = page, type = popularType)
         }.fold(
             onSuccess = {
                 LoadResult.Page(
@@ -26,7 +28,12 @@ class PagingSourcePopular (val popularType: String) : PagingSource<Int, PopularD
         )
     }
 
+    fun putPopularType(type: String) {
+        popularType = type
+    }
+
     companion object {
         private const val FIRST_PAGE = 1
+        private lateinit var popularType: String
     }
 }

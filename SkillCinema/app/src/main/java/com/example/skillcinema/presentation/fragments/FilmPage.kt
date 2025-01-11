@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.skillcinema.R
+import com.example.skillcinema.data.StaffListDTO
 import com.example.skillcinema.databinding.FragmentFilmPageBinding
 import com.example.skillcinema.di.DaggerAppComponent
 import com.example.skillcinema.presentation.MainViewModel
@@ -49,6 +50,10 @@ class FilmPage : Fragment() {
 
         val args: FilmPageArgs by navArgs()
 
+        binding.headerBackButton.setOnClickListener {
+            findNavController().popBackStack()
+        }
+
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 val movie = viewModel.giveOneMovie(args.kinopoiskID)
@@ -71,33 +76,54 @@ class FilmPage : Fragment() {
                 adapterSimilars = AdapterForSimilars(similars, false)
 
                 with(binding) {
-                    filmRatingAndName.text = movie.nameRu ?: movie.nameEn ?: "No name"
+                    if (movie.ratingKinopoisk != null) {
+                        filmRatingAndName.text = "${
+                            String.format(
+                                "%.1f",
+                                movie.ratingKinopoisk
+                            )
+                        } ${movie.nameRu ?: movie.nameEn}"
+                    } else {
+                        filmRatingAndName.text = "${movie.nameRu ?: movie.nameEn}"
+                    }
                     filmYearAndGenre.text = getString(
                         R.string.film_year_and_genre,
                         movie.year.toString(),
-                        movie.genres.first().genre
+                        movie.genres.first().genre,
+                        movie.genres[1].genre
                     )
                     val filmLength = movie.filmLength?.let { convertFilmLength(it) }
                     filmCountryLengthAndAge.text = filmLength?.let {
-                        getString(
-                            R.string.film_length, it.getValue("hours"), it.getValue("minutes")
-                        )
+                        "${movie.countries.first().country}, ${
+                            getString(
+                                R.string.film_length, it.getValue("hours"), it.getValue("minutes")
+                            )
+                        }${convertMovieAgeRestriction(movie.ratingAgeLimits)}"
+
                     }
-                    Glide.with(filmPhoto.context).load(movie.posterUrl).into(filmPhoto)
+                    Glide.with(filmPhoto.context).load(movie.coverUrl ?: movie.posterUrl)
+                        .into(filmPhoto)
+                    Glide.with(movieLogo.context).load(movie.logoUrl).into(movieLogo)
                     filmPremise.text = movie.description
 
+                    allActorsButton.text = getStringOfListForStaff(staff, true)
                     allActorsButton.setOnClickListener {
                         openListOfStaff(true, args.kinopoiskID)
                     }
 
+                    filmStaffButton.text = getStringOfListForStaff(staff, false)
                     filmStaffButton.setOnClickListener {
                         openListOfStaff(false, args.kinopoiskID)
                     }
 
+                    filmGalleryButton.text =
+                        if (gallery.size <= 3) "${gallery.size.toString()}" else "${gallery.size.toString()} >"
                     filmGalleryButton.setOnClickListener {
                         openListOfPhotos(args.kinopoiskID)
                     }
 
+                    similarFilmAll.text =
+                        if (similars.total <= 3) "${similars.total.toString()}" else "${similars.total.toString()} >"
                     similarFilmAll.setOnClickListener {
                         openListSimilars(args.kinopoiskID)
                     }
@@ -117,6 +143,23 @@ class FilmPage : Fragment() {
         val hours = length / 60
         val minutes = length % 60
         return mapOf("hours" to hours, "minutes" to minutes)
+    }
+
+    private fun convertMovieAgeRestriction(ratings: String?): String {
+        return if (ratings != null) {
+            ", ${ratings.removeRange(0, 3)}+"
+        } else {
+            ""
+        }
+    }
+
+    private fun getStringOfListForStaff(list: List<StaffListDTO>, actors: Boolean): String {
+        val newList: List<StaffListDTO> = if (actors) {
+            list.filter { it.professionKey == "ACTOR" }
+        } else {
+            list.filter { it.professionKey != "ACTOR" }
+        }
+        return "${newList.size} >"
     }
 
     private fun openListOfStaff(actorsOrNot: Boolean, id: Int) {

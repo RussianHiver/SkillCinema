@@ -18,8 +18,8 @@ class AdapterForSimilars(val similars: SimilarsDTO, val allFilms: Boolean): Adap
     override fun getItemCount(): Int {
         return when {
             allFilms -> similars.total
-            similars.total <= 3 -> similars.total
-            else -> 3
+            similars.total <= 4 -> similars.total
+            else -> 4
         }
     }
 

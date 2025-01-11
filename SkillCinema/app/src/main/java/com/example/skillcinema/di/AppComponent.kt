@@ -12,6 +12,10 @@ interface AppComponent {
 
     fun mainViewModelFactory(): MainViewModelFactory
 
+    fun pagingSourcePopular(): PagingSourcePopular
+
+    fun pagingSourceFiltered(): PagingSourceFiltered
+
     fun pagingSourceGallery(): PagingSourceGallery
 
     fun pagingSourceSearchResultPager(): PagingSourceSearchResult

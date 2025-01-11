@@ -6,4 +6,6 @@
     <dimen name="header_title_size">12sp</dimen>
     <dimen name="header_height">56dp</dimen>
     <dimen name="back_button_size">48dp</dimen>
+    <dimen name="film_page_button_size">34dp</dimen>
+    <dimen name="film_page_button_padding">8dp</dimen>
 </resources>

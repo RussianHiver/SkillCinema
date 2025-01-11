@@ -45,12 +45,21 @@ class FilteredMovieUseCase @Inject constructor(private val mainRepository: MainR
     }
 
     fun getMovieFilteredPager(
-        filteredCountry: String,
-        filteredGenre: String
+        filteredCountry: Int,
+        filteredGenre: Int
     ): Pager<Int, FilteredDTO.Item> {
+
+        val pagingSource = DaggerAppComponent.create().pagingSourceFiltered()
+        pagingSource.putGenreAndCountry(
+            neededCountry = filteredCountry,
+            neededGenre = filteredGenre
+        )
+
         return Pager(
             config = PagingConfig(pageSize = 10),
-            pagingSourceFactory = { PagingSourceFiltered(country = filteredCountry, genre = filteredGenre) }
+            pagingSourceFactory = {
+                pagingSource
+            }
         )
     }
 

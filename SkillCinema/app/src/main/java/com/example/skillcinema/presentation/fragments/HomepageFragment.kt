@@ -15,7 +15,7 @@ import com.example.skillcinema.presentation.adapters.AdapterForHomePage
 import kotlinx.coroutines.launch
 
 private const val PREMIERS = "premiers"
-private const val POPULAR_ALL_TIME = "popular"
+private const val POPULAR_ALL_TIME = "TOP_POPULAR_ALL"
 private const val TOP_MOVIES = "TOP_250_MOVIES"
 private const val FILTERED = "filtered"
 private const val FRENCH_DRAMAS = "french_dramas"

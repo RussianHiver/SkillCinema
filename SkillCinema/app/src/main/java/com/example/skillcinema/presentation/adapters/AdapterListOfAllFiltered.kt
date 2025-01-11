@@ -2,6 +2,7 @@ package com.example.skillcinema.presentation.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
@@ -18,6 +19,12 @@ class AdapterListOfAllFiltered(val onClickMoviePage:(Int?) -> Unit): PagingDataA
         with(holder.binding) {
             movieTitle.text = item?.nameRu
             movieGenre.text = item?.genres?.first()?.genre
+            item?.ratingKinopoisk?.let {
+                with(movieRating) {
+                    isVisible = true
+                    text = String.format("%.1f", it)
+                }
+            }
             item?.let {
                 Glide.with(poster.context)
                     .load(it.posterUrlPreview)

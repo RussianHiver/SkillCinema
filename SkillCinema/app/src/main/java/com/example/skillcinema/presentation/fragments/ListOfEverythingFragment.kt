@@ -16,6 +16,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import com.example.skillcinema.R
+import com.example.skillcinema.data.GenresAndCountriesDTO
 import com.example.skillcinema.databinding.FragmentListOfEverythingBinding
 import com.example.skillcinema.di.DaggerAppComponent
 import com.example.skillcinema.presentation.MainViewModel
@@ -27,7 +28,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 private const val PREMIERS = "premiers"
-private const val POPULAR_ALL_TIME = "popular"
+private const val POPULAR_ALL_TIME = "TOP_POPULAR_ALL"
 private const val TOP_MOVIES = "TOP_250_MOVIES"
 private const val FILTERED = "filtered"
 private const val FRENCH_DRAMAS = "french_dramas"
@@ -123,6 +124,7 @@ class ListOfEverythingFragment : Fragment() {
                 loadState.source.refresh is LoadState.Error
             handleError(loadState)
         }
+        viewModel.choosePopularType(POPULAR_ALL_TIME)
         viewModel.pagingDataPopular.collectLatest {
             adapterPopular.submitData(it)
         }
@@ -144,6 +146,10 @@ class ListOfEverythingFragment : Fragment() {
                 loadState.source.refresh is LoadState.Error
             handleError(loadState)
         }
+        viewModel.putCountryAndGenre(
+            genre = getGenreByFilter("боевик", viewModel.giveFilters()),
+            country = getCountryByFilter("США", viewModel.giveFilters())
+        )
         viewModel.pagingDataFiltered.collectLatest {
             adapterFiltered.submitData(it)
         }
@@ -187,8 +193,10 @@ class ListOfEverythingFragment : Fragment() {
                 loadState.source.refresh is LoadState.Error
             handleError(loadState)
         }
-        viewModel.chooseFilteredGenre("драма")
-        viewModel.chooseFilteredCountry("Франция")
+        viewModel.putCountryAndGenre(
+            genre = getGenreByFilter("драма", viewModel.giveFilters()),
+            country = getCountryByFilter("Франция", viewModel.giveFilters())
+        )
         viewModel.pagingDataFiltered.collectLatest {
             adapterFiltered.submitData(it)
         }
@@ -223,6 +231,24 @@ class ListOfEverythingFragment : Fragment() {
                 ListOfEverythingFragmentDirections.actionListOfEverythingFragmentToFilmPage(it)
             findNavController().navigate(action)
         }
+    }
+
+    private fun getGenreByFilter(
+        genre: String,
+        filters: GenresAndCountriesDTO
+    ): Int {
+        val neededGenre: List<GenresAndCountriesDTO.Genre> =
+            filters.genres.filter { it.genre == genre }
+        return neededGenre.first().id
+    }
+
+    private fun getCountryByFilter(
+        country: String,
+        filters: GenresAndCountriesDTO
+    ): Int {
+        val neededCountry: List<GenresAndCountriesDTO.Country> =
+            filters.countries.filter { it.country == country }
+        return neededCountry.first().id
     }
 
     private fun handleError(loadState: CombinedLoadStates) {

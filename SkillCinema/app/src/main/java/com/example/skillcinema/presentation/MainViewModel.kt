@@ -40,9 +40,9 @@ class MainViewModel @Inject constructor(
     private val searchMovieUseCase: SearchMovieUseCase
 ) : ViewModel() {
 
-    private var popularType = MutableStateFlow("TOP_POPULAR_ALL")
-    private var filteredGenre = "боевик"
-    private var filteredCountry = "США"
+    private var popularType = ""
+    private var filteredGenre = 1
+    private var filteredCountry = 1
 
     val filmId: MutableStateFlow<Int> = MutableStateFlow(263531)
 
@@ -91,25 +91,16 @@ class MainViewModel @Inject constructor(
     }
 
     fun choosePopularType(type: String) {
-        popularType.value = type
+        popularType = type
     }
 
-    fun chooseFilteredGenre(genre: String) {
-        filteredGenre = when (genre) {
-            "драма" -> genre
-            else -> "боевик"
-        }
-    }
-
-    fun chooseFilteredCountry(country: String) {
-        filteredCountry = when (country) {
-            "Франция" -> country
-            else -> "США"
-        }
+    fun putCountryAndGenre(genre: Int, country: Int) {
+        filteredCountry = country
+        filteredGenre = genre
     }
 
     val pagingDataPopular: Flow<PagingData<PopularDTO.Item>> =
-        popularMovieUseCase.getMoviesPopularPager(popularType.value).flow.cachedIn(viewModelScope)
+        popularMovieUseCase.getMoviesPopularPager(popularType).flow.cachedIn(viewModelScope)
 
     val pagingDataFiltered: Flow<PagingData<FilteredDTO.Item>> =
         filteredMovieUseCase.getMovieFilteredPager(filteredCountry, filteredGenre).flow.cachedIn(

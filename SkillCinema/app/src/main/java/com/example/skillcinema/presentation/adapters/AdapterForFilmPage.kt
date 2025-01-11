@@ -29,7 +29,7 @@ class AdapterForFilmPage(
     override fun getItemCount(): Int {
         return when (fullList) {
             true -> newStaff.size
-            else -> if (newStaff.size > 6) 6 else newStaff.size
+            else -> if (newStaff.size > 9) 9 else newStaff.size
         }
     }
 

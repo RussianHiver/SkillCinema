@@ -41,7 +41,9 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list_of_everything_recycler"
-        android:layout_width="0dp"
+        android:layout_width="290dp"
+        android:paddingLeft="25dp"
+        android:layout_marginTop="15dp"
         android:layout_height="wrap_content"
         android:text="@string/hello_blank_fragment"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
