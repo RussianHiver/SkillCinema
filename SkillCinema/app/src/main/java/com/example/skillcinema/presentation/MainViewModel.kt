@@ -2,6 +2,8 @@ package com.example.skillcinema.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.example.skillcinema.data.FilteredDTO
@@ -11,6 +13,7 @@ import com.example.skillcinema.data.MovieDataDTO
 import com.example.skillcinema.data.PopularDTO
 import com.example.skillcinema.data.PremieresDTO
 import com.example.skillcinema.data.SearchResultDTO
+import com.example.skillcinema.data.SeasonsAndEpisodesDTO
 import com.example.skillcinema.data.SimilarsDTO
 import com.example.skillcinema.data.StaffListDTO
 import com.example.skillcinema.data.StaffMemberDTO
@@ -22,7 +25,11 @@ import com.example.skillcinema.domain.OneMovieUseCase
 import com.example.skillcinema.domain.PopularMovieUseCase
 import com.example.skillcinema.domain.PremierMovieUseCase
 import com.example.skillcinema.domain.SearchMovieUseCase
+import com.example.skillcinema.domain.SeasonsAndEpisodesUseCase
 import com.example.skillcinema.domain.SimilarMoviesUseCase
+import com.example.skillcinema.presentation.pagingsources.PagingSourceFiltered
+import com.example.skillcinema.presentation.pagingsources.PagingSourceGallery
+import com.example.skillcinema.presentation.pagingsources.PagingSourcePopular
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -37,14 +44,15 @@ class MainViewModel @Inject constructor(
     private val movieGalleryUseCase: MovieGalleryUseCase,
     private val similarMoviesUseCase: SimilarMoviesUseCase,
     private val filtersUseCase: FiltersUseCase,
-    private val searchMovieUseCase: SearchMovieUseCase
+    private val searchMovieUseCase: SearchMovieUseCase,
+    private val seasonsAndEpisodesUseCase: SeasonsAndEpisodesUseCase
 ) : ViewModel() {
 
-    private var popularType = ""
-    private var filteredGenre = 1
-    private var filteredCountry = 1
+    private var popularType = MutableStateFlow("")
+    private var filteredGenre = MutableStateFlow("")
+    private var filteredCountry = MutableStateFlow("")
 
-    val filmId: MutableStateFlow<Int> = MutableStateFlow(263531)
+    val filmId: MutableStateFlow<Int> = MutableStateFlow(0)
 
     suspend fun givePremierList(): List<PremieresDTO.Item> {
         return premierMovieUseCase.getMoviesPremiers().items
@@ -91,39 +99,67 @@ class MainViewModel @Inject constructor(
     }
 
     fun choosePopularType(type: String) {
-        popularType = type
+        popularType.value = type
     }
 
-    fun putCountryAndGenre(genre: Int, country: Int) {
-        filteredCountry = country
-        filteredGenre = genre
+    fun putCountryAndGenre(genre: String, country: String) {
+        filteredCountry.value = country
+        filteredGenre.value = genre
     }
 
-    val pagingDataPopular: Flow<PagingData<PopularDTO.Item>> =
-        popularMovieUseCase.getMoviesPopularPager(popularType).flow.cachedIn(viewModelScope)
+    val pagingDataPopular: Flow<PagingData<PopularDTO.Item>> = Pager(
+        config = PagingConfig(pageSize = 10),
+        pagingSourceFactory = {
+            PagingSourcePopular(
+                popularType.value,
+                popularMovieUseCase = popularMovieUseCase
+            )
+        }
+    ).flow.cachedIn(viewModelScope)
 
-    val pagingDataFiltered: Flow<PagingData<FilteredDTO.Item>> =
-        filteredMovieUseCase.getMovieFilteredPager(filteredCountry, filteredGenre).flow.cachedIn(
-            viewModelScope
-        )
+    val pagingDataFiltered: Flow<PagingData<FilteredDTO.Item>> = Pager(
+        config = PagingConfig(pageSize = 10),
+        pagingSourceFactory = {
+            PagingSourceFiltered(
+                country = filteredCountry.value,
+                genre = filteredGenre.value,
+                filteredMovieUseCase = filteredMovieUseCase
+            )
+        }
+    ).flow.cachedIn(viewModelScope)
 
-    val pagingDataGalleryStill: Flow<PagingData<GalleryDTO.Item>> =
-        movieGalleryUseCase.getMovieGalleryPager(
-            filmId.value,
-            "STILL"
-        ).flow.cachedIn(viewModelScope)
+    val pagingDataGalleryStill: Flow<PagingData<GalleryDTO.Item>> = Pager(
+        config = PagingConfig(pageSize = 10),
+        pagingSourceFactory = {
+            PagingSourceGallery(
+                filmId = filmId.value,
+                type = "STILL",
+                movieGalleryUseCase = movieGalleryUseCase
+            )
+        }
+    ).flow.cachedIn(viewModelScope)
 
-    val pagingDataGalleryShooting: Flow<PagingData<GalleryDTO.Item>> =
-        movieGalleryUseCase.getMovieGalleryPager(
-            filmId.value,
-            "SHOOTING"
-        ).flow.cachedIn(viewModelScope)
+    val pagingDataGalleryShooting: Flow<PagingData<GalleryDTO.Item>> =Pager(
+        config = PagingConfig(pageSize = 10),
+        pagingSourceFactory = {
+            PagingSourceGallery(
+                filmId = filmId.value,
+                type = "SHOOTING",
+                movieGalleryUseCase = movieGalleryUseCase
+            )
+        }
+    ).flow.cachedIn(viewModelScope)
 
-    val pagingDataGalleryPoster: Flow<PagingData<GalleryDTO.Item>> =
-        movieGalleryUseCase.getMovieGalleryPager(
-            filmId.value,
-            "POSTER"
-        ).flow.cachedIn(viewModelScope)
+    val pagingDataGalleryPoster: Flow<PagingData<GalleryDTO.Item>> =Pager(
+        config = PagingConfig(pageSize = 10),
+        pagingSourceFactory = {
+            PagingSourceGallery(
+                filmId = filmId.value,
+                type = "POSTER",
+                movieGalleryUseCase = movieGalleryUseCase
+            )
+        }
+    ).flow.cachedIn(viewModelScope)
 
 
     val pagingDataSearchResult = MutableStateFlow<PagingData<SearchResultDTO.Film>?>(null)
@@ -132,6 +168,10 @@ class MainViewModel @Inject constructor(
         searchMovieUseCase.getSearchResultPager(keyword).flow.collectLatest { pagingData ->
             pagingDataSearchResult.value = pagingData
         }
+    }
+
+    suspend fun getSeasonsAndEpisodes(id: Int): SeasonsAndEpisodesDTO {
+        return seasonsAndEpisodesUseCase.getSeasonsAndEpisodes(id)
     }
 
 }

@@ -1,12 +1,8 @@
 package com.example.skillcinema.domain
 
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
 import com.example.skillcinema.data.FilteredDTO
 import com.example.skillcinema.data.GenresAndCountriesDTO
 import com.example.skillcinema.data.MainRepository
-import com.example.skillcinema.di.DaggerAppComponent
-import com.example.skillcinema.presentation.pagingsources.PagingSourceFiltered
 import javax.inject.Inject
 
 class FilteredMovieUseCase @Inject constructor(private val mainRepository: MainRepository) {
@@ -43,24 +39,4 @@ class FilteredMovieUseCase @Inject constructor(private val mainRepository: MainR
             filters.countries.filter { it.country == country }
         return neededCountry.first().id
     }
-
-    fun getMovieFilteredPager(
-        filteredCountry: Int,
-        filteredGenre: Int
-    ): Pager<Int, FilteredDTO.Item> {
-
-        val pagingSource = DaggerAppComponent.create().pagingSourceFiltered()
-        pagingSource.putGenreAndCountry(
-            neededCountry = filteredCountry,
-            neededGenre = filteredGenre
-        )
-
-        return Pager(
-            config = PagingConfig(pageSize = 10),
-            pagingSourceFactory = {
-                pagingSource
-            }
-        )
-    }
-
 }

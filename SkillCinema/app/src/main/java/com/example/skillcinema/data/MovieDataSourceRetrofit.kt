@@ -90,6 +90,13 @@ class MovieDataSourceRetrofit @Inject constructor() {
             @Query("page") page: Int
         ): SearchResultDTO
 
+
+        @Headers(API_KEY)
+        @GET("/api/v2.2/films/{id}/seasons")
+        suspend fun getSeasonsAndEpisodes(
+            @Path("id") id: Int
+        ): SeasonsAndEpisodesDTO
+
     }
 
     companion object {

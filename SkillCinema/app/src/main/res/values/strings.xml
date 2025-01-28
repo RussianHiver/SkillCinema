@@ -25,7 +25,7 @@
     <string name="similarFilms">Похожие фильмы</string>
 
     <!-- String resources -->
-    <string name="film_year_and_genre"> %1$s, %2$s, %3$s</string>
+    <string name="film_year_and_genre"> %1$s, %2$s %3$s</string>
     <string name="film_length">%1$d ч, %2$d мин</string>
 
     <!-- ActorPage strings -->

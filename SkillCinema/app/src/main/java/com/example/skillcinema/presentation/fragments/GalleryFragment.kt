@@ -9,11 +9,12 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
+import com.example.skillcinema.data.App
 import com.example.skillcinema.databinding.FragmentGalleryBinding
-import com.example.skillcinema.di.DaggerAppComponent
 import com.example.skillcinema.presentation.MainViewModel
 import com.example.skillcinema.presentation.adapters.AdapterForFullGallery
 import com.example.skillcinema.presentation.adapters.MovieDataLoadStateAdapter
@@ -29,10 +30,12 @@ class GalleryFragment : Fragment() {
     private val args: GalleryFragmentArgs by navArgs()
 
     private val viewModel: MainViewModel by viewModels {
-        DaggerAppComponent.create().mainViewModelFactory()
+        (activity?.application as App).component.mainViewModelFactory()
     }
 
     private var adapter: AdapterForFullGallery = AdapterForFullGallery()
+
+    private var initialLaunch = Job()
 
     private var stillImages = Job()
 
@@ -50,6 +53,10 @@ class GalleryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.headerBackButton.setOnClickListener {
+            findNavController().popBackStack()
+        }
 
         val filmId = args.FilmId
         viewModel.filmId.value = filmId
@@ -73,39 +80,30 @@ class GalleryFragment : Fragment() {
 
 
         viewLifecycleOwner.lifecycleScope.launch {
+
+            viewLifecycleOwner.lifecycleScope.launch(initialLaunch) {
+                launchStillImages()
+            }
+
+
             binding.chipStillImages.setOnClickListener {
                 viewLifecycleOwner.lifecycleScope.launch(stillImages) {
-                    viewModel.pagingDataGalleryStill.collectLatest {
-                        shootingImages.cancel()
-                        posterImages.cancel()
-                        shootingImages = Job()
-                        posterImages = Job()
-                        adapter.submitData(it)
-                    }
+                    if (initialLaunch.isActive) initialLaunch.cancel()
+                    launchStillImages()
                 }
             }
 
             binding.chipShootingImages.setOnClickListener {
                 viewLifecycleOwner.lifecycleScope.launch(shootingImages) {
-                    viewModel.pagingDataGalleryShooting.collectLatest {
-                        stillImages.cancel()
-                        posterImages.cancel()
-                        stillImages = Job()
-                        posterImages = Job()
-                        adapter.submitData(it)
-                    }
+                    if (initialLaunch.isActive) initialLaunch.cancel()
+                    launchImagesFromShooting()
                 }
             }
 
             binding.chipPosterImages.setOnClickListener {
                 viewLifecycleOwner.lifecycleScope.launch(posterImages) {
-                    viewModel.pagingDataGalleryPoster.collectLatest {
-                        stillImages.cancel()
-                        shootingImages.cancel()
-                        stillImages = Job()
-                        shootingImages = Job()
-                        adapter.submitData(it)
-                    }
+                    if (initialLaunch.isActive) initialLaunch.cancel()
+                    launchPosters()
                 }
             }
         }
@@ -117,6 +115,34 @@ class GalleryFragment : Fragment() {
 
         errorState?.let {
             Toast.makeText(activity, "${it.error}", Toast.LENGTH_LONG).show()
+        }
+    }
+
+    private suspend fun launchStillImages() {
+        viewModel.pagingDataGalleryStill.collectLatest {
+            shootingImages.cancel()
+            posterImages.cancel()
+            shootingImages = Job()
+            posterImages = Job()
+            adapter.submitData(it)
+        }
+    }
+    private suspend fun launchImagesFromShooting() {
+        viewModel.pagingDataGalleryShooting.collectLatest {
+            stillImages.cancel()
+            posterImages.cancel()
+            stillImages = Job()
+            posterImages = Job()
+            adapter.submitData(it)
+        }
+    }
+    private suspend fun launchPosters() {
+        viewModel.pagingDataGalleryPoster.collectLatest {
+            stillImages.cancel()
+            shootingImages.cancel()
+            stillImages = Job()
+            shootingImages = Job()
+            adapter.submitData(it)
         }
     }
 

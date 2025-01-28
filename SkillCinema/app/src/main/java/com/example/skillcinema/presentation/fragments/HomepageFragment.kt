@@ -8,8 +8,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.example.skillcinema.data.App
 import com.example.skillcinema.databinding.FragmentHomepageBinding
-import com.example.skillcinema.di.DaggerAppComponent
 import com.example.skillcinema.presentation.MainViewModel
 import com.example.skillcinema.presentation.adapters.AdapterForHomePage
 import kotlinx.coroutines.launch
@@ -28,7 +28,7 @@ class HomepageFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: MainViewModel by viewModels {
-        DaggerAppComponent.create().mainViewModelFactory()
+        (activity?.application as App).component.mainViewModelFactory()
     }
 
     override fun onCreateView(
@@ -81,7 +81,7 @@ class HomepageFragment : Fragment() {
 
             val topMovies = viewModel.givePopularList(1, TOP_MOVIES)
             val topMoviesAdapterForHomePage = AdapterForHomePage(
-                POPULAR_ALL_TIME,
+                TOP_MOVIES,
                 { id -> openMoviePage(id) }) { list -> openAllList(list) }
             topMoviesAdapterForHomePage.checkTheNumberOfItems(topMovies.size)
             topMoviesAdapterForHomePage.addPopular(topMovies)
@@ -93,7 +93,7 @@ class HomepageFragment : Fragment() {
 
             val frenchDramas = viewModel.giveFilteredList(1, "Франция", "драма")
             val frenchDramasAdapterForHomePage = AdapterForHomePage(
-                FILTERED,
+                FRENCH_DRAMAS,
                 { id -> openMoviePage(id) }) { list -> openAllList(list) }
             frenchDramasAdapterForHomePage.checkTheNumberOfItems(frenchDramas.size)
             frenchDramasAdapterForHomePage.addFiltered(frenchDramas)
@@ -105,7 +105,7 @@ class HomepageFragment : Fragment() {
 
             val tvSeries = viewModel.givePopularList(1, TOP_TV)
             val tvSeriesAdapterForHomePage = AdapterForHomePage(
-                POPULAR_ALL_TIME,
+                TOP_TV,
                 { id -> openMoviePage(id) }) { list -> openAllList(list) }
             tvSeriesAdapterForHomePage.checkTheNumberOfItems(tvSeries.size)
             tvSeriesAdapterForHomePage.addPopular(tvSeries)

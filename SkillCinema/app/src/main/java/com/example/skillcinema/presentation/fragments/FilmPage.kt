@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -13,9 +14,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.skillcinema.R
+import com.example.skillcinema.data.App
+import com.example.skillcinema.data.MovieDataDTO
 import com.example.skillcinema.data.StaffListDTO
 import com.example.skillcinema.databinding.FragmentFilmPageBinding
-import com.example.skillcinema.di.DaggerAppComponent
 import com.example.skillcinema.presentation.MainViewModel
 import com.example.skillcinema.presentation.adapters.AdapterForFilmPage
 import com.example.skillcinema.presentation.adapters.AdapterForGallery
@@ -28,7 +30,7 @@ class FilmPage : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: MainViewModel by viewModels {
-        DaggerAppComponent.create().mainViewModelFactory()
+        (activity?.application as App).component.mainViewModelFactory()
     }
 
     private lateinit var adapterActors: AdapterForFilmPage
@@ -38,6 +40,7 @@ class FilmPage : Fragment() {
     private lateinit var adapterGallery: AdapterForGallery
 
     private lateinit var adapterSimilars: AdapterForSimilars
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
@@ -60,6 +63,18 @@ class FilmPage : Fragment() {
                 val staff = viewModel.giveMovieStaffList(args.kinopoiskID)
                 val gallery = viewModel.giveFilmGalleryList(args.kinopoiskID, 1, "STILL")
                 val similars = viewModel.giveSimilars(args.kinopoiskID)
+
+                if (movie.type == "TV_SERIES") {
+                    binding.seasonsAndEpisodesTitleAndAllButton.isVisible = true
+                    val numberOfSeasons = viewModel.getSeasonsAndEpisodes(args.kinopoiskID).total
+                    var numberOfEpisodes = 0
+                    viewModel.getSeasonsAndEpisodes(args.kinopoiskID).items.forEach { numberOfEpisodes += it.episodes.count() }
+                    binding.amountOfSeasonsAndEpisodes.text = getSeasonsAndEpisodesCountString(
+                        seasons = numberOfSeasons,
+                        episodes = numberOfEpisodes
+                    )
+                }
+
                 adapterStaff =
                     AdapterForFilmPage(staff, areActors = false, fullList = false) { id ->
                         openStaffMemberPage(
@@ -90,7 +105,7 @@ class FilmPage : Fragment() {
                         R.string.film_year_and_genre,
                         movie.year.toString(),
                         movie.genres.first().genre,
-                        movie.genres[1].genre
+                        getSecondGenre(movie.genres.getOrNull(1))
                     )
                     val filmLength = movie.filmLength?.let { convertFilmLength(it) }
                     filmCountryLengthAndAge.text = filmLength?.let {
@@ -117,13 +132,13 @@ class FilmPage : Fragment() {
                     }
 
                     filmGalleryButton.text =
-                        if (gallery.size <= 3) "${gallery.size.toString()}" else "${gallery.size.toString()} >"
+                        if (gallery.size <= 3) "${gallery.size}" else "${gallery.size} >"
                     filmGalleryButton.setOnClickListener {
                         openListOfPhotos(args.kinopoiskID)
                     }
 
                     similarFilmAll.text =
-                        if (similars.total <= 3) "${similars.total.toString()}" else "${similars.total.toString()} >"
+                        if (similars.total <= 3) "${similars.total}" else "${similars.total} >"
                     similarFilmAll.setOnClickListener {
                         openListSimilars(args.kinopoiskID)
                     }
@@ -132,6 +147,11 @@ class FilmPage : Fragment() {
                     recyclerStaff.adapter = adapterStaff
                     recyclerGallery.adapter = adapterGallery
                     recyclerSimilarFilm.adapter = adapterSimilars
+
+                    binding.seasonsAndEpisodesAllButton.setOnClickListener {
+                        val action = FilmPageDirections.actionFilmPageToSeasonsAndEpisodesFragment()
+                        findNavController().navigate(action)
+                    }
                 }
             }
         }
@@ -151,6 +171,11 @@ class FilmPage : Fragment() {
         } else {
             ""
         }
+    }
+
+
+    private fun getSecondGenre(genre: MovieDataDTO.Genre?): String {
+        return if (genre != null) ", ${genre.genre}" else ""
     }
 
     private fun getStringOfListForStaff(list: List<StaffListDTO>, actors: Boolean): String {
@@ -180,6 +205,30 @@ class FilmPage : Fragment() {
     fun openStaffMemberPage(id: Int) {
         val action = FilmPageDirections.actionFilmPageToActorPageFragment(id)
         findNavController().navigate(action)
+    }
+
+    private fun getSeasonsAndEpisodesCountString(seasons: Int, episodes: Int): String {
+
+        var seasonsString = seasons.toString()
+        var episodesString = episodes.toString()
+
+        val patternForOne = Regex("[0-9]*[^1]?1$")
+        val patternForTwoThreeFour = Regex("[0-9]*[^1]?[234]$")
+
+        seasonsString = when {
+            patternForOne.matches(seasonsString) -> "$seasons сезон"
+            patternForTwoThreeFour.matches(seasonsString) -> "$seasons сезона"
+            else -> "$seasons сезонов"
+        }
+
+        episodesString = when {
+            patternForOne.matches(episodesString) -> "$episodes эпизод"
+            patternForTwoThreeFour.matches(episodesString) -> "$episodes эпизода"
+            else -> "$episodes эпизодов"
+        }
+
+        return "$seasonsString, $episodesString"
+
     }
 
     override fun onDestroy() {

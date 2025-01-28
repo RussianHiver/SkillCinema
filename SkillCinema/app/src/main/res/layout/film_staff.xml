@@ -20,8 +20,8 @@
 
     <LinearLayout
         android:id="@+id/staff_name_and_occupation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="140dp"
+        android:layout_height="32dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/poster"

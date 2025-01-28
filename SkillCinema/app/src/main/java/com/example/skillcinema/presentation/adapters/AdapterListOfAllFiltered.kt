@@ -18,7 +18,9 @@ class AdapterListOfAllFiltered(val onClickMoviePage:(Int?) -> Unit): PagingDataA
 
         with(holder.binding) {
             movieTitle.text = item?.nameRu
-            movieGenre.text = item?.genres?.first()?.genre
+            if (item?.genres?.isNotEmpty() == true) {
+                movieGenre.text = item.genres.first().genre
+            }
             item?.ratingKinopoisk?.let {
                 with(movieRating) {
                     isVisible = true

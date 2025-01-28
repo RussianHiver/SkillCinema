@@ -1,21 +1,23 @@
 package com.example.skillcinema.presentation.pagingsources
 
+import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.example.skillcinema.data.MovieDataSourceRetrofit
 import com.example.skillcinema.data.PopularDTO
-import javax.inject.Inject
+import com.example.skillcinema.domain.PopularMovieUseCase
 
-class PagingSourcePopular @Inject constructor(private val movieDataSourceRetrofit: MovieDataSourceRetrofit) :
+class PagingSourcePopular (val type: String, val popularMovieUseCase: PopularMovieUseCase) :
     PagingSource<Int, PopularDTO.Item>() {
 
     override fun getRefreshKey(state: PagingState<Int, PopularDTO.Item>): Int = FIRST_PAGE
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, PopularDTO.Item> {
+        Log.d("testInside", type)
+
         val page = params.key ?: FIRST_PAGE
 
         return kotlin.runCatching {
-            movieDataSourceRetrofit.searchDataApi.getPopular(page = page, type = popularType)
+            popularMovieUseCase.getMoviesPopular(page = page, type = type)
         }.fold(
             onSuccess = {
                 LoadResult.Page(
@@ -28,12 +30,7 @@ class PagingSourcePopular @Inject constructor(private val movieDataSourceRetrofi
         )
     }
 
-    fun putPopularType(type: String) {
-        popularType = type
-    }
-
     companion object {
         private const val FIRST_PAGE = 1
-        private lateinit var popularType: String
     }
 }

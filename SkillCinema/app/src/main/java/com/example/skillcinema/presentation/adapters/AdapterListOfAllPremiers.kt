@@ -22,7 +22,9 @@ class AdapterListOfAllPremiers(
         val item = premiers.getOrNull(position)
         with(holder.binding) {
             movieTitle.text = item?.nameRu
-            movieGenre.text = item?.genres?.first()?.genre
+            if (item?.genres?.isNotEmpty() == true) {
+                movieGenre.text = item.genres.first().genre
+            }
             item?.let {
                 Glide.with(poster.context)
                     .load(it.posterUrlPreview)

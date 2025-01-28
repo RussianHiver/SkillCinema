@@ -59,6 +59,10 @@
             app:destination="@id/homepageFragment"
             app:popUpTo="@id/homepageFragment"
             app:popUpToInclusive="true" />
+        <argument
+            android:name="staffID"
+            app:argType="integer"
+            android:defaultValue="0" />
     </fragment>
     <fragment
         android:id="@+id/filmPage"
@@ -80,6 +84,12 @@
         <action
             android:id="@+id/action_filmPage_to_actorPageFragment"
             app:destination="@id/actorPageFragment" />
+        <action
+            android:id="@+id/action_filmPage_to_listOfStaffFragment2"
+            app:destination="@id/listOfStaffFragment" />
+        <action
+            android:id="@+id/action_filmPage_to_seasonsAndEpisodesFragment"
+            app:destination="@id/seasonsAndEpisodesFragment" />
     </fragment>
     <fragment
         android:id="@+id/listOfStaffFragment"
@@ -122,6 +132,9 @@
         <argument
             android:name="PersonId"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_actorPageFragment_to_staffFilmographyFragment"
+            app:destination="@id/staffFilmographyFragment" />
     </fragment>
     <fragment
         android:id="@+id/searchFilterFragment"
@@ -184,4 +197,21 @@
             app:popUpTo="@id/searchFilterFragment"
             app:popUpToInclusive="true" />
     </fragment>
+    <fragment
+        android:id="@+id/staffFilmographyFragment"
+        android:name="com.example.skillcinema.presentation.fragments.StaffFilmographyFragment"
+        android:label="fragment_staff_filmography"
+        tools:layout="@layout/fragment_staff_filmography" >
+        <argument
+            android:name="StaffID"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_staffFilmographyFragment_to_filmPage"
+            app:destination="@id/filmPage" />
+    </fragment>
+    <fragment
+        android:id="@+id/seasonsAndEpisodesFragment"
+        android:name="com.example.skillcinema.presentation.fragments.SeasonsAndEpisodesFragment"
+        android:label="fragment_seasons_and_episodes"
+        tools:layout="@layout/fragment_seasons_and_episodes" />
 </navigation>

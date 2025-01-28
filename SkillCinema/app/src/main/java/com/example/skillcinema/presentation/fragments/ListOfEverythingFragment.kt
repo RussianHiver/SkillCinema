@@ -1,12 +1,12 @@
 package com.example.skillcinema.presentation.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -16,9 +16,8 @@ import androidx.navigation.fragment.navArgs
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import com.example.skillcinema.R
-import com.example.skillcinema.data.GenresAndCountriesDTO
+import com.example.skillcinema.data.App
 import com.example.skillcinema.databinding.FragmentListOfEverythingBinding
-import com.example.skillcinema.di.DaggerAppComponent
 import com.example.skillcinema.presentation.MainViewModel
 import com.example.skillcinema.presentation.adapters.AdapterListOfAllFiltered
 import com.example.skillcinema.presentation.adapters.AdapterListOfAllPopular
@@ -33,6 +32,7 @@ private const val TOP_MOVIES = "TOP_250_MOVIES"
 private const val FILTERED = "filtered"
 private const val FRENCH_DRAMAS = "french_dramas"
 private const val TOP_TV = "TOP_250_TV_SHOWS"
+private const val STAFF_BEST_FILMS = "staff_best_films"
 
 class ListOfEverythingFragment : Fragment() {
 
@@ -40,7 +40,7 @@ class ListOfEverythingFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: MainViewModel by viewModels {
-        DaggerAppComponent.create().mainViewModelFactory()
+        (activity?.application as App).component.mainViewModelFactory()
     }
 
     private val adapterPopular by lazy { AdapterListOfAllPopular { id -> openMoviePage(id) } }
@@ -93,6 +93,10 @@ class ListOfEverythingFragment : Fragment() {
                     TOP_TV -> {
                         fillTopTV()
                     }
+
+                    STAFF_BEST_FILMS -> {
+
+                    }
                 }
 
             }
@@ -124,7 +128,7 @@ class ListOfEverythingFragment : Fragment() {
                 loadState.source.refresh is LoadState.Error
             handleError(loadState)
         }
-        viewModel.choosePopularType(POPULAR_ALL_TIME)
+        viewModel.choosePopularType("TOP_POPULAR_ALL")
         viewModel.pagingDataPopular.collectLatest {
             adapterPopular.submitData(it)
         }
@@ -147,8 +151,8 @@ class ListOfEverythingFragment : Fragment() {
             handleError(loadState)
         }
         viewModel.putCountryAndGenre(
-            genre = getGenreByFilter("боевик", viewModel.giveFilters()),
-            country = getCountryByFilter("США", viewModel.giveFilters())
+            genre = "боевик",
+            country = "США"
         )
         viewModel.pagingDataFiltered.collectLatest {
             adapterFiltered.submitData(it)
@@ -194,8 +198,8 @@ class ListOfEverythingFragment : Fragment() {
             handleError(loadState)
         }
         viewModel.putCountryAndGenre(
-            genre = getGenreByFilter("драма", viewModel.giveFilters()),
-            country = getCountryByFilter("Франция", viewModel.giveFilters())
+            genre = "драма",
+            country = "Франция"
         )
         viewModel.pagingDataFiltered.collectLatest {
             adapterFiltered.submitData(it)
@@ -203,7 +207,6 @@ class ListOfEverythingFragment : Fragment() {
     }
 
     private suspend fun fillTopTV() {
-
         binding.headerTitle.text = getText(R.string.tvSeries)
         binding.listOfEverythingRecycler.adapter =
             adapterPopular.withLoadStateHeaderAndFooter(
@@ -231,24 +234,6 @@ class ListOfEverythingFragment : Fragment() {
                 ListOfEverythingFragmentDirections.actionListOfEverythingFragmentToFilmPage(it)
             findNavController().navigate(action)
         }
-    }
-
-    private fun getGenreByFilter(
-        genre: String,
-        filters: GenresAndCountriesDTO
-    ): Int {
-        val neededGenre: List<GenresAndCountriesDTO.Genre> =
-            filters.genres.filter { it.genre == genre }
-        return neededGenre.first().id
-    }
-
-    private fun getCountryByFilter(
-        country: String,
-        filters: GenresAndCountriesDTO
-    ): Int {
-        val neededCountry: List<GenresAndCountriesDTO.Country> =
-            filters.countries.filter { it.country == country }
-        return neededCountry.first().id
     }
 
     private fun handleError(loadState: CombinedLoadStates) {

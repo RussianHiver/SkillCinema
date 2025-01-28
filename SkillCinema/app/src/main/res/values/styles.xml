@@ -3,4 +3,11 @@
     <style name="RoundedSquare">
         <item name="cornerSize">5dp</item>
     </style>
+    
+    
+    <style name="CustomChipChoice" parent="Widget.MaterialComponents.Chip.Choice">
+        <item name="chipBackgroundColor">@color/chip_state_background</item>
+        <item name="android:textColor">@color/chip_state_text</item>
+    </style>
+    
 </resources>

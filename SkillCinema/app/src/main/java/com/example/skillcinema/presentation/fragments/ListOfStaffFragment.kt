@@ -11,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.example.skillcinema.data.App
 import com.example.skillcinema.databinding.FragmentListOfStaffBinding
 import com.example.skillcinema.di.DaggerAppComponent
 import com.example.skillcinema.presentation.MainViewModel
@@ -24,7 +25,7 @@ class ListOfStaffFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: MainViewModel by viewModels{
-        DaggerAppComponent.create().mainViewModelFactory()
+        (activity?.application as App).component.mainViewModelFactory()
     }
 
     private val args: ListOfStaffFragmentArgs by navArgs()

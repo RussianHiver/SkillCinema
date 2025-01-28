@@ -10,20 +10,25 @@ import com.bumptech.glide.Glide
 import com.example.skillcinema.data.PopularDTO
 import com.example.skillcinema.databinding.MoviePreviewViewBinding
 
-class AdapterListOfAllPopular(val onClickMoviePage:(Int?) -> Unit): PagingDataAdapter<PopularDTO.Item, PopularViewHolder>(
-    DiffUtilCallback()
-) {
+class AdapterListOfAllPopular(val onClickMoviePage: (Int?) -> Unit) :
+    PagingDataAdapter<PopularDTO.Item, PopularViewHolder>(
+        DiffUtilCallback()
+    ) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PopularViewHolder {
-        val binding = MoviePreviewViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding =
+            MoviePreviewViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return PopularViewHolder(binding)
     }
+
     override fun onBindViewHolder(holder: PopularViewHolder, position: Int) {
         val item = getItem(position)
 
         with(holder.binding) {
             movieTitle.text = item?.nameRu
-            movieGenre.text = item?.genres?.first()?.genre
+            if (item?.genres?.isNotEmpty() == true) {
+                movieGenre.text = item.genres.first().genre
+            }
             item?.ratingKinopoisk?.let {
                 with(movieRating) {
                     isVisible = true
@@ -43,8 +48,8 @@ class AdapterListOfAllPopular(val onClickMoviePage:(Int?) -> Unit): PagingDataAd
     }
 }
 
-class PopularViewHolder(val binding: MoviePreviewViewBinding): ViewHolder(binding.root)
-class DiffUtilCallback: DiffUtil.ItemCallback<PopularDTO.Item>() {
+class PopularViewHolder(val binding: MoviePreviewViewBinding) : ViewHolder(binding.root)
+class DiffUtilCallback : DiffUtil.ItemCallback<PopularDTO.Item>() {
     override fun areItemsTheSame(
         oldItem: PopularDTO.Item, newItem: PopularDTO.Item
     ): Boolean = oldItem.kinopoiskId == newItem.kinopoiskId

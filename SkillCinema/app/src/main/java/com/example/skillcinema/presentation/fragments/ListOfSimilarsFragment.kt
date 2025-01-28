@@ -10,6 +10,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
+import com.example.skillcinema.data.App
 import com.example.skillcinema.data.SimilarsDTO
 import com.example.skillcinema.databinding.FragmentListOfSimilarsBinding
 import com.example.skillcinema.di.DaggerAppComponent
@@ -24,7 +25,7 @@ class ListOfSimilarsFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: MainViewModel by viewModels{
-        DaggerAppComponent.create().mainViewModelFactory()
+        (activity?.application as App).component.mainViewModelFactory()
     }
 
     private val args: ListOfSimilarsFragmentArgs by navArgs()

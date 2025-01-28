@@ -16,6 +16,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import com.example.skillcinema.R
+import com.example.skillcinema.data.App
 import com.example.skillcinema.databinding.FragmentSearchPageBinding
 import com.example.skillcinema.di.DaggerAppComponent
 import com.example.skillcinema.presentation.MainViewModel
@@ -31,7 +32,7 @@ class SearchPageFragment : Fragment() {
     val binding: FragmentSearchPageBinding get() = _binding!!
 
     private val viewModel: MainViewModel by viewModels {
-        DaggerAppComponent.create().mainViewModelFactory()
+        (activity?.application as App).component.mainViewModelFactory()
     }
 
     val adapter = AdapterForSearchResult({ id -> openMoviePage(id) })

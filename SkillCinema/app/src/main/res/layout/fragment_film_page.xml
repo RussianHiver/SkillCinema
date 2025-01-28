@@ -153,7 +153,7 @@
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/film_premise"
             android:layout_width="308dp"
-            android:layout_height="220dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/main_padding"
             android:layout_marginTop="40dp"
             android:ellipsize="end"
@@ -163,13 +163,69 @@
             app:layout_constraintTop_toBottomOf="@id/film_photo"
             tools:text="@tools:sample/lorem/random" />
 
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/film_premise_barier"
+            android:layout_width="0dp"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="film_premise, seasons_and_episodes_title_and_all_button"
+            android:layout_height="0dp"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/seasons_and_episodes_title_and_all_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/film_premise"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/seasons_and_episodes_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/seasons_and_episode"
+                android:padding="@dimen/main_padding"
+                android:textSize="@dimen/list_names"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/seasons_and_episodes_all_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:text="@string/all"
+                android:padding="@dimen/main_padding"
+                android:textAllCaps="false"
+                android:textColor="@color/blue_color"
+                android:textSize="@dimen/blue"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/amount_of_seasons_and_episodes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:textColor="@color/grey"
+                tools:text="@tools:sample/lorem"
+                app:layout_constraintBottom_toBottomOf="@id/seasons_and_episodes_title"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/film_actor_header"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/film_premise"
+            app:layout_constraintTop_toBottomOf="@id/film_premise_barier"
             app:layout_constraintVertical_bias="0">
 
 

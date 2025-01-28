@@ -1,127 +1,178 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".presentation.fragments.StaffMemberPageFragment">
+
+    <FrameLayout
+        android:id="@+id/header_back_button_no_title"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/header_height"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/header_back_button"
+            android:layout_width="@dimen/back_button_size"
+            android:layout_height="@dimen/back_button_size"
+            android:layout_gravity="start|center"
+            android:layout_marginStart="26dp"
+            android:background="@null"
+            android:contentDescription="@string/back_button"
+            android:padding="20dp"
+            android:src="@drawable/back_arrow" />
+
+    </FrameLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/photo_and_name"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/header_back_button_no_title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
-        <androidx.appcompat.widget.AppCompatImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/actor_photo"
-            android:layout_width="170dp"
-            android:layout_height="250dp"
-            android:layout_margin="25dp"
+            android:layout_width="146dp"
+            android:layout_height="201dp"
+            android:layout_marginStart="@dimen/main_padding"
             android:adjustViewBounds="true"
             android:scaleType="fitXY"
-            app:layout_constraintBottom_toBottomOf="@id/photo_and_name"
+            app:shapeAppearanceOverlay="@style/RoundedSquare"
             app:layout_constraintStart_toStartOf="@id/photo_and_name"
             app:layout_constraintTop_toTopOf="@id/photo_and_name"
             tools:src="@tools:sample/avatars" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/actor_name"
-            android:layout_width="170dp"
+        <LinearLayout
+            android:id="@+id/staff_name_and_occupation"
+            android:layout_width="140dp"
             android:layout_height="wrap_content"
-            android:textSize="25sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@id/photo_and_name"
-            app:layout_constraintEnd_toEndOf="@id/photo_and_name"
-            app:layout_constraintHorizontal_bias="0.507"
+            android:orientation="vertical"
             app:layout_constraintStart_toEndOf="@id/actor_photo"
-            app:layout_constraintTop_toTopOf="@id/actor_photo"
-            app:layout_constraintVertical_bias="0.0"
-            tools:text="@tools:sample/lorem" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:textStyle="bold"
+                android:text="Имя Фамилия"
+                android:textSize="16sp" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/occupation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:text="Роль"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <LinearLayout
-        android:id="@+id/best_title_and_all_button"
-        android:layout_width="match_parent"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/containerBest"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        app:layout_constraintTop_toBottomOf="@id/photo_and_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/best_title"
+            android:id="@+id/titleBest"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="25dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="110dp"
-            android:layout_marginBottom="20dp"
             android:text="@string/best"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            android:padding="@dimen/main_padding"
+            android:textSize="@dimen/list_names"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/best_all_button"
+            android:id="@+id/allButtonBest"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="100dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="20dp"
             android:background="@null"
             android:text="@string/all"
+            android:padding="@dimen/main_padding"
             android:textAllCaps="false"
-            android:textColor="#3F51B5"
-            android:textSize="15sp" />
+            android:textColor="@color/blue_color"
+            android:textSize="@dimen/blue"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/actor_best_films_recycler"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        android:orientation="horizontal"
-        android:padding="25dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-    <LinearLayout
-        android:id="@+id/filmography_title_and_all_button"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingStart="25dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/containerBest" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/filmography_title_and_all_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/actor_best_films_recycler"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/filmography_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="25dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="70dp"
-            android:layout_marginBottom="20dp"
             android:text="@string/filmography_title"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            android:padding="@dimen/main_padding"
+            android:textSize="@dimen/list_names"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/filmography_all_button"
+            android:id="@+id/filmography_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="70dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="20dp"
             android:background="@null"
             android:text="@string/filmography_all_button"
+            android:padding="@dimen/main_padding"
             android:textAllCaps="false"
-            android:textColor="#3F51B5"
-            android:textSize="15sp" />
+            android:textColor="@color/blue_color"
+            android:textSize="@dimen/blue"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    </LinearLayout>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/amount_of_films_in_filmography"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:textColor="@color/grey"
+            tools:text="@tools:sample/lorem"
+            app:layout_constraintBottom_toBottomOf="@id/filmography_title"
+            app:layout_constraintStart_toStartOf="parent"/>
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/amount_of_films_in_filmography"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="25dp"
-        android:textColor="@color/grey"
-        tools:text="@tools:sample/lorem"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

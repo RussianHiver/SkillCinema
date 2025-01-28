@@ -10,6 +10,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import com.example.skillcinema.data.App
 import com.example.skillcinema.databinding.FragmentSearchFilterGenreBinding
 import com.example.skillcinema.di.DaggerAppComponent
 import com.example.skillcinema.presentation.MainViewModel
@@ -25,7 +26,7 @@ class SearchFilterGenreFragment : Fragment() {
     private lateinit var adapter: AdapterForFilters
 
     private val viewModel: MainViewModel by viewModels {
-        DaggerAppComponent.create().mainViewModelFactory()
+        (activity?.application as App).component.mainViewModelFactory()
     }
 
     override fun onCreateView(
