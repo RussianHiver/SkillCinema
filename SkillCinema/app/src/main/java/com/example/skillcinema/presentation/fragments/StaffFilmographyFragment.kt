@@ -22,6 +22,7 @@ import com.example.skillcinema.databinding.FragmentStaffFilmographyBinding
 import com.example.skillcinema.presentation.MainViewModel
 import com.example.skillcinema.presentation.adapters.AdapterListOfAllStaffFilms
 import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipDrawable
 import com.google.android.material.chip.ChipGroup
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -77,10 +78,8 @@ class StaffFilmographyFragment : Fragment() {
                 }
                 chipGroup.setOnCheckedStateChangeListener { group, checkedIds ->
                     val occupation = group.findViewById<Chip>(checkedIds.first()).text.toString()
-                    Log.d("check2", occupation)
                     viewLifecycleOwner.lifecycleScope.launch(job) {
                         binding.searchPageProgress.isVisible = true
-                        Log.d("check", getNeededOccupation(occupation))
                         getNeededFilmList(getNeededOccupation(occupation), staffMember)
                         job.cancel()
                         job = Job()
@@ -95,16 +94,19 @@ class StaffFilmographyFragment : Fragment() {
 
     private fun makeAChip(occupation: String): Chip {
         val chip = Chip(context)
-        with(chip) {
-            isCheckable = true
-            text = occupation
-            setChipBackgroundColorResource(R.color.chip_state_background)
-            setTextColor(resources.getColorStateList(R.color.chip_state_text, null))
-            width = LayoutParams.WRAP_CONTENT
-            height = LayoutParams.WRAP_CONTENT
-            textSize = 18f
-            chipStrokeWidth = 3f
-            isChecked = false
+        context?.let {
+            val chipDrawable =
+                ChipDrawable.createFromAttributes(it, null, 0, R.style.CustomChipChoice)
+            with(chip) {
+                isCheckable = true
+                text = occupation
+                setChipDrawable(chipDrawable)
+                setTextColor(resources.getColorStateList(R.color.chip_state_text, null))
+                textSize = 18f
+                textAlignment = View.TEXT_ALIGNMENT_CENTER
+                chipStrokeWidth = 3f
+                isChecked = false
+            }
         }
         return chip
     }

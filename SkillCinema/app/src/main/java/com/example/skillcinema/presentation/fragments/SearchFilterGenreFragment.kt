@@ -10,6 +10,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.skillcinema.data.App
 import com.example.skillcinema.databinding.FragmentSearchFilterGenreBinding
 import com.example.skillcinema.di.DaggerAppComponent
@@ -28,6 +29,8 @@ class SearchFilterGenreFragment : Fragment() {
     private val viewModel: MainViewModel by viewModels {
         (activity?.application as App).component.mainViewModelFactory()
     }
+
+    val args: SearchFilterGenreFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -62,7 +65,7 @@ class SearchFilterGenreFragment : Fragment() {
     private fun sendChosenGenre(chosenGenre: String) {
         val action =
             SearchFilterGenreFragmentDirections.actionSearchFilterGenreFragmentToSearchFilterFragment(
-                null,
+                args.country,
                 chosenGenre
             )
         findNavController().navigate(action)

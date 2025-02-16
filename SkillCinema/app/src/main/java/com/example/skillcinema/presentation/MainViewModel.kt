@@ -24,12 +24,12 @@ import com.example.skillcinema.domain.MovieStaffUseCase
 import com.example.skillcinema.domain.OneMovieUseCase
 import com.example.skillcinema.domain.PopularMovieUseCase
 import com.example.skillcinema.domain.PremierMovieUseCase
-import com.example.skillcinema.domain.SearchMovieUseCase
 import com.example.skillcinema.domain.SeasonsAndEpisodesUseCase
 import com.example.skillcinema.domain.SimilarMoviesUseCase
 import com.example.skillcinema.presentation.pagingsources.PagingSourceFiltered
 import com.example.skillcinema.presentation.pagingsources.PagingSourceGallery
 import com.example.skillcinema.presentation.pagingsources.PagingSourcePopular
+import com.example.skillcinema.presentation.pagingsources.PagingSourceSearchResult
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -44,7 +44,6 @@ class MainViewModel @Inject constructor(
     private val movieGalleryUseCase: MovieGalleryUseCase,
     private val similarMoviesUseCase: SimilarMoviesUseCase,
     private val filtersUseCase: FiltersUseCase,
-    private val searchMovieUseCase: SearchMovieUseCase,
     private val seasonsAndEpisodesUseCase: SeasonsAndEpisodesUseCase
 ) : ViewModel() {
 
@@ -139,7 +138,7 @@ class MainViewModel @Inject constructor(
         }
     ).flow.cachedIn(viewModelScope)
 
-    val pagingDataGalleryShooting: Flow<PagingData<GalleryDTO.Item>> =Pager(
+    val pagingDataGalleryShooting: Flow<PagingData<GalleryDTO.Item>> = Pager(
         config = PagingConfig(pageSize = 10),
         pagingSourceFactory = {
             PagingSourceGallery(
@@ -150,7 +149,7 @@ class MainViewModel @Inject constructor(
         }
     ).flow.cachedIn(viewModelScope)
 
-    val pagingDataGalleryPoster: Flow<PagingData<GalleryDTO.Item>> =Pager(
+    val pagingDataGalleryPoster: Flow<PagingData<GalleryDTO.Item>> = Pager(
         config = PagingConfig(pageSize = 10),
         pagingSourceFactory = {
             PagingSourceGallery(
@@ -162,10 +161,32 @@ class MainViewModel @Inject constructor(
     ).flow.cachedIn(viewModelScope)
 
 
-    val pagingDataSearchResult = MutableStateFlow<PagingData<SearchResultDTO.Film>?>(null)
+    val pagingDataSearchResult = MutableStateFlow<PagingData<FilteredDTO.Item>?>(null)
 
-    suspend fun getNewPagerForSearchResult(keyword: String) {
-        searchMovieUseCase.getSearchResultPager(keyword).flow.collectLatest { pagingData ->
+    suspend fun getNewPagerForSearchResult(
+        keyword: String,
+        country: String,
+        genre: String,
+        type: String,
+        order: String,
+        ratingFrom: Float,
+        ratingTo: Float
+    ) {
+        Pager(
+            config = PagingConfig(pageSize = 10),
+            pagingSourceFactory = {
+                PagingSourceSearchResult(
+                    keyword = keyword,
+                    country = country,
+                    genre = genre,
+                    type = type,
+                    order = order,
+                    ratingFrom = ratingFrom,
+                    ratingTo = ratingTo,
+                    filteredMovieUseCase = filteredMovieUseCase
+                )
+            }
+        ).flow.collectLatest { pagingData ->
             pagingDataSearchResult.value = pagingData
         }
     }

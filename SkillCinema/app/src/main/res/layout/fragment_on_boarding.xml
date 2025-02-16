@@ -55,6 +55,27 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <ProgressBar
+        android:id="@+id/progress_bar_before_homepage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/introductionPicture"
+        android:layout_width="0dp"
+        android:layout_height="300dp"
+        android:layout_marginBottom="@dimen/main_padding"
+        android:src="@drawable/firstscreen"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <me.relex.circleindicator.CircleIndicator3
         android:id="@+id/circleIndicator"
         android:layout_width="100dp"

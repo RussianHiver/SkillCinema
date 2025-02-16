@@ -1,6 +1,7 @@
 package com.example.skillcinema.presentation.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,12 +14,12 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import com.example.skillcinema.R
 import com.example.skillcinema.data.App
 import com.example.skillcinema.databinding.FragmentSearchPageBinding
-import com.example.skillcinema.di.DaggerAppComponent
 import com.example.skillcinema.presentation.MainViewModel
 import com.example.skillcinema.presentation.adapters.AdapterForSearchResult
 import com.example.skillcinema.presentation.adapters.MovieDataLoadStateAdapter
@@ -37,7 +38,7 @@ class SearchPageFragment : Fragment() {
 
     val adapter = AdapterForSearchResult({ id -> openMoviePage(id) })
 
-    var searchJob = Job()
+    private var searchJob = Job()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,6 +50,8 @@ class SearchPageFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val args: SearchPageFragmentArgs by navArgs()
 
         binding.searchResultRecycler.adapter = adapter.withLoadStateHeaderAndFooter(
             header = MovieDataLoadStateAdapter { adapter.retry() },
@@ -82,10 +85,22 @@ class SearchPageFragment : Fragment() {
         }
 
 
-        binding.searchTextInputEditText.doOnTextChanged { text, start, before, count ->
+        binding.searchTextInputEditText.doOnTextChanged { text, _, _, _ ->
             text?.let {
                 viewLifecycleOwner.lifecycleScope.launch(searchJob) {
-                    viewModel.getNewPagerForSearchResult(text.toString())
+                    var fixedGenre = args.genre
+                    fixedGenre?.let { string ->
+                        fixedGenre = string.lowercase()
+                    }
+                    viewModel.getNewPagerForSearchResult(
+                        text.toString(),
+                        country = args.country ?: DEFAULT_COUNTRY,
+                        genre = fixedGenre ?: DEFAULT_GENRE,
+                        type = args.type ?: DEFAULT_TYPE,
+                        order = args.sort ?: DEFAULT_ORDER,
+                        ratingFrom = args.ratingFrom,
+                        ratingTo = args.ratingTo
+                    )
                     searchJob.cancel()
                     searchJob = Job()
                 }
@@ -122,6 +137,13 @@ class SearchPageFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+    }
+
+    companion object {
+        private const val DEFAULT_COUNTRY = "США"
+        private const val DEFAULT_GENRE = "боевик"
+        private const val DEFAULT_TYPE = "ALL"
+        private const val DEFAULT_ORDER = "RATING"
     }
 
 }

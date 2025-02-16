@@ -22,6 +22,31 @@ class FilteredMovieUseCase @Inject constructor(private val mainRepository: MainR
         )
     }
 
+    suspend fun getSearchResultMovies(
+        page: Int,
+        country: String,
+        genre: String,
+        keyword: String,
+        type: String,
+        order: String,
+        ratingFrom: Float,
+        ratingTo: Float
+    ): FilteredDTO {
+        val filters = mainRepository.getFilters()
+        val neededCountry = getCountryByFilter(country, filters)
+        val neededGenre = getGenreByFilter(genre, filters)
+        return mainRepository.getSearchResult(
+            page = page,
+            country = arrayOf(neededCountry),
+            genre = arrayOf(neededGenre),
+            keyword = keyword,
+            order = order,
+            type = type,
+            ratingFrom = ratingFrom,
+            ratingTo = ratingTo
+        )
+    }
+
     private fun getGenreByFilter(
         genre: String,
         filters: GenresAndCountriesDTO

@@ -50,8 +50,26 @@ class MainRepository @Inject constructor(
         return movieDataSource.searchDataApi.getIndividualStaffMember(id = id)
     }
 
-    suspend fun getSearchResult(keyword: String, page: Int): SearchResultDTO {
-        return movieDataSource.searchDataApi.getSearchResult(keyword = keyword, page = page)
+    suspend fun getSearchResult(
+        page: Int,
+        genre: Array<Int>,
+        country: Array<Int>,
+        keyword: String,
+        type: String,
+        order: String,
+        ratingFrom: Float,
+        ratingTo: Float
+    ): FilteredDTO {
+        return movieDataSource.searchDataApi.getFilteredMovies(
+            page = page,
+            genres = genre,
+            countries = country,
+            keyword = keyword,
+            type = type,
+            order = order,
+            ratingFrom = ratingFrom,
+            ratingTo = ratingTo
+        )
     }
 
     suspend fun getSeasonsAndEpisodes(id: Int): SeasonsAndEpisodesDTO {

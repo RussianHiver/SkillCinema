@@ -60,6 +60,7 @@ class AdapterForHomePage(
                             Glide.with(poster.context)
                                 .load(it.posterUrlPreview)
                                 .into(poster)
+
                         }
                     }
 

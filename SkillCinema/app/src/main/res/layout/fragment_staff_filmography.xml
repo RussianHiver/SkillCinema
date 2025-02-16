@@ -50,7 +50,6 @@
         android:id="@+id/staff_occupation_chip_group"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:singleLine="true"
         app:singleSelection="true"
         android:paddingStart="@dimen/main_padding"
         app:chipSpacingHorizontal="20dp">

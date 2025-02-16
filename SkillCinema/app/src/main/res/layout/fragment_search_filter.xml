@@ -57,6 +57,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
+            app:checkedButton="@id/select_all"
+            app:singleSelection="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -64,6 +66,7 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/select_all"
+                style="@style/CustomMaterialButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/filter_select_all"
@@ -73,6 +76,7 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/select_films"
+                style="@style/CustomMaterialButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/filter_select_films"
@@ -81,6 +85,7 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/select_TVseries"
+                style="@style/CustomMaterialButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/filter_select_TVseries"
@@ -131,8 +136,7 @@
             android:layout_gravity="center|start"
             android:layout_margin="20dp"
             android:text="@string/filter_choose_genre_title"
-            android:textSize="16sp"
-             />
+            android:textSize="16sp" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/choose_genre_choice"
@@ -158,8 +162,7 @@
             android:layout_gravity="center|start"
             android:layout_margin="20dp"
             android:text="@string/filter_choose_year_title"
-            android:textSize="16sp"
-             />
+            android:textSize="16sp" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/choose_year_choice"
@@ -199,6 +202,7 @@
             android:stepSize="1.0"
             android:valueFrom="0.0"
             android:valueTo="10.0"
+            style="@style/CustomRangeSlider"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
@@ -230,6 +234,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
+            app:singleSelection="true"
+            app:checkedButton="@id/select_date"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -241,6 +247,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/filter_select_date"
                 android:textSize="14sp"
+                style="@style/CustomMaterialButton"
                 app:strokeColor="@color/black"
                 app:strokeWidth="1dp" />
 
@@ -250,6 +257,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/filter_select_popularity"
                 android:textSize="14sp"
+                style="@style/CustomMaterialButton"
                 app:strokeWidth="1dp" />
 
             <com.google.android.material.button.MaterialButton
@@ -257,6 +265,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/filter_select_rating"
+                style="@style/CustomMaterialButton"
                 android:textSize="14sp"
                 app:strokeWidth="1dp" />
 

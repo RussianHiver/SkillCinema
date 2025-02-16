@@ -48,7 +48,8 @@ class MovieDataSourceRetrofit @Inject constructor() {
             @Query("ratingTo") ratingTo: Number = 10,
             @Query("yearFrom") yearFrom: Int = 1000,
             @Query("yearTo") yearTo: Int = 3000,
-            @Query("page") page: Int = 1
+            @Query("page") page: Int = 1,
+            @Query("keyword") keyword: String = ""
         ): FilteredDTO
 
         @Headers(API_KEY)
@@ -82,13 +83,6 @@ class MovieDataSourceRetrofit @Inject constructor() {
         suspend fun getIndividualStaffMember(
             @Path("id") id: Int = 66539
         ): StaffMemberDTO
-
-        @Headers(API_KEY)
-        @GET("/api/v2.1/films/search-by-keyword")
-        suspend fun getSearchResult(
-            @Query("keyword") keyword: String,
-            @Query("page") page: Int
-        ): SearchResultDTO
 
 
         @Headers(API_KEY)

@@ -2,34 +2,45 @@ package com.example.skillcinema.presentation.pagingsources
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.example.skillcinema.data.MovieDataSourceRetrofit
-import com.example.skillcinema.data.SearchResultDTO
-import javax.inject.Inject
+import com.example.skillcinema.data.FilteredDTO
+import com.example.skillcinema.domain.FilteredMovieUseCase
 
-class PagingSourceSearchResult @Inject constructor(private val movieDataSourceRetrofit: MovieDataSourceRetrofit) :
-    PagingSource<Int, SearchResultDTO.Film>() {
+class PagingSourceSearchResult(
+    val keyword: String,
+    val country: String,
+    val genre: String,
+    val type: String,
+    val order: String,
+    val ratingFrom: Float,
+    val ratingTo: Float,
+    val filteredMovieUseCase: FilteredMovieUseCase
+) : PagingSource<Int, FilteredDTO.Item>() {
 
-    private var word = "Брат"
+    override fun getRefreshKey(state: PagingState<Int, FilteredDTO.Item>): Int = FIRST_PAGE
 
-    override fun getRefreshKey(state: PagingState<Int, SearchResultDTO.Film>): Int = FIRST_PAGE
-
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, SearchResultDTO.Film> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, FilteredDTO.Item> {
         val page = params.key ?: FIRST_PAGE
-        return kotlin.runCatching { movieDataSourceRetrofit.searchDataApi.getSearchResult(keyword = word, page = page) }
-            .fold(
+        return kotlin.runCatching {
+            filteredMovieUseCase.getSearchResultMovies(
+                page = page,
+                country = country,
+                genre = genre,
+                keyword = keyword,
+                order = order,
+                type = type,
+                ratingFrom = ratingFrom,
+                ratingTo = ratingTo
+            )
+        }.fold(
                 onSuccess = {
                     LoadResult.Page(
-                        data = it.films,
+                        data = it.items,
                         prevKey = null,
-                        nextKey = if (it.films.isEmpty()) null else page + 1
+                        nextKey = if (it.items.isEmpty()) null else page + 1
                     )
                 },
                 onFailure = { LoadResult.Error(it) }
             )
-    }
-
-    fun inputWord(newWord: String) {
-        word = newWord
     }
 
     companion object {

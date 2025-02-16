@@ -47,7 +47,7 @@ android {
 
 dependencies {
 
-    val navVersion = "2.8.4"
+    val navVersion = "2.8.6"
     val lifecycleVersion = "2.8.7"
     val daggerVersion = "2.51.1"
 
@@ -81,11 +81,11 @@ dependencies {
     ksp("androidx.room:room-compiler:2.6.1")
 
     //RecycleView
-    implementation("androidx.recyclerview:recyclerview:1.3.2")
+    implementation("androidx.recyclerview:recyclerview:1.4.0")
     implementation("androidx.recyclerview:recyclerview-selection:1.1.0")
 
-    //Pagin
-    implementation("androidx.paging:paging-runtime-ktx:3.3.4")
+    //Paginп
+    implementation("androidx.paging:paging-runtime-ktx:3.3.5")
 
     //Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.11.0")

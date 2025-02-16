@@ -36,13 +36,20 @@ class AdapterForFilmPage(
     override fun onBindViewHolder(holder: FilmViewHolder, position: Int) {
 
         val item = newStaff.getOrNull(position)
+        val stringBuilder = StringBuilder()
+        var fixedString = item?.professionText
+        item?.professionText?.let {
+            stringBuilder.append(it)
+            stringBuilder.deleteAt(it.lastIndex)
+            fixedString = stringBuilder.toString()
+        }
 
         with(holder.binding) {
             Glide.with(poster.context)
                 .load(item?.posterUrl)
                 .into(poster)
-            name.text = item?.nameRu
-            occupation.text = item?.professionText
+            name.text = item?.nameRu ?: "Неизвестный"
+            occupation.text = fixedString ?: "Неизвестный"
         }
 
         holder.binding.root.setOnClickListener {

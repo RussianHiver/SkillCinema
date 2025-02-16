@@ -1,13 +1,16 @@
 package com.example.skillcinema.presentation.fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.example.skillcinema.R
 import com.example.skillcinema.databinding.FragmentSearchFilterBinding
+import com.google.android.material.slider.RangeSlider
 
 
 class SearchFilterFragment : Fragment() {
@@ -15,8 +18,12 @@ class SearchFilterFragment : Fragment() {
     var _binding: FragmentSearchFilterBinding? = null
     val binding: FragmentSearchFilterBinding get() = _binding!!
 
+    private var typeFilter: String? = null
     private var countryFilter: String? = null
     private var genreFilter: String? = null
+    private var sortFilter: String? = null
+    private var ratingFromFilter: Float = 1.0f
+    private var ratingToFilter: Float = 10.0f
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,26 +40,55 @@ class SearchFilterFragment : Fragment() {
         checkForFiltersUpdate(args)
 
         binding.chooseCountryChoice.text = countryFilter ?: "Россия"
-        binding.chooseGenreChoice.text = genreFilter ?: "Комедия"
+        binding.chooseGenreChoice.text = genreFilter ?: "Боевик"
 
         binding.headerBackButton.setOnClickListener {
             val action =
-                SearchFilterFragmentDirections.actionSearchFilterFragmentToSearchPageFragment()
+                SearchFilterFragmentDirections.actionSearchFilterFragmentToSearchPageFragment(
+                    type = typeFilter,
+                    sort = sortFilter,
+                    country = countryFilter,
+                    genre = genreFilter,
+                    ratingFrom = ratingFromFilter,
+                    ratingTo = ratingToFilter
+                )
             findNavController().navigate(action)
         }
 
+        binding.selectWatchTypeGroup.addOnButtonCheckedListener { _, checkedId, _ ->
+            when (checkedId) {
+                R.id.select_all -> typeFilter = "ALL"
+                R.id.select_films -> typeFilter = "FILM"
+                R.id.select_TVseries -> typeFilter = "TV_SERIES"
+            }
+        }
+
+        binding.selectFilmSortGroup.addOnButtonCheckedListener { _, checkedId, _ ->
+            when (checkedId) {
+                R.id.select_date -> sortFilter = "YEAR"
+                R.id.select_popularity -> sortFilter = "NUM_VOTE"
+                R.id.select_ratings -> sortFilter = "RATING"
+            }
+        }
+
         binding.chooseCountry.setOnClickListener {
-            findNavController().navigate(SearchFilterFragmentDirections.actionSearchFilterFragmentToSearchFilterCountryFragment())
+            findNavController().navigate(SearchFilterFragmentDirections.actionSearchFilterFragmentToSearchFilterCountryFragment(genreFilter))
         }
 
         binding.chooseGenre.setOnClickListener {
-            findNavController().navigate(SearchFilterFragmentDirections.actionSearchFilterFragmentToSearchFilterGenreFragment())
+            findNavController().navigate(SearchFilterFragmentDirections.actionSearchFilterFragmentToSearchFilterGenreFragment(countryFilter))
         }
 
         binding.chooseYear.setOnClickListener {
             findNavController().navigate(SearchFilterFragmentDirections.actionSearchFilterFragmentToSearchFilterYearFragment())
         }
 
+
+        binding.ratingSelectSlider.addOnChangeListener { slider, _, _ ->
+            val values = slider.values
+            ratingFromFilter = values[0]
+            ratingToFilter = values[1]
+        }
 
     }
 

@@ -1,6 +1,8 @@
 package com.example.skillcinema.presentation.fragments
 
+import android.animation.LayoutTransition
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -41,6 +43,8 @@ class FilmPage : Fragment() {
 
     private lateinit var adapterSimilars: AdapterForSimilars
 
+    private var isCollapsed = true
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
@@ -73,6 +77,13 @@ class FilmPage : Fragment() {
                         seasons = numberOfSeasons,
                         episodes = numberOfEpisodes
                     )
+
+                    binding.seasonsAndEpisodesAllButton.setOnClickListener {
+                        val action = FilmPageDirections.actionFilmPageToSeasonsAndEpisodesFragment(
+                            movie.nameRu ?: movie.nameEn ?: "Без имени", args.kinopoiskID
+                        )
+                        findNavController().navigate(action)
+                    }
                 }
 
                 adapterStaff =
@@ -119,7 +130,20 @@ class FilmPage : Fragment() {
                     Glide.with(filmPhoto.context).load(movie.coverUrl ?: movie.posterUrl)
                         .into(filmPhoto)
                     Glide.with(movieLogo.context).load(movie.logoUrl).into(movieLogo)
-                    filmPremise.text = movie.description
+                    with(filmPremise) {
+                        text = movie.description
+                        setOnClickListener {
+                            if (isCollapsed) {
+                                this.maxLines = Int.MAX_VALUE
+                            } else {
+                                this.maxLines = 10
+                            }
+                            isCollapsed = !isCollapsed
+                        }
+                    }
+
+                    filmPageLayout.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
+                    filmPageLayout.layoutTransition.setDuration(300)
 
                     allActorsButton.text = getStringOfListForStaff(staff, true)
                     allActorsButton.setOnClickListener {
@@ -147,11 +171,6 @@ class FilmPage : Fragment() {
                     recyclerStaff.adapter = adapterStaff
                     recyclerGallery.adapter = adapterGallery
                     recyclerSimilarFilm.adapter = adapterSimilars
-
-                    binding.seasonsAndEpisodesAllButton.setOnClickListener {
-                        val action = FilmPageDirections.actionFilmPageToSeasonsAndEpisodesFragment()
-                        findNavController().navigate(action)
-                    }
                 }
             }
         }
@@ -222,9 +241,9 @@ class FilmPage : Fragment() {
         }
 
         episodesString = when {
-            patternForOne.matches(episodesString) -> "$episodes эпизод"
-            patternForTwoThreeFour.matches(episodesString) -> "$episodes эпизода"
-            else -> "$episodes эпизодов"
+            patternForOne.matches(episodesString) -> "$episodes серия"
+            patternForTwoThreeFour.matches(episodesString) -> "$episodes серии"
+            else -> "$episodes серий"
         }
 
         return "$seasonsString, $episodesString"

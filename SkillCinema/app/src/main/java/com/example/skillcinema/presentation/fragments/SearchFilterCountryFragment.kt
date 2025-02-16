@@ -10,6 +10,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.skillcinema.data.App
 import com.example.skillcinema.databinding.FragmentSearchFilterCountryBinding
 import com.example.skillcinema.di.DaggerAppComponent
@@ -29,6 +30,8 @@ class SearchFilterCountryFragment : Fragment() {
 
     private lateinit var adapter: AdapterForFilters
 
+    val args: SearchFilterCountryFragmentArgs by navArgs()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -39,6 +42,7 @@ class SearchFilterCountryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         binding.headerBackButton.setOnClickListener {
             val action = SearchFilterCountryFragmentDirections.actionSearchFilterCountryFragmentToSearchFilterFragment(null, null)
             findNavController().navigate(action)
@@ -54,7 +58,7 @@ class SearchFilterCountryFragment : Fragment() {
     }
 
     private fun sendChosenCountry(chosenFilter: String) {
-        val action = SearchFilterCountryFragmentDirections.actionSearchFilterCountryFragmentToSearchFilterFragment(chosenFilter, null)
+        val action = SearchFilterCountryFragmentDirections.actionSearchFilterCountryFragmentToSearchFilterFragment(chosenFilter, args.genre)
         findNavController().navigate(action)
     }
 

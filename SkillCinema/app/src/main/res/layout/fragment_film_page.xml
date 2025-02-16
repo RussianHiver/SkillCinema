@@ -11,6 +11,7 @@
         android:id="@+id/film_page_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:animateLayoutChanges="true"
         tools:context=".presentation.fragments.FilmPage">
 
         <androidx.appcompat.widget.AppCompatImageView
@@ -158,6 +159,8 @@
             android:layout_marginTop="40dp"
             android:ellipsize="end"
             android:maxLines="10"
+            android:clickable="true"
+            android:focusable="true"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/film_photo"

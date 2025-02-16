@@ -23,6 +23,7 @@
     <string name="filmStaffList">Над фильмом работали</string>
     <string name="gallery">Галерея</string>
     <string name="similarFilms">Похожие фильмы</string>
+    <string name="seasons">Сезоны</string>
 
     <!-- String resources -->
     <string name="film_year_and_genre"> %1$s, %2$s %3$s</string>

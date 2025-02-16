@@ -9,5 +9,22 @@
         <item name="chipBackgroundColor">@color/chip_state_background</item>
         <item name="android:textColor">@color/chip_state_text</item>
     </style>
+
+    <style name="CustomMaterialButton" parent="Widget.Material3.Button">
+         <item name="backgroundTint">@color/chip_state_background</item>
+        <item name="android:textColor">@color/chip_state_text</item>
+    </style>
+
+    <style name="CustomRangeSlider" parent="Widget.Material3.Slider">
+        <item name="thumbColor">@color/blue_color</item>
+        <item name="trackColorActive">@color/blue_color</item>
+        <item name="trackColorInactive">@color/white</item>
+        <item name="tickColorActive">@color/white</item>
+        <item name="tickColorInactive">@color/blue_color</item>
+    </style>
+
+    <style name="CustomBottomNavigation" parent="Widget.Design.BottomNavigationView">
+        <item name="itemBackground">@null</item>
+    </style>
     
 </resources>

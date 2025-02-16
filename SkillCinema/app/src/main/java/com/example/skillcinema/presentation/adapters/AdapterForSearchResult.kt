@@ -6,10 +6,11 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.bumptech.glide.Glide
+import com.example.skillcinema.data.FilteredDTO
 import com.example.skillcinema.data.SearchResultDTO
 import com.example.skillcinema.databinding.MoviePreviewViewBinding
 
-class AdapterForSearchResult(val onClick: (Int?) -> Unit): PagingDataAdapter<SearchResultDTO.Film, SearchResultViewHolder>(
+class AdapterForSearchResult(val onClick: (Int?) -> Unit): PagingDataAdapter<FilteredDTO.Item, SearchResultViewHolder>(
     DiffUtillCallbackSearchResult()
 ) {
     override fun onBindViewHolder(holder: SearchResultViewHolder, position: Int) {
@@ -36,14 +37,14 @@ class AdapterForSearchResult(val onClick: (Int?) -> Unit): PagingDataAdapter<Sea
     }
 }
 
-class DiffUtillCallbackSearchResult: DiffUtil.ItemCallback<SearchResultDTO.Film>() {
-    override fun areItemsTheSame(oldItem: SearchResultDTO.Film, newItem: SearchResultDTO.Film): Boolean {
+class DiffUtillCallbackSearchResult: DiffUtil.ItemCallback<FilteredDTO.Item>() {
+    override fun areItemsTheSame(oldItem: FilteredDTO.Item, newItem: FilteredDTO.Item): Boolean {
         return oldItem.kinopoiskId == newItem.kinopoiskId
     }
 
     override fun areContentsTheSame(
-        oldItem: SearchResultDTO.Film,
-        newItem: SearchResultDTO.Film
+        oldItem: FilteredDTO.Item,
+        newItem: FilteredDTO.Item
     ): Boolean {
         return oldItem == newItem
     }

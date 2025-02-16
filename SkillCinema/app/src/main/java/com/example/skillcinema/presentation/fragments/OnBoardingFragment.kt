@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.example.skillcinema.R
@@ -36,6 +37,12 @@ class OnBoardingFragment : Fragment() {
         binding.circleIndicator.setViewPager(viewPager)
 
         binding.skipButton.setOnClickListener {
+            with(binding) {
+                progressBarBeforeHomepage.isVisible = true
+                pager.isVisible = false
+                circleIndicator.isVisible = false
+                introductionPicture.isVisible = true
+            }
             findNavController().navigate(R.id.action_onBoardingFragment_to_homepageFragment)
 
         }
