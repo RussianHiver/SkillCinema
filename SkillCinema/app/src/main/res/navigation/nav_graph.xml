@@ -157,6 +157,13 @@
         <action
             android:id="@+id/action_actorPageFragment_to_staffFilmographyFragment"
             app:destination="@id/staffFilmographyFragment" />
+        <action
+            android:id="@+id/action_actorPageFragment_to_staffPhotoFullFragment"
+            app:destination="@id/staffPhotoFullFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out" />
     </fragment>
     <fragment
         android:id="@+id/searchFilterFragment"
@@ -250,5 +257,15 @@
         <argument
             android:name="TVSeriesID"
             app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/staffPhotoFullFragment"
+        android:name="com.example.skillcinema.presentation.fragments.StaffPhotoFullFragment"
+        android:label="fragment_staff_photo_full"
+        tools:layout="@layout/fragment_staff_photo_full" >
+        <argument
+            android:name="photoUrl"
+            app:argType="string"
+            app:nullable="true" />
     </fragment>
 </navigation>

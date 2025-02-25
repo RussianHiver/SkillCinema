@@ -5,7 +5,7 @@ import com.example.skillcinema.data.StaffListDTO
 import com.example.skillcinema.data.StaffMemberDTO
 import javax.inject.Inject
 
-class MovieStaffUseCase @Inject constructor(private val mainRepository: MainRepository) {
+class MovieStaffUseCase (private val mainRepository: MainRepository) {
 
     suspend fun getMovieStaffList(id: Int): List<StaffListDTO> {
         return mainRepository.getMovieStaff(id = id)

@@ -3,9 +3,8 @@ package com.example.skillcinema.domain
 import com.example.skillcinema.data.FilteredDTO
 import com.example.skillcinema.data.GenresAndCountriesDTO
 import com.example.skillcinema.data.MainRepository
-import javax.inject.Inject
 
-class FilteredMovieUseCase @Inject constructor(private val mainRepository: MainRepository) {
+class FilteredMovieUseCase(private val mainRepository: MainRepository) {
 
     suspend fun getMoviesFiltered(
         page: Int,

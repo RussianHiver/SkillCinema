@@ -114,39 +114,41 @@
             app:layout_constraintStart_toStartOf="@id/film_photo"
             app:layout_constraintTop_toBottomOf="@id/film_info">
 
-            <androidx.appcompat.widget.AppCompatImageView
+            <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/add_to_favorites_button"
                 android:layout_width="@dimen/film_page_button_size"
                 android:layout_height="@dimen/film_page_button_size"
-                android:padding="@dimen/film_page_button_padding"
+                android:background="@null"
                 android:src="@drawable/favorites" />
 
-            <androidx.appcompat.widget.AppCompatImageView
+            <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/add_to_must_watch_button"
                 android:layout_width="@dimen/film_page_button_size"
                 android:layout_height="@dimen/film_page_button_size"
-                android:padding="@dimen/film_page_button_padding"
+                android:background="@null"
                 android:src="@drawable/addtocollection" />
 
-            <androidx.appcompat.widget.AppCompatImageView
+            <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/add_to_watched_button"
                 android:layout_width="@dimen/film_page_button_size"
                 android:layout_height="@dimen/film_page_button_size"
-                android:padding="@dimen/film_page_button_padding"
+                android:background="@null"
                 android:src="@drawable/watched" />
 
-            <androidx.appcompat.widget.AppCompatImageView
+            <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/share_button"
                 android:layout_width="@dimen/film_page_button_size"
                 android:layout_height="@dimen/film_page_button_size"
-                android:padding="@dimen/film_page_button_padding"
+                android:background="@null"
+                android:clickable="true"
                 android:src="@drawable/share" />
 
-            <androidx.appcompat.widget.AppCompatImageView
+            <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/menu_button"
                 android:layout_width="@dimen/film_page_button_size"
                 android:layout_height="@dimen/film_page_button_size"
-                android:padding="@dimen/film_page_button_padding"
+                android:background="@null"
+                android:clickable="true"
                 android:src="@drawable/menu" />
 
         </LinearLayout>
@@ -157,10 +159,10 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/main_padding"
             android:layout_marginTop="40dp"
-            android:ellipsize="end"
-            android:maxLines="10"
             android:clickable="true"
+            android:ellipsize="end"
             android:focusable="true"
+            android:maxLines="10"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/film_photo"
@@ -169,26 +171,26 @@
         <androidx.constraintlayout.widget.Barrier
             android:id="@+id/film_premise_barier"
             android:layout_width="0dp"
+            android:layout_height="0dp"
             app:barrierDirection="bottom"
-            app:constraint_referenced_ids="film_premise, seasons_and_episodes_title_and_all_button"
-            android:layout_height="0dp"/>
+            app:constraint_referenced_ids="film_premise, seasons_and_episodes_title_and_all_button" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/seasons_and_episodes_title_and_all_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@id/film_premise"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/film_premise">
 
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/seasons_and_episodes_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/seasons_and_episode"
                 android:padding="@dimen/main_padding"
+                android:text="@string/seasons_and_episode"
                 android:textSize="@dimen/list_names"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -201,8 +203,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@null"
-                android:text="@string/all"
                 android:padding="@dimen/main_padding"
+                android:text="@string/all"
                 android:textAllCaps="false"
                 android:textColor="@color/blue_color"
                 android:textSize="@dimen/blue"
@@ -216,9 +218,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="25dp"
                 android:textColor="@color/grey"
-                tools:text="@tools:sample/lorem"
                 app:layout_constraintBottom_toBottomOf="@id/seasons_and_episodes_title"
-                app:layout_constraintStart_toStartOf="parent"/>
+                app:layout_constraintStart_toStartOf="parent"
+                tools:text="@tools:sample/lorem" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

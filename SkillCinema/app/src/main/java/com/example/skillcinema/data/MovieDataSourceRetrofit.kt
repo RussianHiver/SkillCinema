@@ -9,7 +9,7 @@ import retrofit2.http.Query
 import java.util.Calendar
 import javax.inject.Inject
 
-class MovieDataSourceRetrofit @Inject constructor() {
+class MovieDataSourceRetrofit {
 
     private val retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)

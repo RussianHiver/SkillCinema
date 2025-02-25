@@ -4,7 +4,7 @@ import com.example.skillcinema.data.MainRepository
 import com.example.skillcinema.data.PremieresDTO
 import javax.inject.Inject
 
-class PremierMovieUseCase @Inject constructor (private val mainRepository: MainRepository) {
+class PremierMovieUseCase  (private val mainRepository: MainRepository) {
 
     suspend fun getMoviesPremiers(): PremieresDTO {
         return mainRepository.getMoviesPremiers()

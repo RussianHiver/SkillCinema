@@ -2,7 +2,7 @@ package com.example.skillcinema.data
 
 import javax.inject.Inject
 
-class MainRepository @Inject constructor(
+class MainRepository(
     private val movieDataSource: MovieDataSourceRetrofit
 ) {
 

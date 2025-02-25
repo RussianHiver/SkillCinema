@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -12,11 +13,13 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
+import com.example.skillcinema.R
 import com.example.skillcinema.data.App
 import com.example.skillcinema.data.StaffMemberDTO
 import com.example.skillcinema.databinding.FragmentActorPageBinding
 import com.example.skillcinema.di.DaggerAppComponent
 import com.example.skillcinema.presentation.MainViewModel
+import com.google.android.material.imageview.ShapeableImageView
 import kotlinx.coroutines.launch
 
 class StaffMemberPageFragment : Fragment() {
@@ -55,6 +58,13 @@ class StaffMemberPageFragment : Fragment() {
                     name.text = staffMember.nameRu ?: staffMember.nameEn ?: "Без названия"
                     occupation.text = staffMember.profession
                     amountOfFilmsInFilmography.text = getFilmCountString(staffMember.films.size)
+                }
+                binding.actorPhoto.setOnClickListener {
+                    val action =
+                        StaffMemberPageFragmentDirections.actionActorPageFragmentToStaffPhotoFullFragment(
+                            staffMember.posterUrl
+                        )
+                    findNavController().navigate(action)
                 }
 
                 binding.filmographyButton.setOnClickListener {

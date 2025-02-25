@@ -2,10 +2,10 @@ package com.example.skillcinema.presentation.fragments
 
 import android.animation.LayoutTransition
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -24,6 +24,7 @@ import com.example.skillcinema.presentation.MainViewModel
 import com.example.skillcinema.presentation.adapters.AdapterForFilmPage
 import com.example.skillcinema.presentation.adapters.AdapterForGallery
 import com.example.skillcinema.presentation.adapters.AdapterForSimilars
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 class FilmPage : Fragment() {
@@ -43,7 +44,15 @@ class FilmPage : Fragment() {
 
     private lateinit var adapterSimilars: AdapterForSimilars
 
+    private var favoritesButtonPressed = false
+
+    private var mustWatchButtonPressed = false
+
+    private var watchedButtonPressed = false
+
     private var isCollapsed = true
+
+    private var jobToAddWatched = Job()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -63,10 +72,78 @@ class FilmPage : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+
                 val movie = viewModel.giveOneMovie(args.kinopoiskID)
                 val staff = viewModel.giveMovieStaffList(args.kinopoiskID)
                 val gallery = viewModel.giveFilmGalleryList(args.kinopoiskID, 1, "STILL")
                 val similars = viewModel.giveSimilars(args.kinopoiskID)
+
+
+                binding.addToFavoritesButton.setOnClickListener {
+                    context?.let { context ->
+                        if (!favoritesButtonPressed) {
+                            binding.addToFavoritesButton.setColorFilter(
+                                ContextCompat.getColor(
+                                    context,
+                                    R.color.blue_color
+                                )
+                            )
+                            favoritesButtonPressed = !favoritesButtonPressed
+                        } else {
+                            binding.addToFavoritesButton.setColorFilter(
+                                ContextCompat.getColor(
+                                    context,
+                                    R.color.grey
+                                )
+                            )
+                            favoritesButtonPressed = !favoritesButtonPressed
+                        }
+                    }
+                }
+
+                binding.addToMustWatchButton.setOnClickListener {
+                    context?.let { context ->
+                        if (!mustWatchButtonPressed) {
+                            binding.addToMustWatchButton.setColorFilter(
+                                ContextCompat.getColor(
+                                    context,
+                                    R.color.blue_color
+                                )
+                            )
+                            mustWatchButtonPressed = !mustWatchButtonPressed
+                        } else {
+                            binding.addToMustWatchButton.setColorFilter(
+                                ContextCompat.getColor(
+                                    context,
+                                    R.color.grey
+                                )
+                            )
+                            mustWatchButtonPressed = !mustWatchButtonPressed
+                        }
+                    }
+                }
+
+                binding.addToWatchedButton.setOnClickListener {
+                    context?.let { context ->
+                        if (!watchedButtonPressed) {
+                            binding.addToWatchedButton.setColorFilter(
+                                ContextCompat.getColor(
+                                    context,
+                                    R.color.blue_color
+                                )
+                            )
+                            watchedButtonPressed = !watchedButtonPressed
+                        } else {
+                            binding.addToWatchedButton.setColorFilter(
+                                ContextCompat.getColor(
+                                    context,
+                                    R.color.grey
+                                )
+                            )
+                            watchedButtonPressed = !watchedButtonPressed
+                        }
+                    }
+                }
 
                 if (movie.type == "TV_SERIES") {
                     binding.seasonsAndEpisodesTitleAndAllButton.isVisible = true

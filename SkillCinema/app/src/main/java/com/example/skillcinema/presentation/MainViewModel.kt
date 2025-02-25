@@ -12,7 +12,6 @@ import com.example.skillcinema.data.GenresAndCountriesDTO
 import com.example.skillcinema.data.MovieDataDTO
 import com.example.skillcinema.data.PopularDTO
 import com.example.skillcinema.data.PremieresDTO
-import com.example.skillcinema.data.SearchResultDTO
 import com.example.skillcinema.data.SeasonsAndEpisodesDTO
 import com.example.skillcinema.data.SimilarsDTO
 import com.example.skillcinema.data.StaffListDTO
@@ -26,6 +25,8 @@ import com.example.skillcinema.domain.PopularMovieUseCase
 import com.example.skillcinema.domain.PremierMovieUseCase
 import com.example.skillcinema.domain.SeasonsAndEpisodesUseCase
 import com.example.skillcinema.domain.SimilarMoviesUseCase
+import com.example.skillcinema.domain.WatchedMoviesUseCase
+import com.example.skillcinema.entity.MovieTable
 import com.example.skillcinema.presentation.pagingsources.PagingSourceFiltered
 import com.example.skillcinema.presentation.pagingsources.PagingSourceGallery
 import com.example.skillcinema.presentation.pagingsources.PagingSourcePopular
@@ -33,9 +34,10 @@ import com.example.skillcinema.presentation.pagingsources.PagingSourceSearchResu
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class MainViewModel @Inject constructor(
+class MainViewModel(
     private val premierMovieUseCase: PremierMovieUseCase,
     private val popularMovieUseCase: PopularMovieUseCase,
     private val filteredMovieUseCase: FilteredMovieUseCase,
@@ -44,7 +46,8 @@ class MainViewModel @Inject constructor(
     private val movieGalleryUseCase: MovieGalleryUseCase,
     private val similarMoviesUseCase: SimilarMoviesUseCase,
     private val filtersUseCase: FiltersUseCase,
-    private val seasonsAndEpisodesUseCase: SeasonsAndEpisodesUseCase
+    private val seasonsAndEpisodesUseCase: SeasonsAndEpisodesUseCase,
+    private val watchedMoviesUseCase: WatchedMoviesUseCase
 ) : ViewModel() {
 
     private var popularType = MutableStateFlow("")

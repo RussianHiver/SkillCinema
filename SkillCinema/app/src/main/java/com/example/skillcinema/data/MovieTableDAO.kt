@@ -3,6 +3,7 @@ package com.example.skillcinema.data
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.example.skillcinema.entity.MovieTable
@@ -14,7 +15,7 @@ interface MovieTableDAO {
     @Query("SELECT * FROM movie")
     fun getAll(): Flow<List<MovieTable>>
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(movieTable: MovieTable)
 
     @Update

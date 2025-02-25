@@ -6,8 +6,16 @@ import com.example.skillcinema.presentation.pagingsources.PagingSourceGallery
 import com.example.skillcinema.presentation.pagingsources.PagingSourcePopular
 import com.example.skillcinema.presentation.pagingsources.PagingSourceSearchResult
 import dagger.Component
+import javax.inject.Singleton
 
-@Component
+@Singleton
+@Component(
+    modules = [
+        DataModule::class,
+        DomainModule::class,
+        PresentationModule::class
+    ]
+)
 interface AppComponent {
 
     fun mainViewModelFactory(): MainViewModelFactory
