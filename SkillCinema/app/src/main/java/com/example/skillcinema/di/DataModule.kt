@@ -1,6 +1,7 @@
 package com.example.skillcinema.di
 
 import android.app.Application
+import android.content.Context
 import androidx.room.Room
 import com.example.skillcinema.data.App
 import com.example.skillcinema.data.LocalRepository
@@ -34,8 +35,8 @@ class DataModule {
 
     @Provides
     @Singleton
-    fun provideDatabase(application: App): MovieDatabase {
-        return Room.databaseBuilder(application, MovieDatabase::class.java, "db").build()
+    fun provideDatabase(context: Context): MovieDatabase {
+        return Room.databaseBuilder(context, MovieDatabase::class.java, "db").build()
     }
 
     @Provides

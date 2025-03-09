@@ -10,7 +10,7 @@ import com.example.skillcinema.databinding.FilmStaffBinding
 
 class AdapterForFilmPage(
     staff: List<StaffListDTO>,
-    areActors: Boolean,
+    val areActors: Boolean,
     val fullList: Boolean,
     val onClick: (Int) -> Unit
 ) : Adapter<FilmViewHolder>() {
@@ -49,7 +49,7 @@ class AdapterForFilmPage(
                 .load(item?.posterUrl)
                 .into(poster)
             name.text = item?.nameRu ?: "Неизвестный"
-            occupation.text = fixedString ?: "Неизвестный"
+            occupation.text = if (areActors) item?.description else fixedString ?: "Неизвестный"
         }
 
         holder.binding.root.setOnClickListener {

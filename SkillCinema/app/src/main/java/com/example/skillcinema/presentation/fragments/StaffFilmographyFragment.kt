@@ -1,11 +1,9 @@
 package com.example.skillcinema.presentation.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewGroup.LayoutParams
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -118,6 +116,12 @@ class StaffFilmographyFragment : Fragment() {
             "Продюсер" -> "PRODUCER"
             "Композитор" -> "COMPOSER"
             "Оператор" -> "OPERATOR"
+            "Монтажер" -> "EDITOR"
+            "Переводчик" -> "TRANSLATOR"
+            "Режиссер" -> "DIRECTOR"
+            "Режиссер дубляжа" -> "VOICE_DIRECTOR"
+            "Художник" -> "DESIGN"
+            "Директор фильма"-> "PRODUCER_USSR"
             else -> "UNKNOWN"
         }
     }

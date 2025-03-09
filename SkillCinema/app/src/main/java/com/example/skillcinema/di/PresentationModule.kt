@@ -10,6 +10,8 @@ import com.example.skillcinema.domain.PremierMovieUseCase
 import com.example.skillcinema.domain.SeasonsAndEpisodesUseCase
 import com.example.skillcinema.domain.SimilarMoviesUseCase
 import com.example.skillcinema.domain.WatchedMoviesUseCase
+import com.example.skillcinema.presentation.DataViewModel
+import com.example.skillcinema.presentation.DataViewModelFactory
 import com.example.skillcinema.presentation.MainViewModel
 import com.example.skillcinema.presentation.MainViewModelFactory
 import dagger.Module
@@ -48,6 +50,16 @@ class PresentationModule {
     @Provides
     fun provideViewModelFactory(mainViewModel: MainViewModel): MainViewModelFactory {
         return MainViewModelFactory(mainViewModel)
+    }
+
+    @Provides
+    fun provideDataViewModel(): DataViewModel {
+        return DataViewModel()
+    }
+
+    @Provides
+    fun provideDataViewModelFactory(dataViewModel: DataViewModel): DataViewModelFactory{
+        return DataViewModelFactory(dataViewModel)
     }
 
 }

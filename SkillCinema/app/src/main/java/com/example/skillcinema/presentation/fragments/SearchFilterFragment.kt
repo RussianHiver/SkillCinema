@@ -1,22 +1,27 @@
 package com.example.skillcinema.presentation.fragments
 
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.skillcinema.R
+import com.example.skillcinema.data.App
 import com.example.skillcinema.databinding.FragmentSearchFilterBinding
-import com.google.android.material.slider.RangeSlider
+import com.example.skillcinema.presentation.DataViewModel
 
 
 class SearchFilterFragment : Fragment() {
 
     var _binding: FragmentSearchFilterBinding? = null
     val binding: FragmentSearchFilterBinding get() = _binding!!
+
+    private val dataViewModel: DataViewModel by activityViewModels {
+        (activity?.application as App).component.dataViewModelFactory()
+    }
 
     private var typeFilter: String? = null
     private var countryFilter: String? = null
