@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -16,6 +17,7 @@ import com.example.skillcinema.data.App
 import com.example.skillcinema.data.MovieDataDTO
 import com.example.skillcinema.data.StaffMemberDTO
 import com.example.skillcinema.databinding.FragmentActorPageBinding
+import com.example.skillcinema.presentation.DataViewModel
 import com.example.skillcinema.presentation.MainViewModel
 import com.example.skillcinema.presentation.adapters.AdapterForStaffBestFilms
 import kotlinx.coroutines.launch
@@ -30,6 +32,11 @@ class StaffMemberPageFragment : Fragment() {
     private val viewModel: MainViewModel by viewModels {
         (activity?.application as App).component.mainViewModelFactory()
     }
+
+    private val dataViewModel: DataViewModel by activityViewModels {
+        (activity?.application as App).component.dataViewModelFactory()
+    }
+
 
     private val bestFilmList = mutableListOf<MovieDataDTO>()
 
@@ -81,6 +88,7 @@ class StaffMemberPageFragment : Fragment() {
                 }
 
                 binding.filmographyButton.setOnClickListener {
+                    dataViewModel.setFilmography(sortedByRatingList)
                     val action =
                         StaffMemberPageFragmentDirections.actionActorPageFragmentToStaffFilmographyFragment(
                             staffMember.staffId

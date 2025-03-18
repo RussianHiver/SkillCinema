@@ -3,27 +3,26 @@ package com.example.skillcinema.presentation.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.skillcinema.data.MovieDataDTO
 import com.example.skillcinema.databinding.MoviePreviewViewBinding
 
 class AdapterListOfAllStaffFilms(
-    val list: List<MovieDataDTO>,
     val onClickMoviePage: (Int?) -> Unit
 ) :
-    RecyclerView.Adapter<AllStaffFilmsViewHolder>() {
+    ListAdapter<MovieDataDTO, AllStaffFilmsViewHolder>(DiffUtilFilmographyMovieCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AllStaffFilmsViewHolder {
         val binding =
             MoviePreviewViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return AllStaffFilmsViewHolder(binding)
     }
 
-    override fun getItemCount(): Int = list.size
-
     override fun onBindViewHolder(holder: AllStaffFilmsViewHolder, position: Int) {
 
-        val item = list.getOrNull(position)
+        val item = getItem(position)
 
         with(holder.binding) {
             movieTitle.text = item?.nameRu
@@ -51,3 +50,15 @@ class AdapterListOfAllStaffFilms(
 
 class AllStaffFilmsViewHolder(val binding: MoviePreviewViewBinding) :
     RecyclerView.ViewHolder(binding.root)
+
+class DiffUtilFilmographyMovieCallback : DiffUtil.ItemCallback<MovieDataDTO>() {
+    override fun areItemsTheSame(oldItem: MovieDataDTO, newItem: MovieDataDTO): Boolean {
+        return oldItem.kinopoiskId == newItem.kinopoiskId
+    }
+
+    override fun areContentsTheSame(oldItem: MovieDataDTO, newItem: MovieDataDTO): Boolean {
+        return oldItem == newItem
+    }
+
+
+}

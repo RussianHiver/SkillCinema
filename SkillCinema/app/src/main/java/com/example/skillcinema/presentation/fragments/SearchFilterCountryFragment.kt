@@ -1,19 +1,21 @@
 package com.example.skillcinema.presentation.fragments
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import com.example.skillcinema.data.App
 import com.example.skillcinema.databinding.FragmentSearchFilterCountryBinding
-import com.example.skillcinema.di.DaggerAppComponent
+import com.example.skillcinema.presentation.DataViewModel
 import com.example.skillcinema.presentation.MainViewModel
 import com.example.skillcinema.presentation.adapters.AdapterForFilters
 import kotlinx.coroutines.launch
@@ -28,9 +30,20 @@ class SearchFilterCountryFragment : Fragment() {
         (activity?.application as App).component.mainViewModelFactory()
     }
 
-    private lateinit var adapter: AdapterForFilters
+    private val dataViewModel: DataViewModel by activityViewModels {
+        (activity?.application as App).component.dataViewModelFactory()
+    }
 
-    val args: SearchFilterCountryFragmentArgs by navArgs()
+    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var editor: SharedPreferences.Editor
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        sharedPreferences = context.getSharedPreferences("shared", Context.MODE_PRIVATE)
+        editor = sharedPreferences.edit()
+    }
+
+    private lateinit var adapter: AdapterForFilters
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,8 +57,7 @@ class SearchFilterCountryFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.headerBackButton.setOnClickListener {
-            val action = SearchFilterCountryFragmentDirections.actionSearchFilterCountryFragmentToSearchFilterFragment(null, null)
-            findNavController().navigate(action)
+            findNavController().popBackStack()
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
@@ -58,8 +70,11 @@ class SearchFilterCountryFragment : Fragment() {
     }
 
     private fun sendChosenCountry(chosenFilter: String) {
-        val action = SearchFilterCountryFragmentDirections.actionSearchFilterCountryFragmentToSearchFilterFragment(chosenFilter, args.genre)
-        findNavController().navigate(action)
+        dataViewModel.setCountryFilter(chosenFilter)
+        editor.apply {
+            putString("filterFilmCountry", chosenFilter)
+        }.apply()
+        findNavController().popBackStack()
     }
 
     override fun onDestroy() {

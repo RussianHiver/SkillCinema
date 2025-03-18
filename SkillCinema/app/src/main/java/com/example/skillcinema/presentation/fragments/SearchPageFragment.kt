@@ -1,5 +1,7 @@
 package com.example.skillcinema.presentation.fragments
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,11 +14,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import com.example.skillcinema.data.App
@@ -28,6 +28,7 @@ import com.example.skillcinema.presentation.adapters.MovieDataLoadStateAdapter
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.yield
 
 class SearchPageFragment : Fragment() {
 
@@ -42,14 +43,25 @@ class SearchPageFragment : Fragment() {
         (activity?.application as App).component.dataViewModelFactory()
     }
 
+    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var editor: SharedPreferences.Editor
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        sharedPreferences = context.getSharedPreferences("shared", Context.MODE_PRIVATE)
+        editor = sharedPreferences.edit()
+    }
+
     val adapter = AdapterForSearchResult { id -> openMoviePage(id) }
 
     private var searchCountryFilter = ""
     private var searchGenreFilter = ""
     private var searchTypeFilter = ""
     private var searchOrderFilter = ""
+    private var searchRatingFromFilter = 0.0f
+    private var searchRatingToFilter = 10.0f
 
-    private var searchJob = Job()
+    private var searchJob: Job? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -62,28 +74,36 @@ class SearchPageFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val args: SearchPageFragmentArgs by navArgs()
+        checkForLastFilters()
 
         with(dataViewModel) {
-            countryFilter.observe(viewLifecycleOwner, Observer { country ->
+            countryFilter.observe(viewLifecycleOwner) { country ->
                 searchCountryFilter = country
-            })
+            }
 
-            genreFilter.observe(viewLifecycleOwner, Observer { genre ->
+            genreFilter.observe(viewLifecycleOwner) { genre ->
                 var fixedGenre = genre
                 fixedGenre?.let { string ->
                     fixedGenre = string.lowercase()
                 }
                 searchGenreFilter = fixedGenre
-            })
+            }
 
-            typeFilter.observe(viewLifecycleOwner, Observer { type ->
+            typeFilter.observe(viewLifecycleOwner) { type ->
                 searchTypeFilter = type
-            })
+            }
 
-            orderFilter.observe(viewLifecycleOwner, Observer { order ->
+            orderFilter.observe(viewLifecycleOwner) { order ->
                 searchOrderFilter = order
-            })
+            }
+
+            ratingFromFilter.observe(viewLifecycleOwner) { ratingFrom ->
+                searchRatingFromFilter = ratingFrom
+            }
+
+            ratingToFilter.observe(viewLifecycleOwner) { ratingTo ->
+                searchRatingToFilter = ratingTo
+            }
 
         }
 
@@ -115,36 +135,20 @@ class SearchPageFragment : Fragment() {
             }
         }
 
-        binding.searchTextInputEditText.onFocusChangeListener =
-            View.OnFocusChangeListener { _, focus ->
-                if (focus) {
-                    binding.searchTextInputEditText.hint = ""
-                }
-            }
-
-
         binding.searchTextInputEditText.doOnTextChanged { text, _, _, _ ->
+            searchJob?.cancel()
+
             text?.let {
-                viewLifecycleOwner.lifecycleScope.launch(searchJob) {
-                    var fixedGenre = args.genre
-                    fixedGenre?.let { string ->
-                        fixedGenre = string.lowercase()
-                    }
-                    Log.d("search", "start search")
-                    viewModel.getNewPagerForSearchResult(
+                searchJob = viewLifecycleOwner.lifecycleScope.launch {
+                     viewModel.getNewPagerForSearchResult(
                         text.toString(),
                         country = searchCountryFilter,
                         genre = searchGenreFilter,
                         type = searchTypeFilter,
                         order = searchOrderFilter,
-                        ratingFrom = args.ratingFrom,
-                        ratingTo = args.ratingTo
+                        ratingFrom = searchRatingFromFilter,
+                        ratingTo = searchRatingToFilter
                     )
-                    Log.d("search1", "end search1")
-                    searchJob.cancel()
-                    Log.d("search", "end search2")
-                    searchJob = Job()
-                    Log.d("search", "end search3")
                 }
             }
         }
@@ -160,7 +164,7 @@ class SearchPageFragment : Fragment() {
         }
     }
 
-    fun openMoviePage(id: Int?) {
+    private fun openMoviePage(id: Int?) {
         id?.let {
             val action = SearchPageFragmentDirections.actionSearchPageFragmentToFilmPage(id)
             findNavController().navigate(action)
@@ -176,16 +180,30 @@ class SearchPageFragment : Fragment() {
         }
     }
 
+    override fun onStop() {
+        super.onStop()
+        viewModel.pagingDataSearchResult.value = null
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
     }
 
-    companion object {
-        private const val DEFAULT_COUNTRY = "США"
-        private const val DEFAULT_GENRE = "боевик"
-        private const val DEFAULT_TYPE = "ALL"
-        private const val DEFAULT_ORDER = "RATING"
+    private fun checkForLastFilters() {
+        val filmType = sharedPreferences.getString("filterFilmType", "ALL")
+        val filmOrder = sharedPreferences.getString("filterFilmOrder", "YEAR")
+        val filmCountry = sharedPreferences.getString("filterFilmCountry", "Россия")
+        val filmGenre = sharedPreferences.getString("filterFilmGenre", "Боевик")
+        val filmRatingFrom = sharedPreferences.getFloat("filterFilmRatingFrom", 0.0f)
+        val filmRatingTo = sharedPreferences.getFloat("filterFilmRatingTo", 10.0f)
+
+        dataViewModel.setCountryFilter(filmCountry ?: "Россия")
+        dataViewModel.setGenreFilter(filmGenre ?: "Боевик")
+        dataViewModel.setOrderFilter(filmOrder?: "YEAR")
+        dataViewModel.setTypeFilter(filmType ?: "ALL")
+        dataViewModel.setRatingFromFilter(filmRatingFrom)
+        dataViewModel.setRatingToFilter(filmRatingTo)
     }
 
 }

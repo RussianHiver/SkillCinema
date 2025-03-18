@@ -171,11 +171,6 @@
         android:label="fragment_search_filter"
         tools:layout="@layout/fragment_search_filter" >
         <action
-            android:id="@+id/action_searchFilterFragment_to_searchPageFragment"
-            app:destination="@id/searchPageFragment"
-            app:popUpTo="@id/searchPageFragment"
-            app:popUpToInclusive="true" />
-        <action
             android:id="@+id/action_searchFilterFragment_to_searchFilterCountryFragment"
             app:destination="@id/searchFilterCountryFragment" />
         <action
@@ -203,10 +198,6 @@
             app:destination="@id/searchFilterFragment"
             app:popUpTo="@id/searchFilterFragment"
             app:popUpToInclusive="true" />
-        <argument
-            android:name="genre"
-            app:argType="string"
-            app:nullable="true" />
     </fragment>
     <fragment
         android:id="@+id/searchFilterGenreFragment"
@@ -218,10 +209,6 @@
             app:destination="@id/searchFilterFragment"
             app:popUpTo="@id/searchFilterFragment"
             app:popUpToInclusive="true" />
-        <argument
-            android:name="country"
-            app:argType="string"
-            app:nullable="true" />
     </fragment>
     <fragment
         android:id="@+id/searchFilterYearFragment"

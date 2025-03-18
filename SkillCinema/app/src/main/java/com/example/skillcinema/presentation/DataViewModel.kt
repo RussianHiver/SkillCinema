@@ -3,10 +3,11 @@ package com.example.skillcinema.presentation
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.skillcinema.data.StaffMemberDTO
 
 class DataViewModel: ViewModel() {
 
-    private val _countryFilter = MutableLiveData("США")
+    private val _countryFilter = MutableLiveData("Россия")
     val countryFilter: LiveData<String> get() = _countryFilter
 
     private val _genreFilter = MutableLiveData("Боевик")
@@ -15,8 +16,18 @@ class DataViewModel: ViewModel() {
     private val _typeFilter = MutableLiveData("ALL")
     val typeFilter: LiveData<String> get() = _typeFilter
 
-    private val _orderFilter = MutableLiveData("RATING")
+    private val _orderFilter = MutableLiveData("YEAR")
     val orderFilter: LiveData<String> get() = _orderFilter
+
+    private val _ratingFromFilter = MutableLiveData(0.0f)
+    val ratingFromFilter: LiveData<Float> get() = _ratingFromFilter
+
+    private val _ratingToFilter = MutableLiveData(10.0f)
+    val ratingToFilter: LiveData<Float> get() = _ratingToFilter
+
+    private val _filmography = MutableLiveData<List<StaffMemberDTO.Film>>()
+    val filmography: LiveData<List<StaffMemberDTO.Film>> get() = _filmography
+
 
     fun setCountryFilter(filter: String) {
         _countryFilter.value = filter
@@ -33,4 +44,17 @@ class DataViewModel: ViewModel() {
     fun setOrderFilter(filter: String) {
         _orderFilter.value = filter
     }
+
+    fun setRatingFromFilter(filter: Float) {
+        _ratingFromFilter.value = filter
+    }
+
+    fun setRatingToFilter(filter: Float) {
+        _ratingToFilter.value = filter
+    }
+
+    fun setFilmography(list: List<StaffMemberDTO.Film>) {
+        _filmography.value = list
+    }
+
 }

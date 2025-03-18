@@ -41,8 +41,6 @@ class SeasonsAndEpisodesFragment : Fragment() {
 
     private val adapter : AdapterForEpisodesList by lazy { AdapterForEpisodesList() }
 
-    private var currentSeason = 0
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

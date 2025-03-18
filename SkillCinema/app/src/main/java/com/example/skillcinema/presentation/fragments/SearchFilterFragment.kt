@@ -1,5 +1,7 @@
 package com.example.skillcinema.presentation.fragments
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,7 +9,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import com.example.skillcinema.R
 import com.example.skillcinema.data.App
 import com.example.skillcinema.databinding.FragmentSearchFilterBinding
@@ -23,12 +24,14 @@ class SearchFilterFragment : Fragment() {
         (activity?.application as App).component.dataViewModelFactory()
     }
 
-    private var typeFilter: String? = null
-    private var countryFilter: String? = null
-    private var genreFilter: String? = null
-    private var sortFilter: String? = null
-    private var ratingFromFilter: Float = 1.0f
-    private var ratingToFilter: Float = 10.0f
+    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var editor: SharedPreferences.Editor
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        sharedPreferences = context.getSharedPreferences("shared", Context.MODE_PRIVATE)
+        editor = sharedPreferences.edit()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,47 +44,70 @@ class SearchFilterFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val args: SearchFilterFragmentArgs by navArgs()
-        checkForFiltersUpdate(args)
+        checkForLastFilters()
 
-        binding.chooseCountryChoice.text = countryFilter ?: "Россия"
-        binding.chooseGenreChoice.text = genreFilter ?: "Боевик"
+        with(dataViewModel) {
+            countryFilter.observe(viewLifecycleOwner) {
+                binding.chooseCountryChoice.text = it
+            }
 
-        binding.headerBackButton.setOnClickListener {
-            val action =
-                SearchFilterFragmentDirections.actionSearchFilterFragmentToSearchPageFragment(
-                    type = typeFilter,
-                    sort = sortFilter,
-                    country = countryFilter,
-                    genre = genreFilter,
-                    ratingFrom = ratingFromFilter,
-                    ratingTo = ratingToFilter
-                )
-            findNavController().navigate(action)
+            genreFilter.observe(viewLifecycleOwner) {
+                binding.chooseGenreChoice.text = it
+            }
         }
 
         binding.selectWatchTypeGroup.addOnButtonCheckedListener { _, checkedId, _ ->
             when (checkedId) {
-                R.id.select_all -> typeFilter = "ALL"
-                R.id.select_films -> typeFilter = "FILM"
-                R.id.select_TVseries -> typeFilter = "TV_SERIES"
+                R.id.select_all -> {
+                    dataViewModel.setTypeFilter("ALL")
+                    editor.apply {
+                        putString("filterFilmType", "ALL")
+                    }.apply()
+                }
+                R.id.select_films -> {
+                    dataViewModel.setTypeFilter("FILM")
+                    editor.apply {
+                        putString("filterFilmType", "FILM")
+                    }.apply()
+                }
+                R.id.select_TVseries -> {
+                    dataViewModel.setTypeFilter("TV_SERIES")
+                    editor.apply {
+                        putString("filterFilmType", "TV_SERIES")
+                    }.apply()
+                }
             }
         }
 
         binding.selectFilmSortGroup.addOnButtonCheckedListener { _, checkedId, _ ->
             when (checkedId) {
-                R.id.select_date -> sortFilter = "YEAR"
-                R.id.select_popularity -> sortFilter = "NUM_VOTE"
-                R.id.select_ratings -> sortFilter = "RATING"
+                R.id.select_date -> {
+                    dataViewModel.setOrderFilter("YEAR")
+                    editor.apply {
+                        putString("filterFilmOrder", "YEAR")
+                    }.apply()
+                }
+                R.id.select_popularity -> {
+                    dataViewModel.setOrderFilter("NUM_VOTE")
+                    editor.apply {
+                        putString("filterFilmOrder", "NUM_VOTE")
+                    }.apply()
+                }
+                R.id.select_ratings -> {
+                    dataViewModel.setOrderFilter("RATING")
+                    editor.apply {
+                        putString("filterFilmOrder", "RATING")
+                    }.apply()
+                }
             }
         }
 
         binding.chooseCountry.setOnClickListener {
-            findNavController().navigate(SearchFilterFragmentDirections.actionSearchFilterFragmentToSearchFilterCountryFragment(genreFilter))
+            findNavController().navigate(SearchFilterFragmentDirections.actionSearchFilterFragmentToSearchFilterCountryFragment())
         }
 
         binding.chooseGenre.setOnClickListener {
-            findNavController().navigate(SearchFilterFragmentDirections.actionSearchFilterFragmentToSearchFilterGenreFragment(countryFilter))
+            findNavController().navigate(SearchFilterFragmentDirections.actionSearchFilterFragmentToSearchFilterGenreFragment())
         }
 
         binding.chooseYear.setOnClickListener {
@@ -91,27 +117,49 @@ class SearchFilterFragment : Fragment() {
 
         binding.ratingSelectSlider.addOnChangeListener { slider, _, _ ->
             val values = slider.values
-            ratingFromFilter = values[0]
-            ratingToFilter = values[1]
+            dataViewModel.setRatingFromFilter(values[0])
+            dataViewModel.setRatingToFilter(values[1])
+            editor.apply{
+                putFloat("filterFilmRatingFrom", values[0])
+                putFloat("filterFilmRatingTo", values[1])
+            }.apply()
         }
 
-    }
-
-    private fun checkForFiltersUpdate(arguments: SearchFilterFragmentArgs) {
-        val country = arguments.CountryFilter
-        country?.let {
-            countryFilter = it
+        binding.headerBackButton.setOnClickListener {
+            findNavController().popBackStack()
         }
-        val genre = arguments.GenreFilter
 
-        genre?.let {
-            genreFilter = it
-        }
     }
 
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+    }
+
+    private fun checkForLastFilters() {
+        val filmType = sharedPreferences.getString("filterFilmType", "ALL")
+        val filmOrder = sharedPreferences.getString("filterFilmOrder", "YEAR")
+        val filmCountry = sharedPreferences.getString("filterFilmCountry", "Россия")
+        val filmGenre = sharedPreferences.getString("filterFilmGenre", "Боевик")
+        val filmRatingFrom = sharedPreferences.getFloat("filterFilmRatingFrom", 0.0f)
+        val filmRatingTo = sharedPreferences.getFloat("filterFilmRatingTo", 10.0f)
+
+        dataViewModel.setCountryFilter(filmCountry ?: "Россия")
+        dataViewModel.setGenreFilter(filmGenre ?: "Боевик")
+
+        with(binding) {
+            when(filmType) {
+                "FILM" -> selectWatchTypeGroup.check(R.id.select_films)
+                "TV_SERIES" -> selectWatchTypeGroup.check(R.id.select_TVseries)
+                else -> selectWatchTypeGroup.check(R.id.select_all)
+            }
+            when(filmOrder) {
+                "NUM_VOTE" -> selectFilmSortGroup.check(R.id.select_popularity)
+                "RATING" -> selectFilmSortGroup.check(R.id.select_ratings)
+                else -> selectFilmSortGroup.check(R.id.select_date)
+            }
+            ratingSelectSlider.setValues(filmRatingFrom, filmRatingTo)
+        }
     }
 
 }

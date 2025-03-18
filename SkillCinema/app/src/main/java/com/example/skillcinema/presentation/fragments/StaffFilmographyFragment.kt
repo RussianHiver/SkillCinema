@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -17,6 +18,7 @@ import com.example.skillcinema.data.App
 import com.example.skillcinema.data.MovieDataDTO
 import com.example.skillcinema.data.StaffMemberDTO
 import com.example.skillcinema.databinding.FragmentStaffFilmographyBinding
+import com.example.skillcinema.presentation.DataViewModel
 import com.example.skillcinema.presentation.MainViewModel
 import com.example.skillcinema.presentation.adapters.AdapterListOfAllStaffFilms
 import com.google.android.material.chip.Chip
@@ -34,9 +36,13 @@ class StaffFilmographyFragment : Fragment() {
 
     private lateinit var chipGroup: ChipGroup
 
-    private lateinit var list: List<MovieDataDTO>
+    private lateinit var fullFilmList: List<StaffMemberDTO.Film>
 
-    private val adapter by lazy { AdapterListOfAllStaffFilms(list) {id -> openMoviePage(id)} }
+    private var neededFilmList: List<MovieDataDTO>? = null
+
+    private val sortedMapOfMovieLists = mutableMapOf<String, List<MovieDataDTO>>()
+
+    private val adapter by lazy { AdapterListOfAllStaffFilms { id -> openMoviePage(id)} }
 
     private var job = Job()
 
@@ -44,6 +50,9 @@ class StaffFilmographyFragment : Fragment() {
         (activity?.application as App).component.mainViewModelFactory()
     }
 
+    private val dataViewModel: DataViewModel by activityViewModels {
+        (activity?.application as App).component.dataViewModelFactory()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -61,8 +70,15 @@ class StaffFilmographyFragment : Fragment() {
 
         val args: StaffFilmographyFragmentArgs by navArgs()
 
+        var previouslyChecked: Chip? = null
+
+        binding.filmsByOccupationList.adapter = adapter
+
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                dataViewModel.filmography.observe(viewLifecycleOwner) {
+                    fullFilmList = it
+                }
                 staffMember = viewmodel.giveIndividualStaffMember(args.StaffID)
                 chipGroup = binding.staffOccupationChipGroup
                 val occupations = staffMember.profession?.split(", ")?.toTypedArray()
@@ -75,10 +91,14 @@ class StaffFilmographyFragment : Fragment() {
                     }
                 }
                 chipGroup.setOnCheckedStateChangeListener { group, checkedIds ->
+                    previouslyChecked?.isClickable = true
+                    previouslyChecked = group.findViewById(checkedIds.first())
+                    previouslyChecked?.isClickable = false
                     val occupation = group.findViewById<Chip>(checkedIds.first()).text.toString()
                     viewLifecycleOwner.lifecycleScope.launch(job) {
                         binding.searchPageProgress.isVisible = true
-                        getNeededFilmList(getNeededOccupation(occupation), staffMember)
+                        val searchOccupation = getNeededOccupation(occupation)
+                        getNeededFilmList(searchOccupation)
                         job.cancel()
                         job = Job()
                         binding.searchPageProgress.isVisible = false
@@ -126,17 +146,24 @@ class StaffFilmographyFragment : Fragment() {
         }
     }
 
-    private suspend fun getNeededFilmList(occupation: String, staffMember: StaffMemberDTO) {
-        val filteredList = mutableListOf<MovieDataDTO>()
-        val neededList = staffMember.films.filter{it.professionKey == occupation}
-        neededList.forEach {
-            filteredList.add(viewmodel.giveOneMovie(it.filmId))
+    private suspend fun getNeededFilmList(occupation: String) {
+        if (sortedMapOfMovieLists.containsKey(occupation)) {
+            val occupationList = sortedMapOfMovieLists[occupation]
+            neededFilmList = occupationList
+            adapter.submitList(neededFilmList)
+        } else {
+            val filteredFilmList = fullFilmList.filter {it.professionKey == occupation}
+            val fullFilmInfoList = mutableListOf<MovieDataDTO>()
+            filteredFilmList.forEach { film ->
+                fullFilmInfoList.add(viewmodel.giveOneMovie(film.filmId))
+            }
+            sortedMapOfMovieLists[occupation] = fullFilmInfoList.toList()
+            neededFilmList = fullFilmInfoList.toList()
+            adapter.submitList(neededFilmList)
         }
-        list = filteredList
-        binding.filmsByOccupationList.adapter = adapter
     }
 
-    fun openMoviePage(id: Int?) {
+    private fun openMoviePage(id: Int?) {
         id?.let {
             val action = StaffFilmographyFragmentDirections.actionStaffFilmographyFragmentToFilmPage(it)
             findNavController().navigate(action)
