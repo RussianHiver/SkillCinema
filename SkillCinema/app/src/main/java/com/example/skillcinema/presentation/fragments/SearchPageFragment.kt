@@ -3,13 +3,13 @@ package com.example.skillcinema.presentation.fragments
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
-import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -28,7 +28,6 @@ import com.example.skillcinema.presentation.adapters.MovieDataLoadStateAdapter
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.yield
 
 class SearchPageFragment : Fragment() {
 
@@ -62,6 +61,8 @@ class SearchPageFragment : Fragment() {
     private var searchRatingToFilter = 10.0f
 
     private var searchJob: Job? = null
+
+    private var previousSearchResult = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -135,24 +136,34 @@ class SearchPageFragment : Fragment() {
             }
         }
 
-        binding.searchTextInputEditText.doOnTextChanged { text, _, _, _ ->
-            searchJob?.cancel()
+        binding.searchTextInputEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
-            text?.let {
-                searchJob = viewLifecycleOwner.lifecycleScope.launch {
-                     viewModel.getNewPagerForSearchResult(
-                        text.toString(),
-                        country = searchCountryFilter,
-                        genre = searchGenreFilter,
-                        type = searchTypeFilter,
-                        order = searchOrderFilter,
-                        ratingFrom = searchRatingFromFilter,
-                        ratingTo = searchRatingToFilter
-                    )
+            }
+
+            override fun onTextChanged(search: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+                if (!search.isNullOrBlank() && search != previousSearchResult) {
+                    searchJob?.cancel()
+                    previousSearchResult = search.toString()
+                    searchJob = viewLifecycleOwner.lifecycleScope.launch {
+                        viewModel.getNewPagerForSearchResult(
+                            search.toString(),
+                            country = searchCountryFilter,
+                            genre = searchGenreFilter,
+                            type = searchTypeFilter,
+                            order = searchOrderFilter,
+                            ratingFrom = searchRatingFromFilter,
+                            ratingTo = searchRatingToFilter
+                        )
+                    }
                 }
             }
-        }
 
+            override fun afterTextChanged(p0: Editable?) {
+            }
+
+        })
 
         binding.searchTextInputLayout.setEndIconOnClickListener {
             val action =
@@ -200,7 +211,7 @@ class SearchPageFragment : Fragment() {
 
         dataViewModel.setCountryFilter(filmCountry ?: "Россия")
         dataViewModel.setGenreFilter(filmGenre ?: "Боевик")
-        dataViewModel.setOrderFilter(filmOrder?: "YEAR")
+        dataViewModel.setOrderFilter(filmOrder ?: "YEAR")
         dataViewModel.setTypeFilter(filmType ?: "ALL")
         dataViewModel.setRatingFromFilter(filmRatingFrom)
         dataViewModel.setRatingToFilter(filmRatingTo)
