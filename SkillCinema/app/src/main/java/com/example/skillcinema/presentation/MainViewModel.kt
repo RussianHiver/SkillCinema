@@ -174,7 +174,9 @@ class MainViewModel(
         type: String,
         order: String,
         ratingFrom: Float,
-        ratingTo: Float
+        ratingTo: Float,
+        yearFrom: Int,
+        yearTo: Int
     ) {
         Pager(
             config = PagingConfig(pageSize = 10),
@@ -187,6 +189,8 @@ class MainViewModel(
                     order = order,
                     ratingFrom = ratingFrom,
                     ratingTo = ratingTo,
+                    yearFrom = yearFrom,
+                    yearTo = yearTo,
                     filteredMovieUseCase = filteredMovieUseCase
                 )
             }

@@ -19,6 +19,12 @@ class DataViewModel: ViewModel() {
     private val _orderFilter = MutableLiveData("YEAR")
     val orderFilter: LiveData<String> get() = _orderFilter
 
+    private val _yearFrom = MutableLiveData(1998)
+    val yearFrom: LiveData<Int> get() = _yearFrom
+
+    private val _yearTo = MutableLiveData(2024)
+    val yearTo: LiveData<Int> get() = _yearTo
+
     private val _ratingFromFilter = MutableLiveData(0.0f)
     val ratingFromFilter: LiveData<Float> get() = _ratingFromFilter
 
@@ -51,6 +57,14 @@ class DataViewModel: ViewModel() {
 
     fun setRatingToFilter(filter: Float) {
         _ratingToFilter.value = filter
+    }
+
+    fun setYearFromFilter(filter: Int) {
+        _yearFrom.value = filter
+    }
+
+    fun setYearToFilter(filter: Int) {
+        _yearTo.value = filter
     }
 
     fun setFilmography(list: List<StaffMemberDTO.Film>) {

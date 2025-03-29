@@ -46,8 +46,8 @@ class MovieDataSourceRetrofit {
             @Query("type") type: String = "ALL",
             @Query("ratingFrom") ratingFrom: Number = 0,
             @Query("ratingTo") ratingTo: Number = 10,
-            @Query("yearFrom") yearFrom: Int = 1000,
-            @Query("yearTo") yearTo: Int = 3000,
+            @Query("yearFrom") yearFrom: Int = 1998,
+            @Query("yearTo") yearTo: Int = 2024,
             @Query("page") page: Int = 1,
             @Query("keyword") keyword: String = ""
         ): FilteredDTO

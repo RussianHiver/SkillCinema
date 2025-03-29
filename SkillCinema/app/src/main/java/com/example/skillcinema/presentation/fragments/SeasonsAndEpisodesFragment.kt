@@ -78,7 +78,6 @@ class SeasonsAndEpisodesFragment : Fragment() {
                     val seasonNumber = previouslyChecked?.text.toString().toInt()
                     viewLifecycleOwner.lifecycleScope.launch(job) {
                         binding.episodesListProgressBar.isVisible = true
-                        delay(1000)
                         val amountOfEpisodes =
                             seasonsAndEpisodesDTO.items[seasonNumber - 1].episodes.count()
                         binding.seasonsAndAmountOfEpisodes.text =

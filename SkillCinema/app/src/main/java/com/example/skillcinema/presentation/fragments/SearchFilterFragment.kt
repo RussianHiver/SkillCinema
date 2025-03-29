@@ -44,6 +44,9 @@ class SearchFilterFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        var yearFromFilter = 1998
+        var yearToFilter = 2024
+
         checkForLastFilters()
 
         with(dataViewModel) {
@@ -53,6 +56,16 @@ class SearchFilterFragment : Fragment() {
 
             genreFilter.observe(viewLifecycleOwner) {
                 binding.chooseGenreChoice.text = it
+            }
+
+            yearFrom.observe(viewLifecycleOwner) {
+                yearFromFilter = it
+                binding.chooseYearChoice.text = "с $yearFromFilter по $yearToFilter"
+            }
+
+            yearTo.observe(viewLifecycleOwner) {
+                yearToFilter = it
+                binding.chooseYearChoice.text = "с $yearFromFilter по $yearToFilter"
             }
         }
 
@@ -143,9 +156,13 @@ class SearchFilterFragment : Fragment() {
         val filmGenre = sharedPreferences.getString("filterFilmGenre", "Боевик")
         val filmRatingFrom = sharedPreferences.getFloat("filterFilmRatingFrom", 0.0f)
         val filmRatingTo = sharedPreferences.getFloat("filterFilmRatingTo", 10.0f)
+        val filmYearFrom = sharedPreferences.getInt("filterYearFrom", 1998)
+        val filmYearTo = sharedPreferences.getInt("filterYearTo", 2024)
 
         dataViewModel.setCountryFilter(filmCountry ?: "Россия")
         dataViewModel.setGenreFilter(filmGenre ?: "Боевик")
+        dataViewModel.setYearFromFilter(filmYearFrom)
+        dataViewModel.setYearToFilter(filmYearTo)
 
         with(binding) {
             when(filmType) {

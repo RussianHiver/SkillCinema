@@ -13,6 +13,8 @@ class PagingSourceSearchResult(
     val order: String,
     val ratingFrom: Float,
     val ratingTo: Float,
+    val yearFrom: Int,
+    val yearTo: Int,
     val filteredMovieUseCase: FilteredMovieUseCase
 ) : PagingSource<Int, FilteredDTO.Item>() {
 
@@ -29,7 +31,9 @@ class PagingSourceSearchResult(
                 order = order,
                 type = type,
                 ratingFrom = ratingFrom,
-                ratingTo = ratingTo
+                ratingTo = ratingTo,
+                yearFrom = yearFrom,
+                yearTo = yearTo
             )
         }.fold(
                 onSuccess = {

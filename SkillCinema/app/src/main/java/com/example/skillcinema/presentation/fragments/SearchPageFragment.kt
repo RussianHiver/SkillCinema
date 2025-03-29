@@ -59,6 +59,8 @@ class SearchPageFragment : Fragment() {
     private var searchOrderFilter = ""
     private var searchRatingFromFilter = 0.0f
     private var searchRatingToFilter = 10.0f
+    private var searchYearFromFilter = 1998
+    private var searchYearToFilter = 2024
 
     private var searchJob: Job? = null
 
@@ -104,6 +106,14 @@ class SearchPageFragment : Fragment() {
 
             ratingToFilter.observe(viewLifecycleOwner) { ratingTo ->
                 searchRatingToFilter = ratingTo
+            }
+
+            yearFrom.observe(viewLifecycleOwner) { yearFrom ->
+                searchYearFromFilter = yearFrom
+            }
+
+            yearTo.observe(viewLifecycleOwner) { yearTo ->
+                searchYearToFilter = yearTo
             }
 
         }
@@ -154,7 +164,9 @@ class SearchPageFragment : Fragment() {
                             type = searchTypeFilter,
                             order = searchOrderFilter,
                             ratingFrom = searchRatingFromFilter,
-                            ratingTo = searchRatingToFilter
+                            ratingTo = searchRatingToFilter,
+                            yearFrom = searchYearFromFilter,
+                            yearTo = searchYearToFilter
                         )
                     }
                 }
@@ -208,6 +220,8 @@ class SearchPageFragment : Fragment() {
         val filmGenre = sharedPreferences.getString("filterFilmGenre", "Боевик")
         val filmRatingFrom = sharedPreferences.getFloat("filterFilmRatingFrom", 0.0f)
         val filmRatingTo = sharedPreferences.getFloat("filterFilmRatingTo", 10.0f)
+        val filmYearFrom = sharedPreferences.getInt("filterYearFrom", 1998)
+        val filmYearTo = sharedPreferences.getInt("filterYearTo", 2024)
 
         dataViewModel.setCountryFilter(filmCountry ?: "Россия")
         dataViewModel.setGenreFilter(filmGenre ?: "Боевик")
@@ -215,6 +229,8 @@ class SearchPageFragment : Fragment() {
         dataViewModel.setTypeFilter(filmType ?: "ALL")
         dataViewModel.setRatingFromFilter(filmRatingFrom)
         dataViewModel.setRatingToFilter(filmRatingTo)
+        dataViewModel.setYearFromFilter(filmYearFrom)
+        dataViewModel.setYearToFilter(filmYearTo)
     }
 
 }

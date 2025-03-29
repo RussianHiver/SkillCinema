@@ -74,6 +74,8 @@
     <string name="filter_choose_genre_choice">Комедия</string>
     <string name="filter_choose_year_title">Год</string>
     <string name="filter_choose_year_choice">с 1998 до 2017</string>
+    <string name="filter_search_from_year">Искать в период с</string>
+    <string name="filter_search_to_year">Искать в период до</string>
 
     <!-- Profile page strings -->
     <string name="preview_profile">Просмотрено</string>

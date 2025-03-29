@@ -9,7 +9,7 @@ import com.example.skillcinema.R
 import com.example.skillcinema.databinding.FragmentOnboardingPageBinding
 
 
-const val PAGE_NUMBER = "number"
+const val PAGE_NUMBER: String = "number"
 
 private const val PAGE_ONE = 1
 private const val PAGE_TWO = 2

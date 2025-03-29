@@ -58,7 +58,9 @@ class MainRepository(
         type: String,
         order: String,
         ratingFrom: Float,
-        ratingTo: Float
+        ratingTo: Float,
+        yearFrom: Int,
+        yearTo: Int
     ): FilteredDTO {
         return movieDataSource.searchDataApi.getFilteredMovies(
             page = page,
@@ -68,7 +70,9 @@ class MainRepository(
             type = type,
             order = order,
             ratingFrom = ratingFrom,
-            ratingTo = ratingTo
+            ratingTo = ratingTo,
+            yearFrom = yearFrom,
+            yearTo = yearTo
         )
     }
 

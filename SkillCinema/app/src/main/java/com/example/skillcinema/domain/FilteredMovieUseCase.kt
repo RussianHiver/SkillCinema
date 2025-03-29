@@ -29,7 +29,9 @@ class FilteredMovieUseCase(private val mainRepository: MainRepository) {
         type: String,
         order: String,
         ratingFrom: Float,
-        ratingTo: Float
+        ratingTo: Float,
+        yearFrom: Int,
+        yearTo: Int
     ): FilteredDTO {
         val filters = mainRepository.getFilters()
         val neededCountry = getCountryByFilter(country, filters)
@@ -42,7 +44,9 @@ class FilteredMovieUseCase(private val mainRepository: MainRepository) {
             order = order,
             type = type,
             ratingFrom = ratingFrom,
-            ratingTo = ratingTo
+            ratingTo = ratingTo,
+            yearFrom = yearFrom,
+            yearTo = yearTo
         )
     }
 

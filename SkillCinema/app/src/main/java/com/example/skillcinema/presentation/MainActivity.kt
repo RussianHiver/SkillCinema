@@ -30,7 +30,12 @@ class MainActivity : FragmentActivity() {
         binding.bottomNav.setupWithNavController(navController)
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            if (destination.id == R.id.onBoardingFragment) {
+
+            if (destination.id == R.id.onBoardingFragment
+                || destination.id == R.id.searchFilterFragment
+                || destination.id == R.id.searchFilterGenreFragment
+                || destination.id == R.id.searchFilterCountryFragment
+                || destination.id == R.id.searchFilterYearFragment) {
                 binding.bottomNav.visibility = View.GONE
             } else {
                 val sharedPreferences = getSharedPreferences("shared", MODE_PRIVATE)
