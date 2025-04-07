@@ -9,7 +9,7 @@ import com.example.skillcinema.domain.PopularMovieUseCase
 import com.example.skillcinema.domain.PremierMovieUseCase
 import com.example.skillcinema.domain.SeasonsAndEpisodesUseCase
 import com.example.skillcinema.domain.SimilarMoviesUseCase
-import com.example.skillcinema.domain.WatchedMoviesUseCase
+import com.example.skillcinema.domain.DatabaseFilmsUseCase
 import com.example.skillcinema.presentation.DataViewModel
 import com.example.skillcinema.presentation.DataViewModelFactory
 import com.example.skillcinema.presentation.MainViewModel
@@ -31,7 +31,7 @@ class PresentationModule {
         premierMovieUseCase: PremierMovieUseCase,
         seasonsAndEpisodesUseCase: SeasonsAndEpisodesUseCase,
         similarMoviesUseCase: SimilarMoviesUseCase,
-        watchedMoviesUseCase: WatchedMoviesUseCase
+        databaseFilmsUseCase: DatabaseFilmsUseCase
     ): MainViewModel {
         return MainViewModel(
             filteredMovieUseCase = filteredMovieUseCase,
@@ -43,7 +43,7 @@ class PresentationModule {
             premierMovieUseCase = premierMovieUseCase,
             seasonsAndEpisodesUseCase = seasonsAndEpisodesUseCase,
             similarMoviesUseCase = similarMoviesUseCase,
-            watchedMoviesUseCase = watchedMoviesUseCase
+            databaseFilmsUseCase = databaseFilmsUseCase
         )
     }
 

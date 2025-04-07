@@ -114,26 +114,29 @@
             app:layout_constraintStart_toStartOf="@id/film_photo"
             app:layout_constraintTop_toBottomOf="@id/film_info">
 
-            <androidx.appcompat.widget.AppCompatImageButton
+            <ToggleButton
                 android:id="@+id/add_to_favorites_button"
                 android:layout_width="@dimen/film_page_button_size"
                 android:layout_height="@dimen/film_page_button_size"
-                android:background="@null"
-                android:src="@drawable/favorites" />
+                android:background="@drawable/favorites"
+                android:textOn=""
+                android:textOff=""/>
 
-            <androidx.appcompat.widget.AppCompatImageButton
+            <ToggleButton
                 android:id="@+id/add_to_must_watch_button"
                 android:layout_width="@dimen/film_page_button_size"
                 android:layout_height="@dimen/film_page_button_size"
-                android:background="@null"
-                android:src="@drawable/addtocollection" />
+                android:background="@drawable/addtocollection"
+                android:textOn=""
+                android:textOff=""/>
 
-            <androidx.appcompat.widget.AppCompatImageButton
+            <ToggleButton
                 android:id="@+id/add_to_watched_button"
                 android:layout_width="@dimen/film_page_button_size"
                 android:layout_height="@dimen/film_page_button_size"
-                android:background="@null"
-                android:src="@drawable/watched" />
+                android:background="@drawable/watched"
+                android:textOn=""
+                android:textOff=""/>
 
             <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/share_button"

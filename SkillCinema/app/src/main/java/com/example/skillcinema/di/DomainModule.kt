@@ -11,7 +11,7 @@ import com.example.skillcinema.domain.PopularMovieUseCase
 import com.example.skillcinema.domain.PremierMovieUseCase
 import com.example.skillcinema.domain.SeasonsAndEpisodesUseCase
 import com.example.skillcinema.domain.SimilarMoviesUseCase
-import com.example.skillcinema.domain.WatchedMoviesUseCase
+import com.example.skillcinema.domain.DatabaseFilmsUseCase
 import dagger.Module
 import dagger.Provides
 
@@ -64,8 +64,8 @@ class DomainModule {
     }
 
     @Provides
-    fun provideWatchedMoviesUseCase(localRepository: LocalRepository): WatchedMoviesUseCase {
-        return WatchedMoviesUseCase(localRepository)
+    fun provideWatchedMoviesUseCase(localRepository: LocalRepository): DatabaseFilmsUseCase {
+        return DatabaseFilmsUseCase(localRepository)
     }
 
 }

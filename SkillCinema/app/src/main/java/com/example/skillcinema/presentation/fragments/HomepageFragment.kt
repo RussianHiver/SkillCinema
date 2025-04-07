@@ -43,6 +43,8 @@ class HomepageFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
+
         viewLifecycleOwner.lifecycleScope.launch {
             val premier = viewModel.givePremierList()
             val premierAdapterForHomePage = AdapterForHomePage(

@@ -5,23 +5,33 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.Update
-import com.example.skillcinema.entity.MovieTable
+import androidx.room.Transaction
+import com.example.skillcinema.entity.CollectionEntity
+import com.example.skillcinema.entity.CollectionListFilms
+import com.example.skillcinema.entity.CollectionWithFilms
+import com.example.skillcinema.entity.FilmEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface MovieTableDAO {
+    @Transaction
+    @Query("SELECT * FROM collection_entity" )
+    fun getAll(): Flow<List<CollectionWithFilms>>
 
-    @Query("SELECT * FROM movie")
-    fun getAll(): Flow<List<MovieTable>>
+    @Insert(onConflict = OnConflictStrategy.REPLACE,)
+    suspend fun insert(table: FilmEntity) // вставлять
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(movieTable: MovieTable)
+    @Insert(onConflict = OnConflictStrategy.REPLACE,)
+    suspend fun insertCollection(table: CollectionEntity) // вставлять
 
-    @Update
-    fun update(movieTable: MovieTable)
+    @Insert(onConflict = OnConflictStrategy.REPLACE,)
+    suspend fun insertFilmForCollection(table: CollectionListFilms)
 
     @Delete
-    fun delete(movieTable: MovieTable)
+    suspend fun deleteFilm(table: FilmEntity) // удаление данных из БД
+    @Delete
+    suspend fun deleteFilmForCollection(table: CollectionListFilms)
+    @Delete
+    suspend fun deleteCollection(table: CollectionEntity)
 
 }

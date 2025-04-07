@@ -25,18 +25,18 @@ import com.example.skillcinema.domain.PopularMovieUseCase
 import com.example.skillcinema.domain.PremierMovieUseCase
 import com.example.skillcinema.domain.SeasonsAndEpisodesUseCase
 import com.example.skillcinema.domain.SimilarMoviesUseCase
-import com.example.skillcinema.domain.WatchedMoviesUseCase
-import com.example.skillcinema.entity.MovieTable
+import com.example.skillcinema.domain.DatabaseFilmsUseCase
 import com.example.skillcinema.presentation.pagingsources.PagingSourceFiltered
 import com.example.skillcinema.presentation.pagingsources.PagingSourceGallery
 import com.example.skillcinema.presentation.pagingsources.PagingSourcePopular
 import com.example.skillcinema.presentation.pagingsources.PagingSourceSearchResult
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 class MainViewModel(
     private val premierMovieUseCase: PremierMovieUseCase,
@@ -48,7 +48,7 @@ class MainViewModel(
     private val similarMoviesUseCase: SimilarMoviesUseCase,
     private val filtersUseCase: FiltersUseCase,
     private val seasonsAndEpisodesUseCase: SeasonsAndEpisodesUseCase,
-    private val watchedMoviesUseCase: WatchedMoviesUseCase
+    private val databaseFilmsUseCase: DatabaseFilmsUseCase
 ) : ViewModel() {
 
     private var popularType = MutableStateFlow("")
@@ -202,5 +202,4 @@ class MainViewModel(
     suspend fun getSeasonsAndEpisodes(id: Int): SeasonsAndEpisodesDTO {
         return seasonsAndEpisodesUseCase.getSeasonsAndEpisodes(id)
     }
-
 }
