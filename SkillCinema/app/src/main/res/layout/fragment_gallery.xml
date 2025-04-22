@@ -42,7 +42,7 @@
         android:layout_height="wrap_content"
         app:singleLine="true"
         app:singleSelection="true"
-        android:paddingStart="@dimen/main_padding"
+        android:paddingStart="@dimen/main_dimen"
         app:chipSpacingHorizontal="20dp">
 
         <com.google.android.material.chip.Chip

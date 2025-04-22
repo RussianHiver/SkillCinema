@@ -1,5 +1,8 @@
 package com.example.skillcinema.presentation.fragments
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -42,7 +45,7 @@ class StaffFilmographyFragment : Fragment() {
 
     private val sortedMapOfMovieLists = mutableMapOf<String, List<MovieDataDTO>>()
 
-    private val adapter by lazy { AdapterListOfAllStaffFilms { id -> openMoviePage(id)} }
+    private val adapter by lazy { AdapterListOfAllStaffFilms { id -> openMoviePage(id) } }
 
     private var job = Job()
 
@@ -68,45 +71,54 @@ class StaffFilmographyFragment : Fragment() {
             findNavController().popBackStack()
         }
 
-        val args: StaffFilmographyFragmentArgs by navArgs()
+        context?.let { context ->
+            if (checkForInternet(context)) {
+                val args: StaffFilmographyFragmentArgs by navArgs()
 
-        var previouslyChecked: Chip? = null
+                var previouslyChecked: Chip? = null
 
-        binding.filmsByOccupationList.adapter = adapter
+                binding.filmsByOccupationList.adapter = adapter
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                dataViewModel.filmography.observe(viewLifecycleOwner) {
-                    fullFilmList = it
-                }
-                staffMember = viewmodel.giveIndividualStaffMember(args.StaffID)
-                chipGroup = binding.staffOccupationChipGroup
-                val occupations = staffMember.profession?.split(", ")?.toTypedArray()
-                with(binding) {
-                    staffName.text = staffMember.nameRu ?: staffMember.nameEn ?: "Неизвестный"
-                    occupations?.let {
-                        it.forEach { occupation ->
-                            chipGroup.addView(makeAChip(occupation))
+                viewLifecycleOwner.lifecycleScope.launch {
+                    viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                        dataViewModel.filmography.observe(viewLifecycleOwner) {
+                            fullFilmList = it
+                        }
+                        staffMember = viewmodel.giveIndividualStaffMember(args.StaffID)
+                        chipGroup = binding.staffOccupationChipGroup
+                        val occupations = staffMember.profession?.split(", ")?.toTypedArray()
+                        with(binding) {
+                            staffName.text =
+                                staffMember.nameRu ?: staffMember.nameEn ?: "Неизвестный"
+                            occupations?.let {
+                                it.forEach { occupation ->
+                                    chipGroup.addView(makeAChip(occupation))
+                                }
+                            }
+                        }
+                        chipGroup.setOnCheckedStateChangeListener { group, checkedIds ->
+                            previouslyChecked?.isClickable = true
+                            previouslyChecked = group.findViewById(checkedIds.first())
+                            previouslyChecked?.isClickable = false
+                            val occupation =
+                                group.findViewById<Chip>(checkedIds.first()).text.toString()
+                            viewLifecycleOwner.lifecycleScope.launch(job) {
+                                binding.searchPageProgress.isVisible = true
+                                val searchOccupation = getNeededOccupation(occupation)
+                                getNeededFilmList(searchOccupation)
+                                job.cancel()
+                                job = Job()
+                                binding.searchPageProgress.isVisible = false
+                            }
+
                         }
                     }
                 }
-                chipGroup.setOnCheckedStateChangeListener { group, checkedIds ->
-                    previouslyChecked?.isClickable = true
-                    previouslyChecked = group.findViewById(checkedIds.first())
-                    previouslyChecked?.isClickable = false
-                    val occupation = group.findViewById<Chip>(checkedIds.first()).text.toString()
-                    viewLifecycleOwner.lifecycleScope.launch(job) {
-                        binding.searchPageProgress.isVisible = true
-                        val searchOccupation = getNeededOccupation(occupation)
-                        getNeededFilmList(searchOccupation)
-                        job.cancel()
-                        job = Job()
-                        binding.searchPageProgress.isVisible = false
-                    }
-
-                }
+            } else {
+                BottomSheetErrorFragment().show(parentFragmentManager, "sheetError")
             }
         }
+
 
     }
 
@@ -141,7 +153,7 @@ class StaffFilmographyFragment : Fragment() {
             "Режиссер" -> "DIRECTOR"
             "Режиссер дубляжа" -> "VOICE_DIRECTOR"
             "Художник" -> "DESIGN"
-            "Директор фильма"-> "PRODUCER_USSR"
+            "Директор фильма" -> "PRODUCER_USSR"
             else -> "UNKNOWN"
         }
     }
@@ -152,7 +164,7 @@ class StaffFilmographyFragment : Fragment() {
             neededFilmList = occupationList
             adapter.submitList(neededFilmList)
         } else {
-            val filteredFilmList = fullFilmList.filter {it.professionKey == occupation}
+            val filteredFilmList = fullFilmList.filter { it.professionKey == occupation }
             val fullFilmInfoList = mutableListOf<MovieDataDTO>()
             filteredFilmList.forEach { film ->
                 fullFilmInfoList.add(viewmodel.giveOneMovie(film.filmId))
@@ -165,7 +177,8 @@ class StaffFilmographyFragment : Fragment() {
 
     private fun openMoviePage(id: Int?) {
         id?.let {
-            val action = StaffFilmographyFragmentDirections.actionStaffFilmographyFragmentToFilmPage(it)
+            val action =
+                StaffFilmographyFragmentDirections.actionStaffFilmographyFragmentToFilmPage(it)
             findNavController().navigate(action)
         }
     }
@@ -173,6 +186,24 @@ class StaffFilmographyFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+    }
+
+    private fun checkForInternet(context: Context): Boolean {
+
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        val network = connectivityManager.activeNetwork ?: return false
+
+        val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
+
+        return when {
+            activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+
+            activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+
+            else -> false
+        }
     }
 
 }

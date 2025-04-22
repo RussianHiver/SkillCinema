@@ -64,7 +64,14 @@
         android:id="@+id/profilePageFragment"
         android:name="com.example.skillcinema.presentation.fragments.ProfilePageFragment"
         android:label="fragment_profile_page"
-        tools:layout="@layout/fragment_profile_page" />
+        tools:layout="@layout/fragment_profile_page" >
+        <action
+            android:id="@+id/action_profilePageFragment_to_filmPage"
+            app:destination="@id/filmPage" />
+        <action
+            android:id="@+id/action_profilePageFragment_to_listOfWatchedFilmsFragment"
+            app:destination="@id/listOfWatchedFilmsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/listOfEverythingFragment"
         android:name="com.example.skillcinema.presentation.fragments.ListOfEverythingFragment"
@@ -254,5 +261,14 @@
             android:name="photoUrl"
             app:argType="string"
             app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/listOfWatchedFilmsFragment"
+        android:name="com.example.skillcinema.presentation.fragments.ListOfWatchedFilmsFragment"
+        android:label="fragment_list_of_watched_films"
+        tools:layout="@layout/fragment_list_of_watched_films" >
+        <action
+            android:id="@+id/action_listOfWatchedFilmsFragment_to_filmPage"
+            app:destination="@id/filmPage" />
     </fragment>
 </navigation>

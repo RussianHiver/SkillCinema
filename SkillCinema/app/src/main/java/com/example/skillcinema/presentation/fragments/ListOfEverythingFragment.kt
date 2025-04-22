@@ -1,5 +1,8 @@
 package com.example.skillcinema.presentation.fragments
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -58,49 +61,57 @@ class ListOfEverythingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val args: ListOfEverythingFragmentArgs by navArgs()
+        binding.headerBackButton.setOnClickListener {
+            val action =
+                ListOfEverythingFragmentDirections.actionListOfEverythingFragmentToHomepageFragment()
+            findNavController().navigate(action)
+        }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+        context?.let { context ->
+            if (checkForInternet(context)) {
+                val args: ListOfEverythingFragmentArgs by navArgs()
 
-                binding.headerBackButton.setOnClickListener {
-                    val action =
-                        ListOfEverythingFragmentDirections.actionListOfEverythingFragmentToHomepageFragment()
-                    findNavController().navigate(action)
+                viewLifecycleOwner.lifecycleScope.launch {
+                    viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+
+                        when (args.listOfMovies) {
+                            PREMIERS -> {
+                                fillPremierList()
+                            }
+
+                            POPULAR_ALL_TIME -> {
+                                fillPopularList()
+                            }
+
+                            FILTERED -> {
+                                fillUsaActionList()
+                            }
+
+                            TOP_MOVIES -> {
+                                fillTopMovies()
+                            }
+
+                            FRENCH_DRAMAS -> {
+                                fillFrenchDramas()
+                            }
+
+                            TOP_TV -> {
+                                fillTopTV()
+                            }
+
+                            STAFF_BEST_FILMS -> {
+
+                            }
+                        }
+
+                    }
                 }
-
-                when (args.listOfMovies) {
-                    PREMIERS -> {
-                        fillPremierList()
-                    }
-
-                    POPULAR_ALL_TIME -> {
-                        fillPopularList()
-                    }
-
-                    FILTERED -> {
-                        fillUsaActionList()
-                    }
-
-                    TOP_MOVIES -> {
-                        fillTopMovies()
-                    }
-
-                    FRENCH_DRAMAS -> {
-                        fillFrenchDramas()
-                    }
-
-                    TOP_TV -> {
-                        fillTopTV()
-                    }
-
-                    STAFF_BEST_FILMS -> {
-
-                    }
-                }
-
+            } else {
+                BottomSheetErrorFragment().show(parentFragmentManager, "sheetError")
             }
         }
+
+
     }
 
     private suspend fun fillPremierList() {
@@ -242,6 +253,24 @@ class ListOfEverythingFragment : Fragment() {
 
         errorState?.let {
             Toast.makeText(activity, it.error.localizedMessage, Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun checkForInternet(context: Context): Boolean {
+
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        val network = connectivityManager.activeNetwork ?: return false
+
+        val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
+
+        return when {
+            activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+
+            activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+
+            else -> false
         }
     }
 

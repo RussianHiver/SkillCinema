@@ -1,5 +1,8 @@
 package com.example.skillcinema.presentation.fragments
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -44,13 +47,37 @@ class ListOfSimilarsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val filmId = args.FilmId
+        context?.let { context ->
+            if (checkForInternet(context)) {
+                val filmId = args.FilmId
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                similars = viewModel.giveSimilars(id = filmId)
-                binding.recyclerAllSimilars.adapter = adapter
+                viewLifecycleOwner.lifecycleScope.launch {
+                    viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                        similars = viewModel.giveSimilars(id = filmId)
+                        binding.recyclerAllSimilars.adapter = adapter
+                    }
+                }
+            } else {
+                BottomSheetErrorFragment().show(parentFragmentManager, "sheetError")
             }
+        }
+    }
+
+    private fun checkForInternet(context: Context): Boolean {
+
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        val network = connectivityManager.activeNetwork ?: return false
+
+        val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
+
+        return when {
+            activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+
+            activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+
+            else -> false
         }
     }
 

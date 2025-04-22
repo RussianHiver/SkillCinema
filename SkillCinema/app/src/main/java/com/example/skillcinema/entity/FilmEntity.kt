@@ -13,4 +13,8 @@ data class FilmEntity(
     val posterUrl: String?,
     @ColumnInfo(name = "name")
     val nameRu: String?,
+    @ColumnInfo(name = "rating")
+    val rating: Double?,
+    @ColumnInfo(name = "genre")
+    val genre: String
     )

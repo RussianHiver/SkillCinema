@@ -1,5 +1,8 @@
 package com.example.skillcinema.presentation.fragments
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -21,7 +24,6 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipDrawable
 import com.google.android.material.chip.ChipGroup
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
@@ -39,7 +41,7 @@ class SeasonsAndEpisodesFragment : Fragment() {
 
     private var job = Job()
 
-    private val adapter : AdapterForEpisodesList by lazy { AdapterForEpisodesList() }
+    private val adapter: AdapterForEpisodesList by lazy { AdapterForEpisodesList() }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,44 +54,53 @@ class SeasonsAndEpisodesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val args: SeasonsAndEpisodesFragmentArgs by navArgs()
-
         binding.headerBackButton.setOnClickListener {
             findNavController().popBackStack()
         }
-        binding.headerTitle.text = args.TVSeriesName
 
-        binding.recyclerEpisodes.adapter = adapter
+        context?.let { context ->
+            if (checkForInternet(context)) {
+                val args: SeasonsAndEpisodesFragmentArgs by navArgs()
 
-        var previouslyChecked: Chip? = null
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                chipGroup = binding.amountOfSeasons
-                val seasonsAndEpisodesDTO = viewModel.getSeasonsAndEpisodes(args.TVSeriesID)
-                repeat(seasonsAndEpisodesDTO.total) { attempt ->
-                    chipGroup.addView(makeAChip(attempt + 1))
-                }
+                binding.headerTitle.text = args.TVSeriesName
 
-                chipGroup.setOnCheckedStateChangeListener { group, checkedIds ->
-                    previouslyChecked?.isClickable = true
-                    previouslyChecked = group.findViewById(checkedIds.first())
-                    previouslyChecked?.isClickable = false
-                    val seasonNumber = previouslyChecked?.text.toString().toInt()
-                    viewLifecycleOwner.lifecycleScope.launch(job) {
-                        binding.episodesListProgressBar.isVisible = true
-                        val amountOfEpisodes =
-                            seasonsAndEpisodesDTO.items[seasonNumber - 1].episodes.count()
-                        binding.seasonsAndAmountOfEpisodes.text =
-                            getSeasonsAndEpisodesCountString(seasonNumber, amountOfEpisodes)
-                        adapter.submitList(seasonsAndEpisodesDTO.items[seasonNumber - 1].episodes)
-                        job.cancel()
-                        job = Job()
-                        binding.episodesListProgressBar.isVisible = false
+                binding.recyclerEpisodes.adapter = adapter
+
+                var previouslyChecked: Chip? = null
+
+                viewLifecycleOwner.lifecycleScope.launch {
+                    viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                        chipGroup = binding.amountOfSeasons
+                        val seasonsAndEpisodesDTO = viewModel.getSeasonsAndEpisodes(args.TVSeriesID)
+                        repeat(seasonsAndEpisodesDTO.total) { attempt ->
+                            chipGroup.addView(makeAChip(attempt + 1))
+                        }
+
+                        chipGroup.setOnCheckedStateChangeListener { group, checkedIds ->
+                            previouslyChecked?.isClickable = true
+                            previouslyChecked = group.findViewById(checkedIds.first())
+                            previouslyChecked?.isClickable = false
+                            val seasonNumber = previouslyChecked?.text.toString().toInt()
+                            viewLifecycleOwner.lifecycleScope.launch(job) {
+                                binding.episodesListProgressBar.isVisible = true
+                                val amountOfEpisodes =
+                                    seasonsAndEpisodesDTO.items[seasonNumber - 1].episodes.count()
+                                binding.seasonsAndAmountOfEpisodes.text =
+                                    getSeasonsAndEpisodesCountString(seasonNumber, amountOfEpisodes)
+                                adapter.submitList(seasonsAndEpisodesDTO.items[seasonNumber - 1].episodes)
+                                job.cancel()
+                                job = Job()
+                                binding.episodesListProgressBar.isVisible = false
+                            }
+                        }
                     }
                 }
+            } else {
+                BottomSheetErrorFragment().show(parentFragmentManager, "sheetError")
             }
         }
+
 
     }
 
@@ -133,6 +144,24 @@ class SeasonsAndEpisodesFragment : Fragment() {
 
         return "$seasonsString сезон, $episodesString"
 
+    }
+
+    private fun checkForInternet(context: Context): Boolean {
+
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        val network = connectivityManager.activeNetwork ?: return false
+
+        val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
+
+        return when {
+            activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+
+            activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+
+            else -> false
+        }
     }
 
 }

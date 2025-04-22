@@ -18,13 +18,16 @@ interface MovieTableDAO {
     @Query("SELECT * FROM collection_entity" )
     fun getAll(): Flow<List<CollectionWithFilms>>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE,)
+    @Query("SELECT * FROM collection_film WHERE film_id LIKE :filmId AND collection_id LIKE :collectionId")
+    fun checkTheFilm(filmId: Int, collectionId: Int): CollectionListFilms
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(table: FilmEntity) // вставлять
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE,)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCollection(table: CollectionEntity) // вставлять
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE,)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertFilmForCollection(table: CollectionListFilms)
 
     @Delete

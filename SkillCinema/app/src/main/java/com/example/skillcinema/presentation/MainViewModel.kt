@@ -16,6 +16,7 @@ import com.example.skillcinema.data.SeasonsAndEpisodesDTO
 import com.example.skillcinema.data.SimilarsDTO
 import com.example.skillcinema.data.StaffListDTO
 import com.example.skillcinema.data.StaffMemberDTO
+import com.example.skillcinema.domain.DatabaseCollectionsUseCase
 import com.example.skillcinema.domain.FilteredMovieUseCase
 import com.example.skillcinema.domain.FiltersUseCase
 import com.example.skillcinema.domain.MovieGalleryUseCase
@@ -26,10 +27,14 @@ import com.example.skillcinema.domain.PremierMovieUseCase
 import com.example.skillcinema.domain.SeasonsAndEpisodesUseCase
 import com.example.skillcinema.domain.SimilarMoviesUseCase
 import com.example.skillcinema.domain.DatabaseFilmsUseCase
+import com.example.skillcinema.entity.CollectionEntity
+import com.example.skillcinema.entity.CollectionListFilms
+import com.example.skillcinema.entity.FilmEntity
 import com.example.skillcinema.presentation.pagingsources.PagingSourceFiltered
 import com.example.skillcinema.presentation.pagingsources.PagingSourceGallery
 import com.example.skillcinema.presentation.pagingsources.PagingSourcePopular
 import com.example.skillcinema.presentation.pagingsources.PagingSourceSearchResult
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -48,7 +53,8 @@ class MainViewModel(
     private val similarMoviesUseCase: SimilarMoviesUseCase,
     private val filtersUseCase: FiltersUseCase,
     private val seasonsAndEpisodesUseCase: SeasonsAndEpisodesUseCase,
-    private val databaseFilmsUseCase: DatabaseFilmsUseCase
+    private val databaseFilmsUseCase: DatabaseFilmsUseCase,
+    private val databaseCollectionsUseCase: DatabaseCollectionsUseCase
 ) : ViewModel() {
 
     private var popularType = MutableStateFlow("")
@@ -109,6 +115,48 @@ class MainViewModel(
         filteredCountry.value = country
         filteredGenre.value = genre
     }
+
+    fun insertCollection(collection: CollectionEntity) {
+        viewModelScope.launch {
+            databaseCollectionsUseCase.insertCollection(collection)
+        }
+    }
+
+    fun deleteFilmForCollection(film: CollectionListFilms) {
+        viewModelScope.launch {
+            databaseCollectionsUseCase.deleteFilmForCollection(film)
+        }
+    }
+
+    fun insertFilm(film: FilmEntity) {
+        viewModelScope.launch {
+            databaseFilmsUseCase.insertFilm(film)
+        }
+    }
+
+    fun insertFilmForCollection(filmCollection: CollectionListFilms) {
+        viewModelScope.launch {
+            databaseCollectionsUseCase.insertFilmForCollection(filmCollection)
+        }
+    }
+
+    fun deleteCollection(collection: CollectionEntity) {
+        viewModelScope.launch {
+            databaseCollectionsUseCase.deleteCollection(collection)
+        }
+
+    }
+
+    fun checkTheFilm(filmId: Int, collectionID: Int): CollectionListFilms {
+        return databaseFilmsUseCase.checkTheFilm(filmId, collectionID)
+    }
+
+    val allCollection = databaseCollectionsUseCase.getAllCollections()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(3000L),
+            initialValue = emptyList()  //пустой список
+        )
 
     val pagingDataPopular: Flow<PagingData<PopularDTO.Item>> = Pager(
         config = PagingConfig(pageSize = 10),

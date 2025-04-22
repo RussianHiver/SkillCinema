@@ -1,5 +1,8 @@
 package com.example.skillcinema.presentation.fragments
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -58,53 +61,64 @@ class GalleryFragment : Fragment() {
             findNavController().popBackStack()
         }
 
-        val filmId = args.FilmId
-        viewModel.filmId.value = filmId
-        binding.fullListOfPhotos.adapter = adapter
-
-        adapter.withLoadStateHeaderAndFooter(
-            header = MovieDataLoadStateAdapter { adapter.retry() },
-            footer = MovieDataLoadStateAdapter { adapter.retry() }
-        )
-
-        adapter.addLoadStateListener { loadState ->
-            binding.fullListOfPhotos.isVisible = loadState.source.refresh is LoadState.NotLoading
-            binding.searchPageProgress.isVisible = loadState.source.refresh is LoadState.Loading
-            binding.searchPageRetryButton.isVisible = loadState.source.refresh is LoadState.Error
-            handleError(loadState)
-        }
-
-        binding.searchPageRetryButton.setOnClickListener {
-            adapter.retry()
-        }
+        context?.let { context ->
+            if (checkForInternet(context)) {
 
 
-        viewLifecycleOwner.lifecycleScope.launch {
+                val filmId = args.FilmId
+                viewModel.filmId.value = filmId
+                binding.fullListOfPhotos.adapter = adapter
 
-            viewLifecycleOwner.lifecycleScope.launch(initialLaunch) {
-                launchStillImages()
-            }
+                adapter.withLoadStateHeaderAndFooter(
+                    header = MovieDataLoadStateAdapter { adapter.retry() },
+                    footer = MovieDataLoadStateAdapter { adapter.retry() }
+                )
 
-
-            binding.chipStillImages.setOnClickListener {
-                viewLifecycleOwner.lifecycleScope.launch(stillImages) {
-                    if (initialLaunch.isActive) initialLaunch.cancel()
-                    launchStillImages()
+                adapter.addLoadStateListener { loadState ->
+                    binding.fullListOfPhotos.isVisible =
+                        loadState.source.refresh is LoadState.NotLoading
+                    binding.searchPageProgress.isVisible =
+                        loadState.source.refresh is LoadState.Loading
+                    binding.searchPageRetryButton.isVisible =
+                        loadState.source.refresh is LoadState.Error
+                    handleError(loadState)
                 }
-            }
 
-            binding.chipShootingImages.setOnClickListener {
-                viewLifecycleOwner.lifecycleScope.launch(shootingImages) {
-                    if (initialLaunch.isActive) initialLaunch.cancel()
-                    launchImagesFromShooting()
+                binding.searchPageRetryButton.setOnClickListener {
+                    adapter.retry()
                 }
-            }
 
-            binding.chipPosterImages.setOnClickListener {
-                viewLifecycleOwner.lifecycleScope.launch(posterImages) {
-                    if (initialLaunch.isActive) initialLaunch.cancel()
-                    launchPosters()
+
+                viewLifecycleOwner.lifecycleScope.launch {
+
+                    viewLifecycleOwner.lifecycleScope.launch(initialLaunch) {
+                        launchStillImages()
+                    }
+
+
+                    binding.chipStillImages.setOnClickListener {
+                        viewLifecycleOwner.lifecycleScope.launch(stillImages) {
+                            if (initialLaunch.isActive) initialLaunch.cancel()
+                            launchStillImages()
+                        }
+                    }
+
+                    binding.chipShootingImages.setOnClickListener {
+                        viewLifecycleOwner.lifecycleScope.launch(shootingImages) {
+                            if (initialLaunch.isActive) initialLaunch.cancel()
+                            launchImagesFromShooting()
+                        }
+                    }
+
+                    binding.chipPosterImages.setOnClickListener {
+                        viewLifecycleOwner.lifecycleScope.launch(posterImages) {
+                            if (initialLaunch.isActive) initialLaunch.cancel()
+                            launchPosters()
+                        }
+                    }
                 }
+            } else {
+                BottomSheetErrorFragment().show(parentFragmentManager, "errorSheet")
             }
         }
     }
@@ -127,6 +141,7 @@ class GalleryFragment : Fragment() {
             adapter.submitData(it)
         }
     }
+
     private suspend fun launchImagesFromShooting() {
         viewModel.pagingDataGalleryShooting.collectLatest {
             stillImages.cancel()
@@ -136,6 +151,7 @@ class GalleryFragment : Fragment() {
             adapter.submitData(it)
         }
     }
+
     private suspend fun launchPosters() {
         viewModel.pagingDataGalleryPoster.collectLatest {
             stillImages.cancel()
@@ -143,6 +159,24 @@ class GalleryFragment : Fragment() {
             stillImages = Job()
             shootingImages = Job()
             adapter.submitData(it)
+        }
+    }
+
+    private fun checkForInternet(context: Context): Boolean {
+
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        val network = connectivityManager.activeNetwork ?: return false
+
+        val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
+
+        return when {
+            activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+
+            activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+
+            else -> false
         }
     }
 

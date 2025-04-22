@@ -1,5 +1,6 @@
 package com.example.skillcinema.di
 
+import com.example.skillcinema.domain.DatabaseCollectionsUseCase
 import com.example.skillcinema.domain.FilteredMovieUseCase
 import com.example.skillcinema.domain.FiltersUseCase
 import com.example.skillcinema.domain.MovieGalleryUseCase
@@ -31,7 +32,8 @@ class PresentationModule {
         premierMovieUseCase: PremierMovieUseCase,
         seasonsAndEpisodesUseCase: SeasonsAndEpisodesUseCase,
         similarMoviesUseCase: SimilarMoviesUseCase,
-        databaseFilmsUseCase: DatabaseFilmsUseCase
+        databaseFilmsUseCase: DatabaseFilmsUseCase,
+        databaseCollectionsUseCase: DatabaseCollectionsUseCase
     ): MainViewModel {
         return MainViewModel(
             filteredMovieUseCase = filteredMovieUseCase,
@@ -43,7 +45,8 @@ class PresentationModule {
             premierMovieUseCase = premierMovieUseCase,
             seasonsAndEpisodesUseCase = seasonsAndEpisodesUseCase,
             similarMoviesUseCase = similarMoviesUseCase,
-            databaseFilmsUseCase = databaseFilmsUseCase
+            databaseFilmsUseCase = databaseFilmsUseCase,
+            databaseCollectionsUseCase = databaseCollectionsUseCase
         )
     }
 

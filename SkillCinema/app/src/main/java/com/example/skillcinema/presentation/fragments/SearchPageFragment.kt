@@ -2,6 +2,8 @@ package com.example.skillcinema.presentation.fragments
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -79,6 +81,15 @@ class SearchPageFragment : Fragment() {
 
         checkForLastFilters()
 
+        binding.searchTextInputLayout.setEndIconOnClickListener {
+            val action =
+                SearchPageFragmentDirections.actionSearchPageFragmentToSearchFilterFragment(
+                    null,
+                    null
+                )
+            findNavController().navigate(action)
+        }
+
         with(dataViewModel) {
             countryFilter.observe(viewLifecycleOwner) { country ->
                 searchCountryFilter = country
@@ -136,55 +147,54 @@ class SearchPageFragment : Fragment() {
             }
         }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.pagingDataSearchResult.collectLatest {
-                    it?.let {
-                        adapter.submitData(it)
+        context?.let { context ->
+            if (checkForInternet(context)) {
+                viewLifecycleOwner.lifecycleScope.launch {
+                    viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                        viewModel.pagingDataSearchResult.collectLatest {
+                            it?.let {
+                                adapter.submitData(it)
+                            }
+                        }
                     }
                 }
+
+                binding.searchTextInputEditText.addTextChangedListener(object : TextWatcher {
+                    override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+                    }
+
+                    override fun onTextChanged(search: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+                        if (!search.isNullOrBlank() && search != previousSearchResult) {
+                            searchJob?.cancel()
+                            previousSearchResult = search.toString()
+                            searchJob = viewLifecycleOwner.lifecycleScope.launch {
+                                viewModel.getNewPagerForSearchResult(
+                                    search.toString(),
+                                    country = searchCountryFilter,
+                                    genre = searchGenreFilter,
+                                    type = searchTypeFilter,
+                                    order = searchOrderFilter,
+                                    ratingFrom = searchRatingFromFilter,
+                                    ratingTo = searchRatingToFilter,
+                                    yearFrom = searchYearFromFilter,
+                                    yearTo = searchYearToFilter
+                                )
+                            }
+                        }
+                    }
+
+                    override fun afterTextChanged(p0: Editable?) {
+                    }
+
+                })
+            } else {
+                BottomSheetErrorFragment().show(parentFragmentManager, "sheetError")
             }
         }
 
-        binding.searchTextInputEditText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
-            }
-
-            override fun onTextChanged(search: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
-                if (!search.isNullOrBlank() && search != previousSearchResult) {
-                    searchJob?.cancel()
-                    previousSearchResult = search.toString()
-                    searchJob = viewLifecycleOwner.lifecycleScope.launch {
-                        viewModel.getNewPagerForSearchResult(
-                            search.toString(),
-                            country = searchCountryFilter,
-                            genre = searchGenreFilter,
-                            type = searchTypeFilter,
-                            order = searchOrderFilter,
-                            ratingFrom = searchRatingFromFilter,
-                            ratingTo = searchRatingToFilter,
-                            yearFrom = searchYearFromFilter,
-                            yearTo = searchYearToFilter
-                        )
-                    }
-                }
-            }
-
-            override fun afterTextChanged(p0: Editable?) {
-            }
-
-        })
-
-        binding.searchTextInputLayout.setEndIconOnClickListener {
-            val action =
-                SearchPageFragmentDirections.actionSearchPageFragmentToSearchFilterFragment(
-                    null,
-                    null
-                )
-            findNavController().navigate(action)
-        }
     }
 
     private fun openMoviePage(id: Int?) {
@@ -231,6 +241,24 @@ class SearchPageFragment : Fragment() {
         dataViewModel.setRatingToFilter(filmRatingTo)
         dataViewModel.setYearFromFilter(filmYearFrom)
         dataViewModel.setYearToFilter(filmYearTo)
+    }
+
+    private fun checkForInternet(context: Context): Boolean {
+
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        val network = connectivityManager.activeNetwork ?: return false
+
+        val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
+
+        return when {
+            activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+
+            activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+
+            else -> false
+        }
     }
 
 }

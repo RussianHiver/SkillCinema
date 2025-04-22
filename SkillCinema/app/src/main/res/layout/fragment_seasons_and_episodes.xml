@@ -43,7 +43,7 @@
             android:id="@+id/amount_of_seasons"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingStart="@dimen/main_padding"
+            android:paddingStart="@dimen/main_dimen"
             app:chipSpacingHorizontal="10dp"
             app:singleSelection="true">
 
@@ -63,7 +63,7 @@
             android:id="@+id/episodes_list_constraint"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/main_padding">
+            android:padding="@dimen/main_dimen">
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/seasons_and_amount_of_episodes"

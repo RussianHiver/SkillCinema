@@ -2,6 +2,7 @@ package com.example.skillcinema.di
 
 import com.example.skillcinema.data.LocalRepository
 import com.example.skillcinema.data.MainRepository
+import com.example.skillcinema.domain.DatabaseCollectionsUseCase
 import com.example.skillcinema.domain.FilteredMovieUseCase
 import com.example.skillcinema.domain.FiltersUseCase
 import com.example.skillcinema.domain.MovieGalleryUseCase
@@ -64,8 +65,13 @@ class DomainModule {
     }
 
     @Provides
-    fun provideWatchedMoviesUseCase(localRepository: LocalRepository): DatabaseFilmsUseCase {
+    fun provideDatabaseFilmsUseCase(localRepository: LocalRepository): DatabaseFilmsUseCase {
         return DatabaseFilmsUseCase(localRepository)
+    }
+
+    @Provides
+    fun provideDatabaseCollectionsUseCase(localRepository: LocalRepository): DatabaseCollectionsUseCase {
+        return DatabaseCollectionsUseCase(localRepository)
     }
 
 }

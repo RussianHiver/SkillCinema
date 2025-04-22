@@ -41,7 +41,7 @@
         android:layout_width="match_parent"
         android:textAlignment="textStart"
         tools:text="@tools:sample/lorem"
-        android:paddingStart="@dimen/main_padding"
+        android:paddingStart="@dimen/main_dimen"
         android:textSize="18sp"
         android:textStyle="bold"
         android:layout_height="wrap_content"/>
@@ -51,7 +51,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:singleSelection="true"
-        android:paddingStart="@dimen/main_padding"
+        android:paddingStart="@dimen/main_dimen"
         app:chipSpacingHorizontal="20dp">
 
     </com.google.android.material.chip.ChipGroup>

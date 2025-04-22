@@ -3,7 +3,9 @@ package com.example.skillcinema.presentation
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.skillcinema.data.MovieDataDTO
 import com.example.skillcinema.data.StaffMemberDTO
+import com.example.skillcinema.entity.FilmEntity
 
 class DataViewModel: ViewModel() {
 
@@ -33,6 +35,15 @@ class DataViewModel: ViewModel() {
 
     private val _filmography = MutableLiveData<List<StaffMemberDTO.Film>>()
     val filmography: LiveData<List<StaffMemberDTO.Film>> get() = _filmography
+
+    private val _watchedFilmsList = MutableLiveData<List<FilmEntity>>(emptyList())
+    val watchedFilmsList: LiveData<List<FilmEntity>> get() = _watchedFilmsList
+
+    private val _interestingFilmsList = MutableLiveData<List<FilmEntity>>(emptyList())
+    val interestingFilmsList: LiveData<List<FilmEntity>> get() = _interestingFilmsList
+
+    private val _movieData = MutableLiveData<MovieDataDTO>()
+    val movieData: LiveData<MovieDataDTO> get() = _movieData
 
 
     fun setCountryFilter(filter: String) {
@@ -69,6 +80,18 @@ class DataViewModel: ViewModel() {
 
     fun setFilmography(list: List<StaffMemberDTO.Film>) {
         _filmography.value = list
+    }
+
+    fun setWatchedFilmsList(list: List<FilmEntity>) {
+        _watchedFilmsList.value = list
+    }
+
+    fun setInterestingFilmsList(list: List<FilmEntity>) {
+        _interestingFilmsList.value = list
+    }
+
+    fun setMovieData(movie: MovieDataDTO) {
+        _movieData.value = movie
     }
 
 }

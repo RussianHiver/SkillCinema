@@ -1,5 +1,8 @@
 package com.example.skillcinema.presentation.fragments
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -59,44 +62,53 @@ class StaffMemberPageFragment : Fragment() {
             findNavController().popBackStack()
         }
 
-        viewLifecycleOwner.lifecycleScope.launch {
+        context?.let { context ->
+            if (checkForInternet(context)) {
+                viewLifecycleOwner.lifecycleScope.launch {
 
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                staffMember = viewModel.giveIndividualStaffMember(id = args.PersonId)
-                with(binding) {
-                    Glide.with(actorPhoto.context).load(staffMember.posterUrl).into(actorPhoto)
-                    name.text = staffMember.nameRu ?: staffMember.nameEn ?: "Без названия"
-                    occupation.text = staffMember.profession
-                    amountOfFilmsInFilmography.text = getFilmCountString(staffMember.films.size)
+                    viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                        staffMember = viewModel.giveIndividualStaffMember(id = args.PersonId)
+                        with(binding) {
+                            Glide.with(actorPhoto.context).load(staffMember.posterUrl)
+                                .into(actorPhoto)
+                            name.text = staffMember.nameRu ?: staffMember.nameEn ?: "Без названия"
+                            occupation.text = staffMember.profession
+                            amountOfFilmsInFilmography.text =
+                                getFilmCountString(staffMember.films.size)
+                        }
+
+                        val sortedByRatingList = staffMember.films.sortedByDescending { it.rating }
+                        val bestFilmIdList = sortFilmByRating(sortedByRatingList)
+
+                        bestFilmIdList.forEach {
+                            bestFilmList.add(viewModel.giveOneMovie(it))
+                        }
+
+                        binding.actorBestFilmsRecycler.adapter = adapter
+
+                        binding.actorPhoto.setOnClickListener {
+                            val action =
+                                StaffMemberPageFragmentDirections.actionActorPageFragmentToStaffPhotoFullFragment(
+                                    staffMember.posterUrl
+                                )
+                            findNavController().navigate(action)
+                        }
+
+                        binding.filmographyButton.setOnClickListener {
+                            dataViewModel.setFilmography(sortedByRatingList)
+                            val action =
+                                StaffMemberPageFragmentDirections.actionActorPageFragmentToStaffFilmographyFragment(
+                                    staffMember.staffId
+                                )
+                            findNavController().navigate(action)
+                        }
+                    }
                 }
-
-                val sortedByRatingList = staffMember.films.sortedByDescending { it.rating }
-                val bestFilmIdList = sortFilmByRating(sortedByRatingList)
-
-                bestFilmIdList.forEach {
-                    bestFilmList.add(viewModel.giveOneMovie(it))
-                }
-
-                binding.actorBestFilmsRecycler.adapter = adapter
-
-                binding.actorPhoto.setOnClickListener {
-                    val action =
-                        StaffMemberPageFragmentDirections.actionActorPageFragmentToStaffPhotoFullFragment(
-                            staffMember.posterUrl
-                        )
-                    findNavController().navigate(action)
-                }
-
-                binding.filmographyButton.setOnClickListener {
-                    dataViewModel.setFilmography(sortedByRatingList)
-                    val action =
-                        StaffMemberPageFragmentDirections.actionActorPageFragmentToStaffFilmographyFragment(
-                            staffMember.staffId
-                        )
-                    findNavController().navigate(action)
-                }
+            } else {
+                BottomSheetErrorFragment().show(parentFragmentManager, "sheetError")
             }
         }
+
 
     }
 
@@ -109,7 +121,7 @@ class StaffMemberPageFragment : Fragment() {
 
         val idAdded = mutableListOf<Int>()
 
-        run breaking@ {
+        run breaking@{
             filmList.forEach { film ->
                 when {
                     idAdded.size > 9 -> return@breaking
@@ -127,6 +139,24 @@ class StaffMemberPageFragment : Fragment() {
             1 -> "$films фильм"
             in (2..4) -> "$films фильма"
             else -> "$films фильмов"
+        }
+    }
+
+    private fun checkForInternet(context: Context): Boolean {
+
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        val network = connectivityManager.activeNetwork ?: return false
+
+        val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
+
+        return when {
+            activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+
+            activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+
+            else -> false
         }
     }
 

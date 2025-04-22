@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="main_padding">25dp</dimen>
+    <dimen name="main_dimen">25dp</dimen>
     <dimen name="list_names">20sp</dimen>
     <dimen name="blue">15sp</dimen>
     <dimen name="header_title_size">12sp</dimen>

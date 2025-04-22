@@ -80,6 +80,19 @@
     <!-- Profile page strings -->
     <string name="preview_profile">Просмотрено</string>
     <string name="interested">Вам было интересно</string>
+    <string name="watch">Хочу посмотреть</string>
+    <string name="collection_amount">0</string>
+    <string name="collection_title">Коллекции</string>
+    <string name="create_collection">Создать свою коллекцию</string>
+    <string name="plus_button">Добавить коллекцию</string>
+    <string name="add_collection">Добавить в коллекцию</string>
+    <string name="clear_history">Очистить историю</string>
+    <string name="add_name_collection">Введите название вашей новой коллекции </string>
+    <string name="done">Готово</string>
+
+    <!-- Bottom sheet error -->
+    <string name="error">Ошибка!</string>
+    <string name="error_text">Проверьте соединение с интернетом и перезапустите приложение.</string>
 
     <!-- Content description -->
     <string name="back_button">Кнопка возврата на предыдущий экран</string>
