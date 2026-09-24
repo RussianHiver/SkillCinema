@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:animateLayoutChanges="true"
-        tools:context=".presentation.fragments.FilmPage">
+        tools:context=".presentation.fragments.FilmPageFragment">
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/film_photo"

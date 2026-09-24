@@ -6,7 +6,10 @@ import androidx.fragment.app.FragmentActivity
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.skillcinema.R
+import com.example.skillcinema.presentation.SharedPreferencesKeys.SHARED
+import com.example.skillcinema.presentation.SharedPreferencesKeys.START_VALUE
 import com.example.skillcinema.databinding.ActivityMainBinding
+import androidx.core.content.edit
 
 class MainActivity : FragmentActivity() {
 
@@ -35,22 +38,24 @@ class MainActivity : FragmentActivity() {
                 || destination.id == R.id.searchFilterFragment
                 || destination.id == R.id.searchFilterGenreFragment
                 || destination.id == R.id.searchFilterCountryFragment
-                || destination.id == R.id.searchFilterYearFragment) {
+                || destination.id == R.id.searchFilterYearFragment
+            ) {
                 binding.bottomNav.visibility = View.GONE
             } else {
-                val sharedPreferences = getSharedPreferences("shared", MODE_PRIVATE)
-                val editor = sharedPreferences.edit()
-                editor.apply {
-                    putBoolean("START", true)
-                }.apply()
+                val sharedPreferences = getSharedPreferences(SHARED, MODE_PRIVATE)
+                sharedPreferences.edit {
+                    apply {
+                        putBoolean(START_VALUE, true)
+                    }
+                }
                 binding.bottomNav.visibility = View.VISIBLE
             }
         }
     }
 
     private fun loadStartDestination() {
-        val sharedPreferences = getSharedPreferences("shared", MODE_PRIVATE)
-        startDestinationCheck = sharedPreferences.getBoolean("START", false)
+        val sharedPreferences = getSharedPreferences(SHARED, MODE_PRIVATE)
+        startDestinationCheck = sharedPreferences.getBoolean(START_VALUE, false)
     }
 
 }

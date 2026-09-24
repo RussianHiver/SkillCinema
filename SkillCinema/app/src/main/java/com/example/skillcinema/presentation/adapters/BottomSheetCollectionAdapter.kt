@@ -1,6 +1,5 @@
 package com.example.skillcinema.presentation.adapters
 
-import android.util.Log
 import android.util.SparseBooleanArray
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -10,7 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.skillcinema.databinding.AddCollectionItemBinding
 import com.example.skillcinema.entity.CollectionWithFilms
 
-class BottomSheetCollectionAdapter(private var movie: Int,
+class BottomSheetCollectionAdapter(
+    private var movie: Int,
     private var onClick: (state: String, CollectionWithFilms) -> Unit
 ) : ListAdapter<CollectionWithFilms, CollectionItemViewHolder>(DiffUtilCollectionItemCallback()) {
 
@@ -27,17 +27,17 @@ class BottomSheetCollectionAdapter(private var movie: Int,
         dataItem.films?.forEach {
             if (movie == it.id) checkedState.put(position, true)
         }
-        with(holder.binding){
-            addNewCollection.text = dataItem?.collection?.nameCollection ?:""
+        with(holder.binding) {
+            addNewCollection.text = dataItem?.collection?.nameCollection ?: ""
             count.text = dataItem?.films?.size.toString()
             checkboxSheet.isChecked = checkedState.get(position, false)
 
-            checkboxSheet.setOnClickListener{
-                if (!checkedState.get(position,false)){
+            checkboxSheet.setOnClickListener {
+                if (!checkedState.get(position, false)) {
                     checkboxSheet.isChecked = true
                     checkedState.put(position, true)
                     state = LIST_STATE_ADD
-                }else{
+                } else {
                     state = LIST_STATE_REMOVE
                     checkboxSheet.isChecked = false
                     checkedState.put(position, false)
@@ -46,13 +46,16 @@ class BottomSheetCollectionAdapter(private var movie: Int,
             }
         }
     }
-    companion object{
+
+    companion object {
         private const val LIST_STATE_ADD = "LIST_STATE_ADD"
         private const val LIST_STATE_REMOVE = "LIST_STATE_REMOVE"
     }
 
 }
-class CollectionItemViewHolder(val binding: AddCollectionItemBinding) : RecyclerView.ViewHolder(binding.root)
+
+class CollectionItemViewHolder(val binding: AddCollectionItemBinding) :
+    RecyclerView.ViewHolder(binding.root)
 
 class DiffUtilCollectionItemCallback : DiffUtil.ItemCallback<CollectionWithFilms>() {
     override fun areItemsTheSame(

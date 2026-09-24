@@ -16,10 +16,11 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.skillcinema.R
-import com.example.skillcinema.data.App
+import com.example.skillcinema.App
 import com.example.skillcinema.databinding.FragmentSeasonsAndEpisodesBinding
 import com.example.skillcinema.presentation.MainViewModel
 import com.example.skillcinema.presentation.adapters.AdapterForEpisodesList
+import com.example.skillcinema.presentation.fragments.BottomSheetKeys.SHEET_ERROR
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipDrawable
 import com.google.android.material.chip.ChipGroup
@@ -40,8 +41,7 @@ class SeasonsAndEpisodesFragment : Fragment() {
     private lateinit var chipGroup: ChipGroup
 
     private var job = Job()
-
-    private val adapter: AdapterForEpisodesList by lazy { AdapterForEpisodesList() }
+    private val adapter: AdapterForEpisodesList by lazy { AdapterForEpisodesList(context) }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -97,7 +97,7 @@ class SeasonsAndEpisodesFragment : Fragment() {
                     }
                 }
             } else {
-                BottomSheetErrorFragment().show(parentFragmentManager, "sheetError")
+                BottomSheetErrorFragment().show(parentFragmentManager, SHEET_ERROR)
             }
         }
 

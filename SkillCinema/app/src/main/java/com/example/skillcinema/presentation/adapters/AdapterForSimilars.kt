@@ -9,9 +9,11 @@ import com.bumptech.glide.Glide
 import com.example.skillcinema.data.SimilarsDTO
 import com.example.skillcinema.databinding.MoviePreviewViewBinding
 
-class AdapterForSimilars(val similars: SimilarsDTO, val allFilms: Boolean): Adapter<SimilarsViewHolder>() {
+class AdapterForSimilars(val similars: SimilarsDTO, val allFilms: Boolean) :
+    Adapter<SimilarsViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SimilarsViewHolder {
-        val binding = MoviePreviewViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding =
+            MoviePreviewViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return SimilarsViewHolder(binding)
     }
 
@@ -35,4 +37,4 @@ class AdapterForSimilars(val similars: SimilarsDTO, val allFilms: Boolean): Adap
     }
 }
 
-class SimilarsViewHolder(val binding: MoviePreviewViewBinding): ViewHolder(binding.root)
+class SimilarsViewHolder(val binding: MoviePreviewViewBinding) : ViewHolder(binding.root)

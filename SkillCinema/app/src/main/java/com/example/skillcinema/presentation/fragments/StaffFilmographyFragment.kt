@@ -17,13 +17,15 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.skillcinema.R
-import com.example.skillcinema.data.App
+import com.example.skillcinema.App
 import com.example.skillcinema.data.MovieDataDTO
 import com.example.skillcinema.data.StaffMemberDTO
+import com.example.skillcinema.data.constants.FilmOccupationTypes
 import com.example.skillcinema.databinding.FragmentStaffFilmographyBinding
 import com.example.skillcinema.presentation.DataViewModel
 import com.example.skillcinema.presentation.MainViewModel
 import com.example.skillcinema.presentation.adapters.AdapterListOfAllStaffFilms
+import com.example.skillcinema.presentation.fragments.BottomSheetKeys.SHEET_ERROR
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipDrawable
 import com.google.android.material.chip.ChipGroup
@@ -89,7 +91,8 @@ class StaffFilmographyFragment : Fragment() {
                         val occupations = staffMember.profession?.split(", ")?.toTypedArray()
                         with(binding) {
                             staffName.text =
-                                staffMember.nameRu ?: staffMember.nameEn ?: "Неизвестный"
+                                staffMember.nameRu ?: staffMember.nameEn
+                                        ?: getString(R.string.unknown)
                             occupations?.let {
                                 it.forEach { occupation ->
                                     chipGroup.addView(makeAChip(occupation))
@@ -115,7 +118,7 @@ class StaffFilmographyFragment : Fragment() {
                     }
                 }
             } else {
-                BottomSheetErrorFragment().show(parentFragmentManager, "sheetError")
+                BottomSheetErrorFragment().show(parentFragmentManager, SHEET_ERROR)
             }
         }
 
@@ -143,17 +146,17 @@ class StaffFilmographyFragment : Fragment() {
 
     private fun getNeededOccupation(occupation: String): String {
         return when (occupation) {
-            "Актер" -> "ACTOR"
-            "Сценарист" -> "WRITER"
-            "Продюсер" -> "PRODUCER"
-            "Композитор" -> "COMPOSER"
-            "Оператор" -> "OPERATOR"
-            "Монтажер" -> "EDITOR"
-            "Переводчик" -> "TRANSLATOR"
-            "Режиссер" -> "DIRECTOR"
-            "Режиссер дубляжа" -> "VOICE_DIRECTOR"
-            "Художник" -> "DESIGN"
-            "Директор фильма" -> "PRODUCER_USSR"
+            "Актер" -> FilmOccupationTypes.ACTOR.type
+            "Сценарист" -> FilmOccupationTypes.WRITER.type
+            "Продюсер" -> FilmOccupationTypes.PRODUCER.type
+            "Композитор" -> FilmOccupationTypes.COMPOSER.type
+            "Оператор" -> FilmOccupationTypes.OPERATOR.type
+            "Монтажер" -> FilmOccupationTypes.EDITOR.type
+            "Переводчик" -> FilmOccupationTypes.TRANSLATOR.type
+            "Режиссер" -> FilmOccupationTypes.DIRECTOR.type
+            "Режиссер дубляжа" -> FilmOccupationTypes.VOICE_DIRECTOR.type
+            "Художник" -> FilmOccupationTypes.DESIGN.type
+            "Директор фильма" -> FilmOccupationTypes.PRODUCER_USSR.type
             else -> "UNKNOWN"
         }
     }

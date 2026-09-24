@@ -11,8 +11,9 @@ class WatchedMovieClearButtonView @JvmOverloads constructor(
 ) : FrameLayout(context, attrs, defStyleAttr, defStyleRes) {
 
     private var binding: WatchedMovieClearButtonBinding
+
     init {
-        val inflateView =  inflate(context, R.layout.watched_movie_clear_button, this)
+        val inflateView = inflate(context, R.layout.watched_movie_clear_button, this)
         binding = WatchedMovieClearButtonBinding.bind(inflateView)
     }
 }

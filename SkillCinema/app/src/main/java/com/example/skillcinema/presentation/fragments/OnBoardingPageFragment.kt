@@ -7,14 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.skillcinema.R
 import com.example.skillcinema.databinding.FragmentOnboardingPageBinding
-
-
-const val PAGE_NUMBER: String = "number"
-
-private const val PAGE_ONE = 1
-private const val PAGE_TWO = 2
-private const val PAGE_THREE = 3
-
+import com.example.skillcinema.presentation.FragmentArgsKeys
 class BlankFragment : Fragment() {
 
     private var _binding: FragmentOnboardingPageBinding? = null
@@ -30,8 +23,8 @@ class BlankFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        arguments?.takeIf { it.containsKey(PAGE_NUMBER) }?.apply {
-            when (getInt(PAGE_NUMBER)) {
+        arguments?.takeIf { it.containsKey(FragmentArgsKeys.PAGE_NUMBER) }?.apply {
+            when (getInt(FragmentArgsKeys.PAGE_NUMBER)) {
                 PAGE_ONE -> {
                     binding.introductionPicture.setImageResource(R.drawable.firstscreen)
                     binding.explainText.text = getText(R.string.explanation_Page1)
@@ -53,5 +46,11 @@ class BlankFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object {
+        private const val PAGE_ONE = 1
+        private const val PAGE_TWO = 2
+        private const val PAGE_THREE = 3
     }
 }

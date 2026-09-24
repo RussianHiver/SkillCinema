@@ -13,10 +13,15 @@
     <string name="preview">Премьеры</string>
     <string name="popular">Популярное</string>
     <string name="usaAction">Боевики США</string>
+    <string name="country_USA">США</string>
+    <string name="country_France">Франция</string>
+    <string name="genre_action">боевик</string>
+    <string name="genre_drama">драма</string>
     <string name="topMovies">Топ-250</string>
     <string name="frenchDramas">Драмы Франции</string>
     <string name="tvSeries">Сериалы</string>
     <string name="all">Все</string>
+    <string name="show_all">Показать всё</string>
 
     <!-- FilmPage strings -->
     <string name="filmActorList">В фильме снимались</string>
@@ -24,10 +29,13 @@
     <string name="gallery">Галерея</string>
     <string name="similarFilms">Похожие фильмы</string>
     <string name="seasons">Сезоны</string>
+    <string name="movie_length_hours">hours</string>
+    <string name="movie_length_minutes">minutes</string>
 
     <!-- String resources -->
     <string name="film_year_and_genre"> %1$s, %2$s %3$s</string>
     <string name="film_length">%1$d ч, %2$d мин</string>
+    <string name="film_rating_and_name">%.1f</string>
 
     <!-- ActorPage strings -->
     <string name="best">Лучшее</string>
@@ -80,7 +88,9 @@
     <!-- Profile page strings -->
     <string name="preview_profile">Просмотрено</string>
     <string name="interested">Вам было интересно</string>
-    <string name="watch">Хочу посмотреть</string>
+    <string name="collection_watched_movies">Просмотренные фильмы</string>
+    <string name="collection_want_to_watch">Хочу посмотреть</string>
+    <string name="collection_favourites">Любимые</string>
     <string name="collection_amount">0</string>
     <string name="collection_title">Коллекции</string>
     <string name="create_collection">Создать свою коллекцию</string>
@@ -90,10 +100,16 @@
     <string name="add_name_collection">Введите название вашей новой коллекции </string>
     <string name="done">Готово</string>
 
-    <!-- Bottom sheet error -->
+    <!-- Bottom sheet strings -->
     <string name="error">Ошибка!</string>
     <string name="error_text">Проверьте соединение с интернетом и перезапустите приложение.</string>
 
     <!-- Content description -->
     <string name="back_button">Кнопка возврата на предыдущий экран</string>
+
+    <!-- Adapter strings  -->
+    <string name="unknown_date">Дата неизвестна</string>
+    <string name="unknown_name">Неизвестное имя</string>
+    <string name="unknown">Неизвестный</string>
+
 </resources>

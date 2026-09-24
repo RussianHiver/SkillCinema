@@ -17,7 +17,7 @@
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/show_everything_button_text"
         android:textAlignment="center"
-        android:text="Показать всё"
+        android:text="@string/show_all"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"

@@ -16,11 +16,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
-import com.example.skillcinema.data.App
+import com.example.skillcinema.App
 import com.example.skillcinema.databinding.FragmentGalleryBinding
 import com.example.skillcinema.presentation.MainViewModel
 import com.example.skillcinema.presentation.adapters.AdapterForFullGallery
 import com.example.skillcinema.presentation.adapters.MovieDataLoadStateAdapter
+import com.example.skillcinema.presentation.fragments.BottomSheetKeys.SHEET_ERROR
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -118,7 +119,10 @@ class GalleryFragment : Fragment() {
                     }
                 }
             } else {
-                BottomSheetErrorFragment().show(parentFragmentManager, "errorSheet")
+                BottomSheetErrorFragment().show(
+                    parentFragmentManager,
+                    SHEET_ERROR
+                )
             }
         }
     }

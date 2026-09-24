@@ -1,3 +1,6 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -8,7 +11,7 @@ plugins {
 
 android {
     namespace = "com.example.skillcinema"
-    compileSdk = 35
+    compileSdk = 37
 
 
 
@@ -33,11 +36,14 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
-    kotlinOptions {
-        jvmTarget = "1.8"
+
+    kotlin {
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_11)
+        }
     }
 
     buildFeatures {
@@ -47,18 +53,19 @@ android {
 
 dependencies {
 
-    val navVersion = "2.8.6"
-    val lifecycleVersion = "2.8.7"
-    val daggerVersion = "2.51.1"
+    val navVersion = "2.9.8"
+    val lifecycleVersion = "2.11.0"
+    val daggerVersion = "2.60.1"
+    val glideVersion = "5.0.9"
 
 
-    implementation("androidx.core:core-ktx:1.15.0")
-    implementation("androidx.appcompat:appcompat:1.7.0")
-    implementation("com.google.android.material:material:1.12.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.2.0")
+    implementation("androidx.core:core-ktx:1.19.0")
+    implementation("androidx.appcompat:appcompat:1.8.0")
+    implementation("com.google.android.material:material:1.14.0")
+    implementation("androidx.constraintlayout:constraintlayout:2.2.2")
     testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.2.1")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
+    androidTestImplementation("androidx.test.ext:junit:1.3.0")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.7.0")
 
     implementation("androidx.viewpager2:viewpager2:1.1.0")
     implementation("me.relex:circleindicator:2.1.6")
@@ -73,30 +80,30 @@ dependencies {
 
     //Dagger
     implementation("com.google.dagger:dagger:$daggerVersion")
-    kapt("com.google.dagger:dagger-compiler:$daggerVersion")
+    ksp ("com.google.dagger:dagger-compiler:$daggerVersion")
 
     //Room
-    implementation("androidx.room:room-runtime:2.6.1")
-    implementation("androidx.room:room-ktx:2.6.1")
-    ksp("androidx.room:room-compiler:2.6.1")
+    implementation("androidx.room:room-runtime:2.8.4")
+    implementation("androidx.room:room-ktx:2.8.4")
+    ksp("androidx.room:room-compiler:2.8.4")
 
     //RecycleView
     implementation("androidx.recyclerview:recyclerview:1.4.0")
-    implementation("androidx.recyclerview:recyclerview-selection:1.1.0")
+    implementation("androidx.recyclerview:recyclerview-selection:1.2.0")
 
-    //Paginп
-    implementation("androidx.paging:paging-runtime-ktx:3.3.5")
+    //Paging
+    implementation("androidx.paging:paging-runtime-ktx:3.5.1")
 
     //Retrofit
-    implementation("com.squareup.retrofit2:retrofit:2.11.0")
+    implementation("com.squareup.retrofit2:retrofit:3.0.0")
 
     //Moshi
-    implementation("com.squareup.moshi:moshi:1.15.1")
-    implementation("com.squareup.retrofit2:converter-moshi:2.11.0")
-    ksp("com.squareup.moshi:moshi-kotlin-codegen:1.15.1")
+    implementation("com.squareup.moshi:moshi:1.15.2")
+    implementation("com.squareup.retrofit2:converter-moshi:3.0.0")
+    ksp("com.squareup.moshi:moshi-kotlin-codegen:1.15.2")
 
     //Glide
-    implementation("com.github.bumptech.glide:glide:4.16.0")
-    ksp("com.github.bumptech.glide:glide:4.16.0")
+    implementation("com.github.bumptech.glide:glide:$glideVersion")
+    ksp("com.github.bumptech.glide:glide:$glideVersion")
 
 }

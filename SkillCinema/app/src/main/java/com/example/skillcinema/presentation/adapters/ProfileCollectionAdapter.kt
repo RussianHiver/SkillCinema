@@ -17,10 +17,11 @@ class ProfileCollectionAdapter(
 
     private var data: List<CollectionWithFilms> = emptyList()
 
-    fun setData(data: List<CollectionWithFilms>){
+    fun setData(data: List<CollectionWithFilms>) {
         this.data = data
         notifyDataSetChanged()
     }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderCollection {
         val binding = CollectionItemBinding.inflate(LayoutInflater.from(parent.context))
         return ViewHolderCollection(binding)
@@ -31,11 +32,11 @@ class ProfileCollectionAdapter(
         with(holder.binding) {
             textCollection.text = dataItem.collection.nameCollection
             countCollection.text = dataItem.films?.size.toString()
-            if (position == 0){
+            if (position == 0) {
                 imageCollection.setImageResource(R.drawable.favorite_black)
                 delete.isVisible = false
             }
-            if (position == 1){
+            if (position == 1) {
                 imageCollection.setImageResource(R.drawable.bookmark_black)
                 delete.isVisible = false
             }
@@ -43,15 +44,18 @@ class ProfileCollectionAdapter(
             delete.setOnClickListener {
                 clickDelete(dataItem.collection)
             }
-            containerCollection.setOnClickListener{
+            containerCollection.setOnClickListener {
                 clickAllCollection(dataItem.films)
             }
 
         }
 
     }
+
     override fun getItemCount(): Int {
         return data.size
     }
 }
-class ViewHolderCollection(val binding: CollectionItemBinding) : RecyclerView.ViewHolder(binding.root)
+
+class ViewHolderCollection(val binding: CollectionItemBinding) :
+    RecyclerView.ViewHolder(binding.root)

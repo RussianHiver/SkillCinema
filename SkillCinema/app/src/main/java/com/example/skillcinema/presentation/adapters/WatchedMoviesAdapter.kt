@@ -22,7 +22,7 @@ class WatchedMoviesAdapter(
         return if (position == data.size) 0 else 1
     }
 
-    fun setData(data: List<FilmEntity>){
+    fun setData(data: List<FilmEntity>) {
         this.data = data
         dataSize = if (data.size > 20) 20 else data.size
         notifyDataSetChanged()
@@ -34,11 +34,20 @@ class WatchedMoviesAdapter(
 
         return when (viewType) {
             1 -> {
-                val movieBinding = MoviePreviewViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                val movieBinding = MoviePreviewViewBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
                 WatchedMovieViewHolder(movieBinding)
             }
+
             else -> {
-                val buttonBinding = WatchedMovieClearButtonViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                val buttonBinding = WatchedMovieClearButtonViewBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
                 DeleteButtonViewHolder(buttonBinding)
             }
         }
@@ -49,7 +58,7 @@ class WatchedMoviesAdapter(
 
         if (holder is WatchedMovieViewHolder) {
             val dataItem = data[position]
-            with(holder.binding){
+            with(holder.binding) {
                 movieTitle.text = dataItem.nameRu
                 movieGenre.text = dataItem.genre
                 dataItem.let {
@@ -79,7 +88,9 @@ class WatchedMoviesAdapter(
     }
 
 }
-class WatchedMovieViewHolder (val binding: MoviePreviewViewBinding) : ViewHolder(binding.root)
 
-class DeleteButtonViewHolder (val binding: WatchedMovieClearButtonViewBinding) : ViewHolder(binding.root)
+class WatchedMovieViewHolder(val binding: MoviePreviewViewBinding) : ViewHolder(binding.root)
+
+class DeleteButtonViewHolder(val binding: WatchedMovieClearButtonViewBinding) :
+    ViewHolder(binding.root)
 

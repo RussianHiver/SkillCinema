@@ -15,8 +15,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import com.example.skillcinema.App
 import com.example.skillcinema.R
-import com.example.skillcinema.data.App
 import com.example.skillcinema.databinding.FragmentProfilePageBinding
 import com.example.skillcinema.entity.CollectionEntity
 import com.example.skillcinema.entity.CollectionListFilms
@@ -25,6 +25,7 @@ import com.example.skillcinema.presentation.DataViewModel
 import com.example.skillcinema.presentation.MainViewModel
 import com.example.skillcinema.presentation.adapters.ProfileCollectionAdapter
 import com.example.skillcinema.presentation.adapters.WatchedMoviesAdapter
+import com.example.skillcinema.presentation.fragments.BottomSheetKeys.SHEET_ERROR
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.launch
@@ -46,7 +47,8 @@ class ProfilePageFragment : Fragment() {
         WatchedMoviesAdapter({ filmList -> deleteMovieList(filmList) }, { id -> openMoviePage(id) })
 
     private val profileCollectionAdapter =
-        ProfileCollectionAdapter({ collection -> onClickDelete(collection) },
+        ProfileCollectionAdapter(
+            { collection -> onClickDelete(collection) },
             { list -> onClickOpenAll(list) })
 
     private val interestingMoviesAdapter =
@@ -125,7 +127,10 @@ class ProfilePageFragment : Fragment() {
                     findNavController().navigate(R.id.listOfWatchedFilmsFragment)
                 }
             } else {
-                BottomSheetErrorFragment().show(parentFragmentManager, "sheetError")
+                BottomSheetErrorFragment().show(
+                    parentFragmentManager,
+                    SHEET_ERROR
+                )
             }
         }
 

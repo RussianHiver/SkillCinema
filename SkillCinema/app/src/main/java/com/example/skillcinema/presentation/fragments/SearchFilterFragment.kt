@@ -10,9 +10,24 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.skillcinema.R
-import com.example.skillcinema.data.App
+import com.example.skillcinema.App
+import com.example.skillcinema.data.constants.filmfilters.FilmCountryFilters
+import com.example.skillcinema.data.constants.filmfilters.FilmGenreFilter
+import com.example.skillcinema.data.constants.filmfilters.FilmOrderFilter
+import com.example.skillcinema.data.constants.filmfilters.FilmRatingFilter
+import com.example.skillcinema.data.constants.filmfilters.FilmTypeFilter
+import com.example.skillcinema.data.constants.filmfilters.FilmYearFilter
 import com.example.skillcinema.databinding.FragmentSearchFilterBinding
 import com.example.skillcinema.presentation.DataViewModel
+import com.example.skillcinema.presentation.SharedPreferencesKeys.FILTER_FILM_COUNTRY
+import com.example.skillcinema.presentation.SharedPreferencesKeys.FILTER_FILM_GENRE
+import com.example.skillcinema.presentation.SharedPreferencesKeys.FILTER_FILM_ORDER
+import com.example.skillcinema.presentation.SharedPreferencesKeys.FILTER_FILM_RATING_FROM
+import com.example.skillcinema.presentation.SharedPreferencesKeys.FILTER_FILM_RATING_TO
+import com.example.skillcinema.presentation.SharedPreferencesKeys.FILTER_FILM_TYPE
+import com.example.skillcinema.presentation.SharedPreferencesKeys.FILTER_YEAR_FROM
+import com.example.skillcinema.presentation.SharedPreferencesKeys.FILTER_YEAR_TO
+import com.example.skillcinema.presentation.SharedPreferencesKeys.SHARED
 
 
 class SearchFilterFragment : Fragment() {
@@ -29,7 +44,7 @@ class SearchFilterFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        sharedPreferences = context.getSharedPreferences("shared", Context.MODE_PRIVATE)
+        sharedPreferences = context.getSharedPreferences(SHARED, Context.MODE_PRIVATE)
         editor = sharedPreferences.edit()
     }
 
@@ -72,21 +87,23 @@ class SearchFilterFragment : Fragment() {
         binding.selectWatchTypeGroup.addOnButtonCheckedListener { _, checkedId, _ ->
             when (checkedId) {
                 R.id.select_all -> {
-                    dataViewModel.setTypeFilter("ALL")
+                    dataViewModel.setTypeFilter(FilmTypeFilter.ALL.filter)
                     editor.apply {
-                        putString("filterFilmType", "ALL")
+                        putString(FILTER_FILM_TYPE, FilmTypeFilter.ALL.filter)
                     }.apply()
                 }
+
                 R.id.select_films -> {
-                    dataViewModel.setTypeFilter("FILM")
+                    dataViewModel.setTypeFilter(FilmTypeFilter.FILM.filter)
                     editor.apply {
-                        putString("filterFilmType", "FILM")
+                        putString(FILTER_FILM_TYPE, FilmTypeFilter.FILM.filter)
                     }.apply()
                 }
+
                 R.id.select_TVseries -> {
-                    dataViewModel.setTypeFilter("TV_SERIES")
+                    dataViewModel.setTypeFilter(FilmTypeFilter.TV_SERIES.filter)
                     editor.apply {
-                        putString("filterFilmType", "TV_SERIES")
+                        putString(FILTER_FILM_TYPE, FilmTypeFilter.TV_SERIES.filter)
                     }.apply()
                 }
             }
@@ -95,21 +112,23 @@ class SearchFilterFragment : Fragment() {
         binding.selectFilmSortGroup.addOnButtonCheckedListener { _, checkedId, _ ->
             when (checkedId) {
                 R.id.select_date -> {
-                    dataViewModel.setOrderFilter("YEAR")
+                    dataViewModel.setOrderFilter(FilmOrderFilter.YEAR.filter)
                     editor.apply {
-                        putString("filterFilmOrder", "YEAR")
+                        putString(FILTER_FILM_ORDER, FilmOrderFilter.YEAR.filter)
                     }.apply()
                 }
+
                 R.id.select_popularity -> {
-                    dataViewModel.setOrderFilter("NUM_VOTE")
+                    dataViewModel.setOrderFilter(FilmOrderFilter.NUM_VOTE.filter)
                     editor.apply {
-                        putString("filterFilmOrder", "NUM_VOTE")
+                        putString(FILTER_FILM_ORDER, FilmOrderFilter.NUM_VOTE.filter)
                     }.apply()
                 }
+
                 R.id.select_ratings -> {
-                    dataViewModel.setOrderFilter("RATING")
+                    dataViewModel.setOrderFilter(FilmOrderFilter.RATING.filter)
                     editor.apply {
-                        putString("filterFilmOrder", "RATING")
+                        putString(FILTER_FILM_ORDER, FilmOrderFilter.RATING.filter)
                     }.apply()
                 }
             }
@@ -132,9 +151,9 @@ class SearchFilterFragment : Fragment() {
             val values = slider.values
             dataViewModel.setRatingFromFilter(values[0])
             dataViewModel.setRatingToFilter(values[1])
-            editor.apply{
-                putFloat("filterFilmRatingFrom", values[0])
-                putFloat("filterFilmRatingTo", values[1])
+            editor.apply {
+                putFloat(FILTER_FILM_RATING_FROM, values[0])
+                putFloat(FILTER_FILM_RATING_TO, values[1])
             }.apply()
         }
 
@@ -150,29 +169,34 @@ class SearchFilterFragment : Fragment() {
     }
 
     private fun checkForLastFilters() {
-        val filmType = sharedPreferences.getString("filterFilmType", "ALL")
-        val filmOrder = sharedPreferences.getString("filterFilmOrder", "YEAR")
-        val filmCountry = sharedPreferences.getString("filterFilmCountry", "Россия")
-        val filmGenre = sharedPreferences.getString("filterFilmGenre", "Боевик")
-        val filmRatingFrom = sharedPreferences.getFloat("filterFilmRatingFrom", 0.0f)
-        val filmRatingTo = sharedPreferences.getFloat("filterFilmRatingTo", 10.0f)
-        val filmYearFrom = sharedPreferences.getInt("filterYearFrom", 1998)
-        val filmYearTo = sharedPreferences.getInt("filterYearTo", 2024)
+        val filmType = sharedPreferences.getString(FILTER_FILM_TYPE, FilmTypeFilter.ALL.filter)
+        val filmOrder = sharedPreferences.getString(FILTER_FILM_ORDER, FilmOrderFilter.YEAR.filter)
+        val filmCountry =
+            sharedPreferences.getString(FILTER_FILM_COUNTRY, FilmCountryFilters.RUSSIA.filter)
+        val filmGenre =
+            sharedPreferences.getString(FILTER_FILM_GENRE, FilmGenreFilter.ACTION.filter)
+        val filmRatingFrom =
+            sharedPreferences.getFloat(FILTER_FILM_RATING_FROM, FilmRatingFilter.RATING_FROM.filter)
+        val filmRatingTo =
+            sharedPreferences.getFloat(FILTER_FILM_RATING_TO, FilmRatingFilter.RATING_TO.filter)
+        val filmYearFrom =
+            sharedPreferences.getInt(FILTER_YEAR_FROM, FilmYearFilter.YEAR_FROM.filter)
+        val filmYearTo = sharedPreferences.getInt(FILTER_YEAR_TO, FilmYearFilter.YEAR_TO.filter)
 
-        dataViewModel.setCountryFilter(filmCountry ?: "Россия")
-        dataViewModel.setGenreFilter(filmGenre ?: "Боевик")
+        dataViewModel.setCountryFilter(filmCountry ?: FilmCountryFilters.RUSSIA.filter)
+        dataViewModel.setGenreFilter(filmGenre ?: FilmGenreFilter.ACTION.filter)
         dataViewModel.setYearFromFilter(filmYearFrom)
         dataViewModel.setYearToFilter(filmYearTo)
 
         with(binding) {
-            when(filmType) {
-                "FILM" -> selectWatchTypeGroup.check(R.id.select_films)
-                "TV_SERIES" -> selectWatchTypeGroup.check(R.id.select_TVseries)
+            when (filmType) {
+                FilmTypeFilter.FILM.filter -> selectWatchTypeGroup.check(R.id.select_films)
+                FilmTypeFilter.TV_SERIES.filter -> selectWatchTypeGroup.check(R.id.select_TVseries)
                 else -> selectWatchTypeGroup.check(R.id.select_all)
             }
-            when(filmOrder) {
-                "NUM_VOTE" -> selectFilmSortGroup.check(R.id.select_popularity)
-                "RATING" -> selectFilmSortGroup.check(R.id.select_ratings)
+            when (filmOrder) {
+                FilmOrderFilter.NUM_VOTE.filter -> selectFilmSortGroup.check(R.id.select_popularity)
+                FilmOrderFilter.RATING.filter -> selectFilmSortGroup.check(R.id.select_ratings)
                 else -> selectFilmSortGroup.check(R.id.select_date)
             }
             ratingSelectSlider.setValues(filmRatingFrom, filmRatingTo)

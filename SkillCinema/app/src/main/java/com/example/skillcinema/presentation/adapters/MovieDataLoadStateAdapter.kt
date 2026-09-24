@@ -10,7 +10,7 @@ import com.example.skillcinema.databinding.LoadItemStateBinding
 
 class MovieDataLoadStateAdapter(
     private val retry: () -> Unit
-): LoadStateAdapter<LoadStateViewHolder>() {
+) : LoadStateAdapter<LoadStateViewHolder>() {
     override fun onBindViewHolder(holder: LoadStateViewHolder, loadState: LoadState) {
         holder.bind(loadState)
         holder.binding.retryButton.setOnClickListener {
@@ -19,15 +19,16 @@ class MovieDataLoadStateAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, loadState: LoadState): LoadStateViewHolder {
-        val binding = LoadItemStateBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding =
+            LoadItemStateBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return LoadStateViewHolder(binding)
     }
 }
 
-class LoadStateViewHolder(val binding: LoadItemStateBinding): ViewHolder(binding.root) {
+class LoadStateViewHolder(val binding: LoadItemStateBinding) : ViewHolder(binding.root) {
 
     fun bind(loadState: LoadState) {
-        if (loadState is LoadState.Error){
+        if (loadState is LoadState.Error) {
             binding.errorText.text = loadState.error.localizedMessage
         }
 

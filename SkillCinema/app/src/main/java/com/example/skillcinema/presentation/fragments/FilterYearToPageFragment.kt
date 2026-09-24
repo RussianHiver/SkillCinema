@@ -8,10 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import com.example.skillcinema.App
 import com.example.skillcinema.R
-import com.example.skillcinema.data.App
 import com.example.skillcinema.databinding.FragmentFilterYearToPageBinding
 import com.example.skillcinema.presentation.DataViewModel
+import com.example.skillcinema.presentation.SharedPreferencesKeys.FILTER_YEAR_FROM
+import com.example.skillcinema.presentation.SharedPreferencesKeys.FILTER_YEAR_TO
+import com.example.skillcinema.presentation.SharedPreferencesKeys.SHARED
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipDrawable
 import com.google.android.material.chip.ChipGroup
@@ -35,7 +38,10 @@ class FilterYearToPageFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        sharedPreferences = context.getSharedPreferences("shared", Context.MODE_PRIVATE)
+        sharedPreferences = context.getSharedPreferences(
+            SHARED,
+            Context.MODE_PRIVATE
+        )
         editor = sharedPreferences.edit()
     }
 
@@ -52,18 +58,18 @@ class FilterYearToPageFragment : Fragment() {
 
         chipGroup = binding.filterYearChipGroup
 
-        arguments?.takeIf { it.containsKey(FILTER_PAGE_NUMBER) }?.apply {
-            pageNumber = getInt(FILTER_PAGE_NUMBER)
+        arguments?.takeIf { it.containsKey(FilterArgsKeys.FILTER_PAGE_NUMBER.key) }?.apply {
+            pageNumber = getInt(FilterArgsKeys.FILTER_PAGE_NUMBER.key)
         }
 
-        arguments?.takeIf { it.containsKey(FILTER_PAGES_AMOUNT) }?.apply {
-            pages = getInt(FILTER_PAGES_AMOUNT)
+        arguments?.takeIf { it.containsKey(FilterArgsKeys.FILTER_PAGES_AMOUNT.key) }?.apply {
+            pages = getInt(FilterArgsKeys.FILTER_PAGES_AMOUNT.key)
         }
 
         binding.filterYearPageText.text = "$pageNumber из $pages"
 
-        arguments?.takeIf { it.containsKey(FILTER_YEAR_LIST) }?.apply {
-            val list = getIntegerArrayList(FILTER_YEAR_LIST)?.toList()
+        arguments?.takeIf { it.containsKey(FilterArgsKeys.FILTER_YEAR_LIST.key) }?.apply {
+            val list = getIntegerArrayList(FilterArgsKeys.FILTER_YEAR_LIST.key)?.toList()
             val firstYear = list?.first()
             val lastYear = list?.last()
             binding.filterYearPeriodText.text = "$firstYear - $lastYear"
@@ -78,12 +84,15 @@ class FilterYearToPageFragment : Fragment() {
             previouslyChecked?.isClickable = true
             previouslyChecked = group.findViewById(checkedIds.first())
             previouslyChecked?.isClickable = false
-            dataViewModel.setYearToFilter(previouslyChecked?.text?.toString()?.toInt() ?: 2024)
-            var yearTo = previouslyChecked?.text?.toString()?.toInt() ?: 2024
+            dataViewModel.setYearToFilter(previouslyChecked?.text?.toString()?.toInt() ?: DEFAULT_YEAR_TO)
+            var yearTo = previouslyChecked?.text?.toString()?.toInt() ?: DEFAULT_YEAR_TO
             editor.apply {
-                val yearFrom = sharedPreferences.getInt("filterYearFrom", 2024)
+                val yearFrom = sharedPreferences.getInt(
+                    FILTER_YEAR_FROM,
+                    DEFAULT_YEAR_TO
+                )
                 if (yearFrom > yearTo) yearTo = yearFrom
-                putInt("filterYearTo", yearTo)
+                putInt(FILTER_YEAR_TO, yearTo)
             }.apply()
         }
 
@@ -112,5 +121,9 @@ class FilterYearToPageFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+    }
+
+    companion object {
+        private const val DEFAULT_YEAR_TO = 2024
     }
 }

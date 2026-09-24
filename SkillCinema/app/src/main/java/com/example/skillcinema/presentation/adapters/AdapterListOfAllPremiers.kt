@@ -9,10 +9,11 @@ import com.example.skillcinema.databinding.MoviePreviewViewBinding
 
 class AdapterListOfAllPremiers(
     val premiers: List<PremieresDTO.Item>,
-    val onClickMoviePage:(Int?) -> Unit
-): RecyclerView.Adapter<PremiersViewHolder>() {
+    val onClickMoviePage: (Int?) -> Unit
+) : RecyclerView.Adapter<PremiersViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PremiersViewHolder {
-        val binding = MoviePreviewViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding =
+            MoviePreviewViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return PremiersViewHolder(binding)
     }
 
@@ -39,4 +40,5 @@ class AdapterListOfAllPremiers(
     }
 }
 
-class PremiersViewHolder(val binding: MoviePreviewViewBinding): RecyclerView.ViewHolder(binding.root)
+class PremiersViewHolder(val binding: MoviePreviewViewBinding) :
+    RecyclerView.ViewHolder(binding.root)

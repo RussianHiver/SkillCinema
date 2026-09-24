@@ -9,9 +9,11 @@ import com.bumptech.glide.Glide
 import com.example.skillcinema.data.MovieDataDTO
 import com.example.skillcinema.databinding.MoviePreviewViewBinding
 
-class AdapterForStaffBestFilms(val list: MutableList<MovieDataDTO>): RecyclerView.Adapter<StaffBestFilmsViewHolder>() {
+class AdapterForStaffBestFilms(val list: MutableList<MovieDataDTO>) :
+    RecyclerView.Adapter<StaffBestFilmsViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StaffBestFilmsViewHolder {
-        val binding = MoviePreviewViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding =
+            MoviePreviewViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return StaffBestFilmsViewHolder(binding)
     }
 
@@ -37,4 +39,4 @@ class AdapterForStaffBestFilms(val list: MutableList<MovieDataDTO>): RecyclerVie
     }
 }
 
-class StaffBestFilmsViewHolder(val binding: MoviePreviewViewBinding): ViewHolder(binding.root)
+class StaffBestFilmsViewHolder(val binding: MoviePreviewViewBinding) : ViewHolder(binding.root)

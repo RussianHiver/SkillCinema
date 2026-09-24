@@ -1,6 +1,6 @@
 package com.example.skillcinema.entity
 
-interface Movie<T>{
+interface Movie<T> {
     val kinopoiskId: Int
     val nameEn: String?
     val nameRu: String?

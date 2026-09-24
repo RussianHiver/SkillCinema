@@ -17,4 +17,4 @@ data class FilmEntity(
     val rating: Double?,
     @ColumnInfo(name = "genre")
     val genre: String
-    )
+)

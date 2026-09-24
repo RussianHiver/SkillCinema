@@ -18,24 +18,19 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
+import com.example.skillcinema.App
 import com.example.skillcinema.R
-import com.example.skillcinema.data.App
+import com.example.skillcinema.data.constants.FilmMainListTypes
+import com.example.skillcinema.data.constants.filmfilters.FilmCountryFilters
 import com.example.skillcinema.databinding.FragmentListOfEverythingBinding
 import com.example.skillcinema.presentation.MainViewModel
 import com.example.skillcinema.presentation.adapters.AdapterListOfAllFiltered
 import com.example.skillcinema.presentation.adapters.AdapterListOfAllPopular
 import com.example.skillcinema.presentation.adapters.AdapterListOfAllPremiers
 import com.example.skillcinema.presentation.adapters.MovieDataLoadStateAdapter
+import com.example.skillcinema.presentation.fragments.BottomSheetKeys.SHEET_ERROR
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-
-private const val PREMIERS = "premiers"
-private const val POPULAR_ALL_TIME = "TOP_POPULAR_ALL"
-private const val TOP_MOVIES = "TOP_250_MOVIES"
-private const val FILTERED = "filtered"
-private const val FRENCH_DRAMAS = "french_dramas"
-private const val TOP_TV = "TOP_250_TV_SHOWS"
-private const val STAFF_BEST_FILMS = "staff_best_films"
 
 class ListOfEverythingFragment : Fragment() {
 
@@ -75,39 +70,38 @@ class ListOfEverythingFragment : Fragment() {
                     viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
 
                         when (args.listOfMovies) {
-                            PREMIERS -> {
+                            FilmMainListTypes.PREMIERS.type -> {
                                 fillPremierList()
                             }
 
-                            POPULAR_ALL_TIME -> {
+                            FilmMainListTypes.POPULAR_ALL_TIME.type -> {
                                 fillPopularList()
                             }
 
-                            FILTERED -> {
+                            FilmMainListTypes.FILTERED.type -> {
                                 fillUsaActionList()
                             }
 
-                            TOP_MOVIES -> {
+                            FilmMainListTypes.TOP_MOVIES.type -> {
                                 fillTopMovies()
                             }
 
-                            FRENCH_DRAMAS -> {
+                            FilmMainListTypes.FRENCH_DRAMAS.type -> {
                                 fillFrenchDramas()
                             }
 
-                            TOP_TV -> {
+                            FilmMainListTypes.TOP_TV.type -> {
                                 fillTopTV()
-                            }
-
-                            STAFF_BEST_FILMS -> {
-
                             }
                         }
 
                     }
                 }
             } else {
-                BottomSheetErrorFragment().show(parentFragmentManager, "sheetError")
+                BottomSheetErrorFragment().show(
+                    parentFragmentManager,
+                    SHEET_ERROR
+                )
             }
         }
 
@@ -139,7 +133,7 @@ class ListOfEverythingFragment : Fragment() {
                 loadState.source.refresh is LoadState.Error
             handleError(loadState)
         }
-        viewModel.choosePopularType("TOP_POPULAR_ALL")
+        viewModel.choosePopularType(FilmMainListTypes.POPULAR_ALL_TIME.type)
         viewModel.pagingDataPopular.collectLatest {
             adapterPopular.submitData(it)
         }
@@ -162,8 +156,8 @@ class ListOfEverythingFragment : Fragment() {
             handleError(loadState)
         }
         viewModel.putCountryAndGenre(
-            genre = "боевик",
-            country = "США"
+            genre = getString(R.string.genre_action),
+            country = FilmCountryFilters.USA.filter
         )
         viewModel.pagingDataFiltered.collectLatest {
             adapterFiltered.submitData(it)
@@ -186,7 +180,7 @@ class ListOfEverythingFragment : Fragment() {
                 loadState.source.refresh is LoadState.Error
             handleError(loadState)
         }
-        viewModel.choosePopularType(TOP_MOVIES)
+        viewModel.choosePopularType(FilmMainListTypes.TOP_MOVIES.type)
         viewModel.pagingDataPopular.collectLatest {
             adapterPopular.submitData(it)
         }
@@ -209,8 +203,8 @@ class ListOfEverythingFragment : Fragment() {
             handleError(loadState)
         }
         viewModel.putCountryAndGenre(
-            genre = "драма",
-            country = "Франция"
+            genre = getString(R.string.genre_drama),
+            country = FilmCountryFilters.FRANCE.filter
         )
         viewModel.pagingDataFiltered.collectLatest {
             adapterFiltered.submitData(it)
@@ -233,7 +227,7 @@ class ListOfEverythingFragment : Fragment() {
                 loadState.source.refresh is LoadState.Error
             handleError(loadState)
         }
-        viewModel.choosePopularType(TOP_TV)
+        viewModel.choosePopularType(FilmMainListTypes.TOP_TV.type)
         viewModel.pagingDataPopular.collectLatest {
             adapterPopular.submitData(it)
         }

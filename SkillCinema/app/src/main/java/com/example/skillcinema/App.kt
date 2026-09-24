@@ -1,4 +1,4 @@
-package com.example.skillcinema.data
+package com.example.skillcinema
 
 import android.app.Application
 import com.example.skillcinema.di.AppComponent

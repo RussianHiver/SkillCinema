@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface MovieTableDAO {
     @Transaction
-    @Query("SELECT * FROM collection_entity" )
+    @Query("SELECT * FROM collection_entity")
     fun getAll(): Flow<List<CollectionWithFilms>>
 
     @Query("SELECT * FROM collection_film WHERE film_id LIKE :filmId AND collection_id LIKE :collectionId")
@@ -32,8 +32,10 @@ interface MovieTableDAO {
 
     @Delete
     suspend fun deleteFilm(table: FilmEntity) // удаление данных из БД
+
     @Delete
     suspend fun deleteFilmForCollection(table: CollectionListFilms)
+
     @Delete
     suspend fun deleteCollection(table: CollectionEntity)
 

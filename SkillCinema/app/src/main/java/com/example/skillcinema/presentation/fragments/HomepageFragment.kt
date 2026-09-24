@@ -11,20 +11,16 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.example.skillcinema.data.App
+import com.example.skillcinema.App
+import com.example.skillcinema.R
+import com.example.skillcinema.data.constants.FilmMainListTypes
+import com.example.skillcinema.data.constants.filmfilters.FilmCountryFilters
 import com.example.skillcinema.databinding.FragmentHomepageBinding
 import com.example.skillcinema.entity.CollectionEntity
 import com.example.skillcinema.presentation.MainViewModel
 import com.example.skillcinema.presentation.adapters.AdapterForHomePage
+import com.example.skillcinema.presentation.fragments.BottomSheetKeys.SHEET_ERROR
 import kotlinx.coroutines.launch
-
-private const val PREMIERS = "premiers"
-private const val POPULAR_ALL_TIME = "TOP_POPULAR_ALL"
-private const val TOP_MOVIES = "TOP_250_MOVIES"
-private const val FILTERED = "filtered"
-private const val FRENCH_DRAMAS = "french_dramas"
-private const val TOP_TV = "TOP_250_TV_SHOWS"
-private const val TOP_POPULAR = "TOP_POPULAR_ALL"
 
 class HomepageFragment : Fragment() {
 
@@ -34,10 +30,6 @@ class HomepageFragment : Fragment() {
     private val viewModel: MainViewModel by viewModels {
         (activity?.application as App).component.mainViewModelFactory()
     }
-
-    private val favoriteFilm = CollectionEntity(1, "Любимые")
-    private val bookmarkFilm = CollectionEntity(2, "Хочу посмотреть")
-    private val visibilityFilm = CollectionEntity(3, "Просмотренные фильмы")
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,6 +43,10 @@ class HomepageFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val favoriteFilm = CollectionEntity(1, getString(R.string.collection_favourites))
+        val bookmarkFilm = CollectionEntity(2, getString(R.string.collection_want_to_watch))
+        val visibilityFilm = CollectionEntity(3, getString(R.string.collection_watched_movies))
+
         context?.let {
             if (checkForInternet(it)) {
 
@@ -61,77 +57,90 @@ class HomepageFragment : Fragment() {
                 viewLifecycleOwner.lifecycleScope.launch {
                     val premier = viewModel.givePremierList()
                     val premierAdapterForHomePage = AdapterForHomePage(
-                        PREMIERS,
+                        FilmMainListTypes.PREMIERS.type,
                         { id -> openMoviePage(id) }) { list -> openAllList(list) }
                     premierAdapterForHomePage.checkTheNumberOfItems(premier.size)
                     premierAdapterForHomePage.addPremiers(premier)
                     binding.recyclerPreview.adapter = premierAdapterForHomePage
                     if (premier.size < 20) binding.allButtonPreview.isEnabled = false
                     binding.allButtonPreview.setOnClickListener {
-                        openAllList(PREMIERS)
+                        openAllList(FilmMainListTypes.PREMIERS.type)
                     }
 
-                    val popular = viewModel.givePopularList(1, TOP_POPULAR)
-                    val popularAdapterForHomePage = AdapterForHomePage(POPULAR_ALL_TIME,
+                    val popular =
+                        viewModel.givePopularList(1, FilmMainListTypes.POPULAR_ALL_TIME.type)
+                    val popularAdapterForHomePage = AdapterForHomePage(
+                        FilmMainListTypes.POPULAR_ALL_TIME.type,
                         { id -> openMoviePage(id) }) { list -> openAllList(list) }
                     popularAdapterForHomePage.checkTheNumberOfItems(popular.size)
                     popularAdapterForHomePage.addPopular(popular)
                     binding.recyclerPopular.adapter = popularAdapterForHomePage
                     if (premier.size < 20) binding.allButtonPopular.isEnabled = false
                     binding.allButtonPopular.setOnClickListener {
-                        openAllList(POPULAR_ALL_TIME)
+                        openAllList(FilmMainListTypes.POPULAR_ALL_TIME.type)
                     }
 
-                    val usaAction = viewModel.giveFilteredList(1, "США", "боевик")
+                    val usaAction = viewModel.giveFilteredList(
+                        1,
+                        FilmCountryFilters.USA.filter,
+                        getString(R.string.genre_action)
+                    )
                     val usaActionAdapterForHomePage = AdapterForHomePage(
-                        FILTERED,
+                        FilmMainListTypes.FILTERED.type,
                         { id -> openMoviePage(id) }) { list -> openAllList(list) }
                     usaActionAdapterForHomePage.checkTheNumberOfItems(usaAction.size)
                     usaActionAdapterForHomePage.addFiltered(usaAction)
                     binding.recyclerUsaAction.adapter = usaActionAdapterForHomePage
                     if (premier.size < 20) binding.allButtonUsaAction.isEnabled = false
                     binding.allButtonUsaAction.setOnClickListener {
-                        openAllList(FILTERED)
+                        openAllList(FilmMainListTypes.FILTERED.type)
                     }
 
-                    val topMovies = viewModel.givePopularList(1, TOP_MOVIES)
+                    val topMovies = viewModel.givePopularList(1, FilmMainListTypes.TOP_MOVIES.type)
                     val topMoviesAdapterForHomePage = AdapterForHomePage(
-                        TOP_MOVIES,
+                        FilmMainListTypes.TOP_MOVIES.type,
                         { id -> openMoviePage(id) }) { list -> openAllList(list) }
                     topMoviesAdapterForHomePage.checkTheNumberOfItems(topMovies.size)
                     topMoviesAdapterForHomePage.addPopular(topMovies)
                     binding.recyclerTop.adapter = topMoviesAdapterForHomePage
                     if (premier.size < 20) binding.allButtonTop.isEnabled = false
                     binding.allButtonTop.setOnClickListener {
-                        openAllList(TOP_MOVIES)
+                        openAllList(FilmMainListTypes.TOP_MOVIES.type)
                     }
 
-                    val frenchDramas = viewModel.giveFilteredList(1, "Франция", "драма")
+                    val frenchDramas = viewModel.giveFilteredList(
+                        1,
+                        FilmCountryFilters.FRANCE.filter,
+                        getString(R.string.genre_drama)
+                    )
                     val frenchDramasAdapterForHomePage = AdapterForHomePage(
-                        FRENCH_DRAMAS,
+                        FilmMainListTypes.FRENCH_DRAMAS.type,
                         { id -> openMoviePage(id) }) { list -> openAllList(list) }
                     frenchDramasAdapterForHomePage.checkTheNumberOfItems(frenchDramas.size)
                     frenchDramasAdapterForHomePage.addFiltered(frenchDramas)
                     binding.recyclerFrenchDramas.adapter = frenchDramasAdapterForHomePage
                     if (premier.size < 20) binding.allButtonFrenchDramas.isEnabled = false
                     binding.allButtonFrenchDramas.setOnClickListener {
-                        openAllList(FRENCH_DRAMAS)
+                        openAllList(FilmMainListTypes.FRENCH_DRAMAS.type)
                     }
 
-                    val tvSeries = viewModel.givePopularList(1, TOP_TV)
+                    val tvSeries = viewModel.givePopularList(1, FilmMainListTypes.TOP_TV.type)
                     val tvSeriesAdapterForHomePage = AdapterForHomePage(
-                        TOP_TV,
+                        FilmMainListTypes.TOP_TV.type,
                         { id -> openMoviePage(id) }) { list -> openAllList(list) }
                     tvSeriesAdapterForHomePage.checkTheNumberOfItems(tvSeries.size)
                     tvSeriesAdapterForHomePage.addPopular(tvSeries)
                     binding.recyclerTVSeries.adapter = tvSeriesAdapterForHomePage
                     if (premier.size < 20) binding.allButtonTVSeries.isEnabled = false
                     binding.allButtonTVSeries.setOnClickListener {
-                        openAllList(TOP_TV)
+                        openAllList(FilmMainListTypes.TOP_TV.type)
                     }
                 }
             } else {
-                BottomSheetErrorFragment().show(parentFragmentManager, "errorSheet")
+                BottomSheetErrorFragment().show(
+                    parentFragmentManager,
+                    SHEET_ERROR
+                )
             }
         }
 

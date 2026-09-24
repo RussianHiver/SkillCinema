@@ -1,14 +1,18 @@
 package com.example.skillcinema.presentation.adapters
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.bumptech.glide.Glide
+import com.example.skillcinema.R
 import com.example.skillcinema.data.StaffListDTO
+import com.example.skillcinema.data.constants.FilmOccupationTypes
 import com.example.skillcinema.databinding.FilmStaffBinding
 
 class AdapterForFilmPage(
+    private val context: Context?,
     staff: List<StaffListDTO>,
     val areActors: Boolean,
     val fullList: Boolean,
@@ -16,9 +20,9 @@ class AdapterForFilmPage(
 ) : Adapter<FilmViewHolder>() {
 
     val newStaff: List<StaffListDTO> = if (areActors) {
-        staff.filter { it.professionKey == "ACTOR" }
+        staff.filter { it.professionKey == FilmOccupationTypes.ACTOR.type }
     } else {
-        staff.filter { it.professionKey != "ACTOR" }
+        staff.filter { it.professionKey != FilmOccupationTypes.ACTOR.type }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FilmViewHolder {
@@ -48,8 +52,9 @@ class AdapterForFilmPage(
             Glide.with(poster.context)
                 .load(item?.posterUrl)
                 .into(poster)
-            name.text = item?.nameRu ?: "Неизвестный"
-            occupation.text = if (areActors) item?.description else fixedString ?: "Неизвестный"
+            name.text = item?.nameRu ?: context?.getString(R.string.unknown)
+            occupation.text = if (areActors) item?.description else fixedString
+                ?: context?.getString(R.string.unknown)
         }
 
         holder.binding.root.setOnClickListener {

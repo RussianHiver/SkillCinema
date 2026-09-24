@@ -5,32 +5,38 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.skillcinema.data.MovieDataDTO
 import com.example.skillcinema.data.StaffMemberDTO
+import com.example.skillcinema.data.constants.filmfilters.FilmCountryFilters
+import com.example.skillcinema.data.constants.filmfilters.FilmGenreFilter
+import com.example.skillcinema.data.constants.filmfilters.FilmOrderFilter
+import com.example.skillcinema.data.constants.filmfilters.FilmRatingFilter
+import com.example.skillcinema.data.constants.filmfilters.FilmTypeFilter
+import com.example.skillcinema.data.constants.filmfilters.FilmYearFilter
 import com.example.skillcinema.entity.FilmEntity
 
-class DataViewModel: ViewModel() {
+class DataViewModel : ViewModel() {
 
-    private val _countryFilter = MutableLiveData("Россия")
+    private val _countryFilter = MutableLiveData(FilmCountryFilters.RUSSIA.filter)
     val countryFilter: LiveData<String> get() = _countryFilter
 
-    private val _genreFilter = MutableLiveData("Боевик")
+    private val _genreFilter = MutableLiveData(FilmGenreFilter.ACTION.filter)
     val genreFilter: LiveData<String> get() = _genreFilter
 
-    private val _typeFilter = MutableLiveData("ALL")
+    private val _typeFilter = MutableLiveData(FilmTypeFilter.ALL.filter)
     val typeFilter: LiveData<String> get() = _typeFilter
 
-    private val _orderFilter = MutableLiveData("YEAR")
+    private val _orderFilter = MutableLiveData(FilmOrderFilter.YEAR.filter)
     val orderFilter: LiveData<String> get() = _orderFilter
 
-    private val _yearFrom = MutableLiveData(1998)
+    private val _yearFrom = MutableLiveData(FilmYearFilter.YEAR_FROM.filter)
     val yearFrom: LiveData<Int> get() = _yearFrom
 
-    private val _yearTo = MutableLiveData(2024)
+    private val _yearTo = MutableLiveData(FilmYearFilter.YEAR_TO.filter)
     val yearTo: LiveData<Int> get() = _yearTo
 
-    private val _ratingFromFilter = MutableLiveData(0.0f)
+    private val _ratingFromFilter = MutableLiveData(FilmRatingFilter.RATING_FROM.filter)
     val ratingFromFilter: LiveData<Float> get() = _ratingFromFilter
 
-    private val _ratingToFilter = MutableLiveData(10.0f)
+    private val _ratingToFilter = MutableLiveData(FilmRatingFilter.RATING_TO.filter)
     val ratingToFilter: LiveData<Float> get() = _ratingToFilter
 
     private val _filmography = MutableLiveData<List<StaffMemberDTO.Film>>()
@@ -38,9 +44,6 @@ class DataViewModel: ViewModel() {
 
     private val _watchedFilmsList = MutableLiveData<List<FilmEntity>>(emptyList())
     val watchedFilmsList: LiveData<List<FilmEntity>> get() = _watchedFilmsList
-
-    private val _interestingFilmsList = MutableLiveData<List<FilmEntity>>(emptyList())
-    val interestingFilmsList: LiveData<List<FilmEntity>> get() = _interestingFilmsList
 
     private val _movieData = MutableLiveData<MovieDataDTO>()
     val movieData: LiveData<MovieDataDTO> get() = _movieData
@@ -84,10 +87,6 @@ class DataViewModel: ViewModel() {
 
     fun setWatchedFilmsList(list: List<FilmEntity>) {
         _watchedFilmsList.value = list
-    }
-
-    fun setInterestingFilmsList(list: List<FilmEntity>) {
-        _interestingFilmsList.value = list
     }
 
     fun setMovieData(movie: MovieDataDTO) {

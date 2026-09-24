@@ -1,15 +1,13 @@
 package com.example.skillcinema.di
 
-import android.app.Application
 import android.content.Context
 import androidx.room.Room
-import com.example.skillcinema.data.App
+import com.example.skillcinema.App
 import com.example.skillcinema.data.LocalRepository
 import com.example.skillcinema.data.MainRepository
 import com.example.skillcinema.data.MovieDataSourceRetrofit
 import com.example.skillcinema.data.MovieDatabase
 import com.example.skillcinema.data.MovieTableDAO
-import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton

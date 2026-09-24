@@ -20,7 +20,7 @@ class DatabaseCollectionsUseCase(private val localRepository: LocalRepository) {
         localRepository.insertFilmForCollection(filmCollection)
     }
 
-     fun getAllCollections(): Flow<List<CollectionWithFilms>> {
+    fun getAllCollections(): Flow<List<CollectionWithFilms>> {
         return localRepository.getAllCollections()
     }
 

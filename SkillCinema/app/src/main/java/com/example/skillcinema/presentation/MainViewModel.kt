@@ -16,7 +16,9 @@ import com.example.skillcinema.data.SeasonsAndEpisodesDTO
 import com.example.skillcinema.data.SimilarsDTO
 import com.example.skillcinema.data.StaffListDTO
 import com.example.skillcinema.data.StaffMemberDTO
+import com.example.skillcinema.data.constants.GalleryImageTypes
 import com.example.skillcinema.domain.DatabaseCollectionsUseCase
+import com.example.skillcinema.domain.DatabaseFilmsUseCase
 import com.example.skillcinema.domain.FilteredMovieUseCase
 import com.example.skillcinema.domain.FiltersUseCase
 import com.example.skillcinema.domain.MovieGalleryUseCase
@@ -26,7 +28,6 @@ import com.example.skillcinema.domain.PopularMovieUseCase
 import com.example.skillcinema.domain.PremierMovieUseCase
 import com.example.skillcinema.domain.SeasonsAndEpisodesUseCase
 import com.example.skillcinema.domain.SimilarMoviesUseCase
-import com.example.skillcinema.domain.DatabaseFilmsUseCase
 import com.example.skillcinema.entity.CollectionEntity
 import com.example.skillcinema.entity.CollectionListFilms
 import com.example.skillcinema.entity.FilmEntity
@@ -34,14 +35,14 @@ import com.example.skillcinema.presentation.pagingsources.PagingSourceFiltered
 import com.example.skillcinema.presentation.pagingsources.PagingSourceGallery
 import com.example.skillcinema.presentation.pagingsources.PagingSourcePopular
 import com.example.skillcinema.presentation.pagingsources.PagingSourceSearchResult
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+
+private const val PAGE_SIZE = 10
 
 class MainViewModel(
     private val premierMovieUseCase: PremierMovieUseCase,
@@ -147,10 +148,6 @@ class MainViewModel(
 
     }
 
-    fun checkTheFilm(filmId: Int, collectionID: Int): CollectionListFilms {
-        return databaseFilmsUseCase.checkTheFilm(filmId, collectionID)
-    }
-
     val allCollection = databaseCollectionsUseCase.getAllCollections()
         .stateIn(
             scope = viewModelScope,
@@ -159,7 +156,7 @@ class MainViewModel(
         )
 
     val pagingDataPopular: Flow<PagingData<PopularDTO.Item>> = Pager(
-        config = PagingConfig(pageSize = 10),
+        config = PagingConfig(pageSize = PAGE_SIZE),
         pagingSourceFactory = {
             PagingSourcePopular(
                 popularType.value,
@@ -169,7 +166,7 @@ class MainViewModel(
     ).flow.cachedIn(viewModelScope)
 
     val pagingDataFiltered: Flow<PagingData<FilteredDTO.Item>> = Pager(
-        config = PagingConfig(pageSize = 10),
+        config = PagingConfig(pageSize = PAGE_SIZE),
         pagingSourceFactory = {
             PagingSourceFiltered(
                 country = filteredCountry.value,
@@ -180,33 +177,33 @@ class MainViewModel(
     ).flow.cachedIn(viewModelScope)
 
     val pagingDataGalleryStill: Flow<PagingData<GalleryDTO.Item>> = Pager(
-        config = PagingConfig(pageSize = 10),
+        config = PagingConfig(pageSize = PAGE_SIZE),
         pagingSourceFactory = {
             PagingSourceGallery(
                 filmId = filmId.value,
-                type = "STILL",
+                type = GalleryImageTypes.STILL.imageType,
                 movieGalleryUseCase = movieGalleryUseCase
             )
         }
     ).flow.cachedIn(viewModelScope)
 
     val pagingDataGalleryShooting: Flow<PagingData<GalleryDTO.Item>> = Pager(
-        config = PagingConfig(pageSize = 10),
+        config = PagingConfig(pageSize = PAGE_SIZE),
         pagingSourceFactory = {
             PagingSourceGallery(
                 filmId = filmId.value,
-                type = "SHOOTING",
+                type = GalleryImageTypes.SHOOTING.imageType,
                 movieGalleryUseCase = movieGalleryUseCase
             )
         }
     ).flow.cachedIn(viewModelScope)
 
     val pagingDataGalleryPoster: Flow<PagingData<GalleryDTO.Item>> = Pager(
-        config = PagingConfig(pageSize = 10),
+        config = PagingConfig(pageSize = PAGE_SIZE),
         pagingSourceFactory = {
             PagingSourceGallery(
                 filmId = filmId.value,
-                type = "POSTER",
+                type = GalleryImageTypes.POSTER.imageType,
                 movieGalleryUseCase = movieGalleryUseCase
             )
         }
@@ -227,7 +224,7 @@ class MainViewModel(
         yearTo: Int
     ) {
         Pager(
-            config = PagingConfig(pageSize = 10),
+            config = PagingConfig(pageSize = PAGE_SIZE),
             pagingSourceFactory = {
                 PagingSourceSearchResult(
                     keyword = keyword,

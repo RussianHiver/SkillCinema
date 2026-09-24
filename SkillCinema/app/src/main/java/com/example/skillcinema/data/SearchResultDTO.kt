@@ -44,7 +44,7 @@ data class SearchResultDTO(
         val type: String,
         @Json(name = "year")
         override val year: String
-    ): Movie<String> {
+    ) : Movie<String> {
         @JsonClass(generateAdapter = true)
         data class Country(
             @Json(name = "country")

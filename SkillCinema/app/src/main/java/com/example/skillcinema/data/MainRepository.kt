@@ -1,7 +1,5 @@
 package com.example.skillcinema.data
 
-import javax.inject.Inject
-
 class MainRepository(
     private val movieDataSource: MovieDataSourceRetrofit
 ) {

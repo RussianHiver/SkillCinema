@@ -14,11 +14,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.example.skillcinema.data.App
+import com.example.skillcinema.App
 import com.example.skillcinema.databinding.FragmentListOfStaffBinding
-import com.example.skillcinema.di.DaggerAppComponent
 import com.example.skillcinema.presentation.MainViewModel
 import com.example.skillcinema.presentation.adapters.AdapterForFilmPage
+import com.example.skillcinema.presentation.fragments.BottomSheetKeys.SHEET_ERROR
 import kotlinx.coroutines.launch
 
 
@@ -51,6 +51,7 @@ class ListOfStaffFragment : Fragment() {
                     viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                         val staff = viewModel.giveMovieStaffList(id = filmId)
                         binding.recyclerStaff.adapter = AdapterForFilmPage(
+                            context,
                             staff,
                             args.TypeOfStaff,
                             true
@@ -58,7 +59,10 @@ class ListOfStaffFragment : Fragment() {
                     }
                 }
             } else {
-                BottomSheetErrorFragment().show(parentFragmentManager, "sheetError")
+                BottomSheetErrorFragment().show(
+                    parentFragmentManager,
+                    SHEET_ERROR
+                )
             }
         }
     }

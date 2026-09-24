@@ -11,4 +11,4 @@ data class CollectionEntity(
     val collectionId: Int?,
     @ColumnInfo(name = "name_collection")
     val nameCollection: String?
-    )
+)

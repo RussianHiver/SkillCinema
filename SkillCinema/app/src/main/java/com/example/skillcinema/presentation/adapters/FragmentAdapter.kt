@@ -4,8 +4,8 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.example.skillcinema.presentation.FragmentArgsKeys
 import com.example.skillcinema.presentation.fragments.BlankFragment
-import com.example.skillcinema.presentation.fragments.PAGE_NUMBER
 
 
 class FragmentAdapter(fragment: FragmentActivity) : FragmentStateAdapter(fragment) {
@@ -14,7 +14,7 @@ class FragmentAdapter(fragment: FragmentActivity) : FragmentStateAdapter(fragmen
     override fun createFragment(position: Int): Fragment {
         val fragment = BlankFragment()
         fragment.arguments = Bundle().apply {
-            putInt(PAGE_NUMBER, position + 1)
+            putInt(FragmentArgsKeys.PAGE_NUMBER, position + 1)
         }
         return fragment
     }

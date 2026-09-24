@@ -20,9 +20,13 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.skillcinema.R
-import com.example.skillcinema.data.App
+import com.example.skillcinema.App
+import com.example.skillcinema.presentation.fragments.BundleKeys.ID
 import com.example.skillcinema.data.MovieDataDTO
 import com.example.skillcinema.data.StaffListDTO
+import com.example.skillcinema.data.constants.GalleryImageTypes
+import com.example.skillcinema.data.constants.filmfilters.FilmProfessionFilter
+import com.example.skillcinema.data.constants.filmfilters.FilmTypeFilter
 import com.example.skillcinema.databinding.FragmentFilmPageBinding
 import com.example.skillcinema.entity.CollectionListFilms
 import com.example.skillcinema.entity.FilmEntity
@@ -31,9 +35,11 @@ import com.example.skillcinema.presentation.MainViewModel
 import com.example.skillcinema.presentation.adapters.AdapterForFilmPage
 import com.example.skillcinema.presentation.adapters.AdapterForGallery
 import com.example.skillcinema.presentation.adapters.AdapterForSimilars
+import com.example.skillcinema.presentation.fragments.BottomSheetKeys.BOTTOM_SHEET_TAG
+import com.example.skillcinema.presentation.fragments.BottomSheetKeys.SHEET_ERROR
 import kotlinx.coroutines.launch
 
-class FilmPage : Fragment() {
+class FilmPageFragment : Fragment() {
 
     private var _binding: FragmentFilmPageBinding? = null
     private val binding get() = _binding!!
@@ -74,22 +80,24 @@ class FilmPage : Fragment() {
 
         context?.let { context ->
             if (checkForInternet(context)) {
-                val args: FilmPageArgs by navArgs()
-
-
+                val args: FilmPageFragmentArgs by navArgs()
 
                 viewLifecycleOwner.lifecycleScope.launch {
                     viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
 
                         movie = viewModel.giveOneMovie(args.kinopoiskID)
                         val staff = viewModel.giveMovieStaffList(args.kinopoiskID)
-                        val gallery = viewModel.giveFilmGalleryList(args.kinopoiskID, 1, "STILL")
+                        val gallery = viewModel.giveFilmGalleryList(
+                            args.kinopoiskID,
+                            1,
+                            GalleryImageTypes.STILL.imageType
+                        )
                         val similars = viewModel.giveSimilars(args.kinopoiskID)
 
                         val watched = FilmEntity(
                             id = movie.kinopoiskId,
                             posterUrl = movie.posterUrl,
-                            nameRu = movie.nameRu ?: movie.nameEn ?: "Неизвестный",
+                            nameRu = movie.nameRu ?: movie.nameEn ?: getString(R.string.unknown),
                             genre = movie.genres.first().genre,
                             rating = movie.ratingKinopoisk
                         )
@@ -167,7 +175,7 @@ class FilmPage : Fragment() {
                             val intent = Intent().apply {
                                 action = Intent.ACTION_SEND
                                 putExtra(Intent.EXTRA_TEXT, movie.webUrl)
-                                type = "text/plain"
+                                type = IntentTypes.TEXT_PLANE
                             }
                             val shareIntent = Intent.createChooser(intent, null)
                             startActivity(shareIntent)
@@ -177,9 +185,12 @@ class FilmPage : Fragment() {
                             dataViewModel.setMovieData(movie)
                             val bottomSheetFragment = BottomSheetFragment()
                             val bundle = Bundle()
-                            bundle.putInt("ID", movie.kinopoiskId)
+                            bundle.putInt(ID, movie.kinopoiskId)
                             bottomSheetFragment.arguments = bundle
-                            bottomSheetFragment.show(parentFragmentManager, "bottomSheetTag")
+                            bottomSheetFragment.show(
+                                parentFragmentManager,
+                                BOTTOM_SHEET_TAG
+                            )
                         }
 
                         launch {
@@ -202,32 +213,46 @@ class FilmPage : Fragment() {
                             }
                         }
 
-                        if (movie.type == "TV_SERIES") {
+                        if (movie.type == FilmTypeFilter.TV_SERIES.filter) {
                             binding.seasonsAndEpisodesTitleAndAllButton.isVisible = true
-                            val numberOfSeasons = viewModel.getSeasonsAndEpisodes(args.kinopoiskID).total
+                            val numberOfSeasons =
+                                viewModel.getSeasonsAndEpisodes(args.kinopoiskID).total
                             var numberOfEpisodes = 0
                             viewModel.getSeasonsAndEpisodes(args.kinopoiskID).items.forEach { numberOfEpisodes += it.episodes.count() }
-                            binding.amountOfSeasonsAndEpisodes.text = getSeasonsAndEpisodesCountString(
-                                seasons = numberOfSeasons,
-                                episodes = numberOfEpisodes
-                            )
+                            binding.amountOfSeasonsAndEpisodes.text =
+                                getSeasonsAndEpisodesCountString(
+                                    seasons = numberOfSeasons,
+                                    episodes = numberOfEpisodes
+                                )
 
                             binding.seasonsAndEpisodesAllButton.setOnClickListener {
-                                val action = FilmPageDirections.actionFilmPageToSeasonsAndEpisodesFragment(
-                                    movie.nameRu ?: movie.nameEn ?: "Без имени", args.kinopoiskID
-                                )
+                                val action =
+                                    FilmPageFragmentDirections.actionFilmPageToSeasonsAndEpisodesFragment(
+                                        movie.nameRu ?: movie.nameEn
+                                        ?: getString(R.string.unknown_name), args.kinopoiskID
+                                    )
                                 findNavController().navigate(action)
                             }
                         }
 
                         adapterStaff =
-                            AdapterForFilmPage(staff, areActors = false, fullList = false) { id ->
+                            AdapterForFilmPage(
+                                context,
+                                staff,
+                                areActors = false,
+                                fullList = false
+                            ) { id ->
                                 openStaffMemberPage(
                                     id
                                 )
                             }
                         adapterActors =
-                            AdapterForFilmPage(staff, areActors = true, fullList = false) { id ->
+                            AdapterForFilmPage(
+                                context,
+                                staff,
+                                areActors = true,
+                                fullList = false
+                            ) { id ->
                                 openStaffMemberPage(
                                     id
                                 )
@@ -239,7 +264,7 @@ class FilmPage : Fragment() {
                             if (movie.ratingKinopoisk != null) {
                                 filmRatingAndName.text = "${
                                     String.format(
-                                        "%.1f",
+                                        getString(R.string.film_rating_and_name),
                                         movie.ratingKinopoisk
                                     )
                                 } ${movie.nameRu ?: movie.nameEn}"
@@ -256,7 +281,9 @@ class FilmPage : Fragment() {
                             filmCountryLengthAndAge.text = filmLength?.let {
                                 "${movie.countries.first().country}, ${
                                     getString(
-                                        R.string.film_length, it.getValue("hours"), it.getValue("minutes")
+                                        R.string.film_length,
+                                        it.getValue(getString(R.string.movie_length_hours)),
+                                        it.getValue(getString(R.string.movie_length_minutes))
                                     )
                                 }${convertMovieAgeRestriction(movie.ratingAgeLimits)}"
 
@@ -309,7 +336,10 @@ class FilmPage : Fragment() {
                     }
                 }
             } else {
-                BottomSheetErrorFragment().show(parentFragmentManager, "sheetError")
+                BottomSheetErrorFragment().show(
+                    parentFragmentManager,
+                    SHEET_ERROR
+                )
             }
         }
     }
@@ -317,7 +347,10 @@ class FilmPage : Fragment() {
     private fun convertFilmLength(length: Int): Map<String, Int> {
         val hours = length / 60
         val minutes = length % 60
-        return mapOf("hours" to hours, "minutes" to minutes)
+        return mapOf(
+            getString(R.string.movie_length_hours) to hours,
+            getString(R.string.movie_length_minutes) to minutes
+        )
     }
 
     private fun convertMovieAgeRestriction(ratings: String?): String {
@@ -335,30 +368,30 @@ class FilmPage : Fragment() {
 
     private fun getStringOfListForStaff(list: List<StaffListDTO>, actors: Boolean): String {
         val newList: List<StaffListDTO> = if (actors) {
-            list.filter { it.professionKey == "ACTOR" }
+            list.filter { it.professionKey == FilmProfessionFilter.ACTOR.filter }
         } else {
-            list.filter { it.professionKey != "ACTOR" }
+            list.filter { it.professionKey != FilmProfessionFilter.ACTOR.filter }
         }
         return "${newList.size} >"
     }
 
     private fun openListOfStaff(actorsOrNot: Boolean, id: Int) {
-        val action = FilmPageDirections.actionFilmPageToListOfStaffFragment(actorsOrNot, id)
+        val action = FilmPageFragmentDirections.actionFilmPageToListOfStaffFragment(actorsOrNot, id)
         findNavController().navigate(action)
     }
 
     private fun openListOfPhotos(filmId: Int) {
-        val action = FilmPageDirections.actionFilmPageToGalleryFragment(filmId)
+        val action = FilmPageFragmentDirections.actionFilmPageToGalleryFragment(filmId)
         findNavController().navigate(action)
     }
 
     private fun openListSimilars(filmId: Int) {
-        val action = FilmPageDirections.actionFilmPageToSimilarsFragment(filmId)
+        val action = FilmPageFragmentDirections.actionFilmPageToSimilarsFragment(filmId)
         findNavController().navigate(action)
     }
 
     private fun openStaffMemberPage(id: Int) {
-        val action = FilmPageDirections.actionFilmPageToActorPageFragment(id)
+        val action = FilmPageFragmentDirections.actionFilmPageToActorPageFragment(id)
         findNavController().navigate(action)
     }
 

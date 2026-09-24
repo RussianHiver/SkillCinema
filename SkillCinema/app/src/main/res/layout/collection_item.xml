@@ -40,7 +40,7 @@
             android:id="@+id/textCollection"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/watch"
+            android:text="@string/collection_want_to_watch"
             android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="@+id/image_collection"
             app:layout_constraintStart_toStartOf="@+id/image_collection"

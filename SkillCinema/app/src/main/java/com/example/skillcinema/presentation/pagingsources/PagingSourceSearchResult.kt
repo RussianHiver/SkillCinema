@@ -36,15 +36,15 @@ class PagingSourceSearchResult(
                 yearTo = yearTo
             )
         }.fold(
-                onSuccess = {
-                    LoadResult.Page(
-                        data = it.items,
-                        prevKey = null,
-                        nextKey = if (it.items.isEmpty()) null else page + 1
-                    )
-                },
-                onFailure = { LoadResult.Error(it) }
-            )
+            onSuccess = {
+                LoadResult.Page(
+                    data = it.items,
+                    prevKey = null,
+                    nextKey = if (it.items.isEmpty()) null else page + 1
+                )
+            },
+            onFailure = { LoadResult.Error(it) }
+        )
     }
 
     companion object {

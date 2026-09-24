@@ -61,7 +61,7 @@ class PresentationModule {
     }
 
     @Provides
-    fun provideDataViewModelFactory(dataViewModel: DataViewModel): DataViewModelFactory{
+    fun provideDataViewModelFactory(dataViewModel: DataViewModel): DataViewModelFactory {
         return DataViewModelFactory(dataViewModel)
     }
 

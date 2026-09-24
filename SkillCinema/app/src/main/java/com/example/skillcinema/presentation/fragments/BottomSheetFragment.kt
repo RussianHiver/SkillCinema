@@ -11,7 +11,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.example.skillcinema.R
-import com.example.skillcinema.data.App
+import com.example.skillcinema.App
+import com.example.skillcinema.presentation.fragments.BundleKeys.ID
 import com.example.skillcinema.databinding.FragmentBottomSheetBinding
 import com.example.skillcinema.entity.CollectionEntity
 import com.example.skillcinema.entity.CollectionListFilms
@@ -51,7 +52,7 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        id = arguments?.getInt("ID") ?: 0
+        id = arguments?.getInt(ID) ?: 0
         _binding = FragmentBottomSheetBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -68,8 +69,8 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
             binding.recyclerAddCollection.adapter = collectionButtonSheetAdapter
             with(binding) {
                 Glide.with(imageSheet.context).load(movie.posterUrl).into(imageSheet)
-                textNameSheet.text = movie.nameRu ?: movie.nameEn ?: "Неизвестный"
-                textYearSheet.text = movie.year?.toString() ?: "Без даты"
+                textNameSheet.text = movie.nameRu ?: movie.nameEn ?: getString(R.string.unknown)
+                textYearSheet.text = movie.year?.toString() ?: getString(R.string.unknown_date)
                 textGenreSheet.text = movie.genres.first().genre
             }
         }
@@ -127,7 +128,6 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
         super.onDestroy()
         _binding = null
     }
-
 
 
     companion object {

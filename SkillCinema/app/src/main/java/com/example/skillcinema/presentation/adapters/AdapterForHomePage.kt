@@ -14,8 +14,8 @@ import com.example.skillcinema.databinding.ShowEverythingButtonViewBinding
 
 class AdapterForHomePage(
     val nameForList: String,
-    val onClickMoviePage:(Int?) -> Unit,
-    val onClickAllButton:(String) -> Unit
+    val onClickMoviePage: (Int?) -> Unit,
+    val onClickAllButton: (String) -> Unit
 ) : RecyclerView.Adapter<ViewHolder>() {
 
     private var listPremier: List<PremieresDTO.Item> = emptyList()
@@ -35,17 +35,26 @@ class AdapterForHomePage(
 
         return when (viewType) {
             1 -> {
-                val movieBinding = MoviePreviewViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                val movieBinding = MoviePreviewViewBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
                 MovieViewHolder(movieBinding)
             }
+
             else -> {
-                val buttonBinding = ShowEverythingButtonViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                val buttonBinding = ShowEverythingButtonViewBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
                 ButtonViewHolder(buttonBinding)
             }
         }
     }
 
-    override fun getItemCount(): Int  = numberOfItems
+    override fun getItemCount(): Int = numberOfItems
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
@@ -68,6 +77,7 @@ class AdapterForHomePage(
                         onClickMoviePage(item?.kinopoiskId)
                     }
                 }
+
                 listPopular.isNotEmpty() -> {
                     val item = listPopular.getOrNull(position)
                     with(holder.binding) {
@@ -125,7 +135,7 @@ class AdapterForHomePage(
 
 
     fun addPremiers(premieres: List<PremieresDTO.Item>) {
-       listPremier = premieres
+        listPremier = premieres
     }
 
     fun addPopular(popular: List<PopularDTO.Item>) {
@@ -138,6 +148,6 @@ class AdapterForHomePage(
 
 }
 
-class MovieViewHolder (val binding: MoviePreviewViewBinding) : ViewHolder(binding.root)
+class MovieViewHolder(val binding: MoviePreviewViewBinding) : ViewHolder(binding.root)
 
-class ButtonViewHolder (val binding: ShowEverythingButtonViewBinding) : ViewHolder(binding.root)
+class ButtonViewHolder(val binding: ShowEverythingButtonViewBinding) : ViewHolder(binding.root)

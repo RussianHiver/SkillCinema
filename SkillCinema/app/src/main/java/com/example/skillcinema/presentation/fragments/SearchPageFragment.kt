@@ -21,12 +21,28 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
-import com.example.skillcinema.data.App
+import com.example.skillcinema.App
+import com.example.skillcinema.data.constants.filmfilters.FilmCountryFilters
+import com.example.skillcinema.data.constants.filmfilters.FilmGenreFilter
+import com.example.skillcinema.data.constants.filmfilters.FilmOrderFilter
+import com.example.skillcinema.data.constants.filmfilters.FilmRatingFilter
+import com.example.skillcinema.data.constants.filmfilters.FilmTypeFilter
+import com.example.skillcinema.data.constants.filmfilters.FilmYearFilter
 import com.example.skillcinema.databinding.FragmentSearchPageBinding
 import com.example.skillcinema.presentation.DataViewModel
 import com.example.skillcinema.presentation.MainViewModel
+import com.example.skillcinema.presentation.SharedPreferencesKeys.FILTER_FILM_COUNTRY
+import com.example.skillcinema.presentation.SharedPreferencesKeys.FILTER_FILM_GENRE
+import com.example.skillcinema.presentation.SharedPreferencesKeys.FILTER_FILM_ORDER
+import com.example.skillcinema.presentation.SharedPreferencesKeys.FILTER_FILM_RATING_FROM
+import com.example.skillcinema.presentation.SharedPreferencesKeys.FILTER_FILM_RATING_TO
+import com.example.skillcinema.presentation.SharedPreferencesKeys.FILTER_FILM_TYPE
+import com.example.skillcinema.presentation.SharedPreferencesKeys.FILTER_YEAR_FROM
+import com.example.skillcinema.presentation.SharedPreferencesKeys.FILTER_YEAR_TO
+import com.example.skillcinema.presentation.SharedPreferencesKeys.SHARED
 import com.example.skillcinema.presentation.adapters.AdapterForSearchResult
 import com.example.skillcinema.presentation.adapters.MovieDataLoadStateAdapter
+import com.example.skillcinema.presentation.fragments.BottomSheetKeys.SHEET_ERROR
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -49,7 +65,7 @@ class SearchPageFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        sharedPreferences = context.getSharedPreferences("shared", Context.MODE_PRIVATE)
+        sharedPreferences = context.getSharedPreferences(SHARED, Context.MODE_PRIVATE)
         editor = sharedPreferences.edit()
     }
 
@@ -59,10 +75,10 @@ class SearchPageFragment : Fragment() {
     private var searchGenreFilter = ""
     private var searchTypeFilter = ""
     private var searchOrderFilter = ""
-    private var searchRatingFromFilter = 0.0f
-    private var searchRatingToFilter = 10.0f
-    private var searchYearFromFilter = 1998
-    private var searchYearToFilter = 2024
+    private var searchRatingFromFilter = FilmRatingFilter.RATING_FROM.filter
+    private var searchRatingToFilter = FilmRatingFilter.RATING_TO.filter
+    private var searchYearFromFilter = FilmYearFilter.YEAR_FROM.filter
+    private var searchYearToFilter = FilmYearFilter.YEAR_TO.filter
 
     private var searchJob: Job? = null
 
@@ -190,7 +206,7 @@ class SearchPageFragment : Fragment() {
 
                 })
             } else {
-                BottomSheetErrorFragment().show(parentFragmentManager, "sheetError")
+                BottomSheetErrorFragment().show(parentFragmentManager, SHEET_ERROR)
             }
         }
 
@@ -224,19 +240,24 @@ class SearchPageFragment : Fragment() {
     }
 
     private fun checkForLastFilters() {
-        val filmType = sharedPreferences.getString("filterFilmType", "ALL")
-        val filmOrder = sharedPreferences.getString("filterFilmOrder", "YEAR")
-        val filmCountry = sharedPreferences.getString("filterFilmCountry", "Россия")
-        val filmGenre = sharedPreferences.getString("filterFilmGenre", "Боевик")
-        val filmRatingFrom = sharedPreferences.getFloat("filterFilmRatingFrom", 0.0f)
-        val filmRatingTo = sharedPreferences.getFloat("filterFilmRatingTo", 10.0f)
-        val filmYearFrom = sharedPreferences.getInt("filterYearFrom", 1998)
-        val filmYearTo = sharedPreferences.getInt("filterYearTo", 2024)
+        val filmType = sharedPreferences.getString(FILTER_FILM_TYPE, FilmTypeFilter.ALL.filter)
+        val filmOrder = sharedPreferences.getString(FILTER_FILM_ORDER, FilmOrderFilter.YEAR.filter)
+        val filmCountry =
+            sharedPreferences.getString(FILTER_FILM_COUNTRY, FilmCountryFilters.RUSSIA.filter)
+        val filmGenre =
+            sharedPreferences.getString(FILTER_FILM_GENRE, FilmGenreFilter.ACTION.filter)
+        val filmRatingFrom =
+            sharedPreferences.getFloat(FILTER_FILM_RATING_FROM, FilmRatingFilter.RATING_FROM.filter)
+        val filmRatingTo =
+            sharedPreferences.getFloat(FILTER_FILM_RATING_TO, FilmRatingFilter.RATING_TO.filter)
+        val filmYearFrom =
+            sharedPreferences.getInt(FILTER_YEAR_FROM, FilmYearFilter.YEAR_FROM.filter)
+        val filmYearTo = sharedPreferences.getInt(FILTER_YEAR_TO, FilmYearFilter.YEAR_TO.filter)
 
-        dataViewModel.setCountryFilter(filmCountry ?: "Россия")
-        dataViewModel.setGenreFilter(filmGenre ?: "Боевик")
-        dataViewModel.setOrderFilter(filmOrder ?: "YEAR")
-        dataViewModel.setTypeFilter(filmType ?: "ALL")
+        dataViewModel.setCountryFilter(filmCountry ?: FilmCountryFilters.RUSSIA.filter)
+        dataViewModel.setGenreFilter(filmGenre ?: FilmGenreFilter.ACTION.filter)
+        dataViewModel.setOrderFilter(filmOrder ?: FilmOrderFilter.YEAR.filter)
+        dataViewModel.setTypeFilter(filmType ?: FilmTypeFilter.ALL.filter)
         dataViewModel.setRatingFromFilter(filmRatingFrom)
         dataViewModel.setRatingToFilter(filmRatingTo)
         dataViewModel.setYearFromFilter(filmYearFrom)

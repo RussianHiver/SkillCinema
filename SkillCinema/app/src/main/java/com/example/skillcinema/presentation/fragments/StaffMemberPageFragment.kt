@@ -16,13 +16,15 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
-import com.example.skillcinema.data.App
+import com.example.skillcinema.App
+import com.example.skillcinema.R
 import com.example.skillcinema.data.MovieDataDTO
 import com.example.skillcinema.data.StaffMemberDTO
 import com.example.skillcinema.databinding.FragmentActorPageBinding
 import com.example.skillcinema.presentation.DataViewModel
 import com.example.skillcinema.presentation.MainViewModel
 import com.example.skillcinema.presentation.adapters.AdapterForStaffBestFilms
+import com.example.skillcinema.presentation.fragments.BottomSheetKeys.SHEET_ERROR
 import kotlinx.coroutines.launch
 
 class StaffMemberPageFragment : Fragment() {
@@ -71,7 +73,8 @@ class StaffMemberPageFragment : Fragment() {
                         with(binding) {
                             Glide.with(actorPhoto.context).load(staffMember.posterUrl)
                                 .into(actorPhoto)
-                            name.text = staffMember.nameRu ?: staffMember.nameEn ?: "Без названия"
+                            name.text = staffMember.nameRu ?: staffMember.nameEn
+                                    ?: getString(R.string.unknown_name)
                             occupation.text = staffMember.profession
                             amountOfFilmsInFilmography.text =
                                 getFilmCountString(staffMember.films.size)
@@ -105,7 +108,7 @@ class StaffMemberPageFragment : Fragment() {
                     }
                 }
             } else {
-                BottomSheetErrorFragment().show(parentFragmentManager, "sheetError")
+                BottomSheetErrorFragment().show(parentFragmentManager, SHEET_ERROR)
             }
         }
 

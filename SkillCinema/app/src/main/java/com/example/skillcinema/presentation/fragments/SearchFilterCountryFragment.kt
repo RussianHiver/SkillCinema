@@ -15,11 +15,14 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
-import com.example.skillcinema.data.App
+import com.example.skillcinema.App
 import com.example.skillcinema.databinding.FragmentSearchFilterCountryBinding
 import com.example.skillcinema.presentation.DataViewModel
 import com.example.skillcinema.presentation.MainViewModel
+import com.example.skillcinema.presentation.SharedPreferencesKeys.FILTER_FILM_COUNTRY
+import com.example.skillcinema.presentation.SharedPreferencesKeys.SHARED
 import com.example.skillcinema.presentation.adapters.AdapterForFilters
+import com.example.skillcinema.presentation.fragments.BottomSheetKeys.SHEET_ERROR
 import kotlinx.coroutines.launch
 
 
@@ -41,7 +44,10 @@ class SearchFilterCountryFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        sharedPreferences = context.getSharedPreferences("shared", Context.MODE_PRIVATE)
+        sharedPreferences = context.getSharedPreferences(
+            SHARED,
+            Context.MODE_PRIVATE
+        )
         editor = sharedPreferences.edit()
     }
 
@@ -74,7 +80,10 @@ class SearchFilterCountryFragment : Fragment() {
                     }
                 }
             } else {
-                BottomSheetErrorFragment().show(parentFragmentManager, "sheetError")
+                BottomSheetErrorFragment().show(
+                    parentFragmentManager,
+                    SHEET_ERROR
+                )
             }
         }
     }
@@ -82,7 +91,7 @@ class SearchFilterCountryFragment : Fragment() {
     private fun sendChosenCountry(chosenFilter: String) {
         dataViewModel.setCountryFilter(chosenFilter)
         editor.apply {
-            putString("filterFilmCountry", chosenFilter)
+            putString(FILTER_FILM_COUNTRY, chosenFilter)
         }.apply()
         findNavController().popBackStack()
     }

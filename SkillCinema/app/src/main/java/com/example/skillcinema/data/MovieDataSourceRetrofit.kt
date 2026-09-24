@@ -7,7 +7,6 @@ import retrofit2.http.Headers
 import retrofit2.http.Path
 import retrofit2.http.Query
 import java.util.Calendar
-import javax.inject.Inject
 
 class MovieDataSourceRetrofit {
 
@@ -22,7 +21,7 @@ class MovieDataSourceRetrofit {
         @Headers(API_KEY)
         @GET("/api/v2.2/films/premieres")
         suspend fun getMoviePremieres(
-            @Query("year") year: Int = 2025,
+            @Query("year") year: Int = currentYear,
             @Query("month") month: String = MONTHS[currentMonth]
         ): PremieresDTO
 
@@ -101,6 +100,7 @@ class MovieDataSourceRetrofit {
             "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"
         )
         private val calendar = Calendar.getInstance()
-        private val currentMonth = calendar.get(Calendar.MONTH) + 1
+        private val currentMonth = calendar.get(Calendar.MONTH)
+        private val currentYear = calendar.get(Calendar.YEAR)
     }
 }

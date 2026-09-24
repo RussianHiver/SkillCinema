@@ -4,9 +4,7 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.example.skillcinema.presentation.fragments.FILTER_PAGES_AMOUNT
-import com.example.skillcinema.presentation.fragments.FILTER_PAGE_NUMBER
-import com.example.skillcinema.presentation.fragments.FILTER_YEAR_LIST
+import com.example.skillcinema.presentation.fragments.FilterArgsKeys
 import com.example.skillcinema.presentation.fragments.FilterYearFromPageFragment
 import com.example.skillcinema.presentation.fragments.FilterYearToPageFragment
 
@@ -45,9 +43,9 @@ class FilterYearAdapter(
 
         val fragment = if (isYearFrom) FilterYearFromPageFragment() else FilterYearToPageFragment()
         fragment.arguments = Bundle().apply {
-            putInt(FILTER_PAGE_NUMBER, position + 1)
-            putInt(FILTER_PAGES_AMOUNT, pages)
-            putIntegerArrayList(FILTER_YEAR_LIST, ArrayList(yearsChipCount))
+            putInt(FilterArgsKeys.FILTER_PAGE_NUMBER.key, position + 1)
+            putInt(FilterArgsKeys.FILTER_PAGES_AMOUNT.key, pages)
+            putIntegerArrayList(FilterArgsKeys.FILTER_YEAR_LIST.key, ArrayList(yearsChipCount))
         }
         return fragment
     }

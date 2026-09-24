@@ -9,7 +9,7 @@ import com.bumptech.glide.Glide
 import com.example.skillcinema.data.GalleryDTO
 import com.example.skillcinema.databinding.ImageForGalleryBinding
 
-class AdapterForFullGallery : PagingDataAdapter<GalleryDTO.Item, FullGalleryViewHolder> (
+class AdapterForFullGallery : PagingDataAdapter<GalleryDTO.Item, FullGalleryViewHolder>(
     DiffUtilCallbackGallery()
 ) {
     override fun onBindViewHolder(holder: FullGalleryViewHolder, position: Int) {
@@ -22,7 +22,8 @@ class AdapterForFullGallery : PagingDataAdapter<GalleryDTO.Item, FullGalleryView
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FullGalleryViewHolder {
-        val binding = ImageForGalleryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding =
+            ImageForGalleryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return FullGalleryViewHolder(binding)
     }
 }

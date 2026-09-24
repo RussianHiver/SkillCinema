@@ -95,7 +95,7 @@
     </fragment>
     <fragment
         android:id="@+id/filmPage"
-        android:name="com.example.skillcinema.presentation.fragments.FilmPage"
+        android:name="com.example.skillcinema.presentation.fragments.FilmPageFragment"
         android:label="fragment_film_page"
         tools:layout="@layout/fragment_film_page" >
         <argument

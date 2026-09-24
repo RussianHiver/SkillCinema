@@ -8,7 +8,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
-import com.example.skillcinema.data.App
+import com.example.skillcinema.App
+import com.example.skillcinema.data.constants.filmfilters.FilmYearFilter
 import com.example.skillcinema.databinding.FragmentSearchFilterYearBinding
 import com.example.skillcinema.presentation.DataViewModel
 import com.example.skillcinema.presentation.adapters.FilterYearAdapter
@@ -30,8 +31,7 @@ class SearchFilterYearFragment : Fragment() {
     private lateinit var adapterYearFrom: FilterYearAdapter
     private lateinit var adapterYearTo: FilterYearAdapter
 
-    private val currentYear = Year.now().value
-    private val years = (1998..currentYear)
+    private val years = (FilmYearFilter.YEAR_FROM.filter..FilmYearFilter.YEAR_TO.filter)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -60,7 +60,7 @@ class SearchFilterYearFragment : Fragment() {
         viewPagerYearFrom = binding.pagerYearFrom
         viewPagerYearTo = binding.pagerYearTo
         adapterYearFrom = FilterYearAdapter(requireActivity(), years, true)
-        adapterYearTo = FilterYearAdapter(requireActivity(), years,false)
+        adapterYearTo = FilterYearAdapter(requireActivity(), years, false)
 
         viewPagerYearFrom.adapter = adapterYearFrom
         viewPagerYearTo.adapter = adapterYearTo

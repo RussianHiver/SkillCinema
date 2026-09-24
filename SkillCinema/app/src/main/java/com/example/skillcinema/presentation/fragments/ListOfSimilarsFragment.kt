@@ -13,12 +13,12 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
-import com.example.skillcinema.data.App
+import com.example.skillcinema.App
 import com.example.skillcinema.data.SimilarsDTO
 import com.example.skillcinema.databinding.FragmentListOfSimilarsBinding
-import com.example.skillcinema.di.DaggerAppComponent
 import com.example.skillcinema.presentation.MainViewModel
 import com.example.skillcinema.presentation.adapters.AdapterForSimilars
+import com.example.skillcinema.presentation.fragments.BottomSheetKeys.SHEET_ERROR
 import kotlinx.coroutines.launch
 
 
@@ -27,7 +27,7 @@ class ListOfSimilarsFragment : Fragment() {
     private var _binding: FragmentListOfSimilarsBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: MainViewModel by viewModels{
+    private val viewModel: MainViewModel by viewModels {
         (activity?.application as App).component.mainViewModelFactory()
     }
 
@@ -58,7 +58,10 @@ class ListOfSimilarsFragment : Fragment() {
                     }
                 }
             } else {
-                BottomSheetErrorFragment().show(parentFragmentManager, "sheetError")
+                BottomSheetErrorFragment().show(
+                    parentFragmentManager,
+                    SHEET_ERROR
+                )
             }
         }
     }

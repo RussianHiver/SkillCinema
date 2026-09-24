@@ -10,9 +10,10 @@ import com.example.skillcinema.data.FilteredDTO
 import com.example.skillcinema.data.SearchResultDTO
 import com.example.skillcinema.databinding.MoviePreviewViewBinding
 
-class AdapterForSearchResult(val onClick: (Int?) -> Unit): PagingDataAdapter<FilteredDTO.Item, SearchResultViewHolder>(
-    DiffUtillCallbackSearchResult()
-) {
+class AdapterForSearchResult(val onClick: (Int?) -> Unit) :
+    PagingDataAdapter<FilteredDTO.Item, SearchResultViewHolder>(
+        DiffUtillCallbackSearchResult()
+    ) {
     override fun onBindViewHolder(holder: SearchResultViewHolder, position: Int) {
         val item = getItem(position)
 
@@ -32,12 +33,13 @@ class AdapterForSearchResult(val onClick: (Int?) -> Unit): PagingDataAdapter<Fil
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchResultViewHolder {
-        val binding = MoviePreviewViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding =
+            MoviePreviewViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return SearchResultViewHolder(binding)
     }
 }
 
-class DiffUtillCallbackSearchResult: DiffUtil.ItemCallback<FilteredDTO.Item>() {
+class DiffUtillCallbackSearchResult : DiffUtil.ItemCallback<FilteredDTO.Item>() {
     override fun areItemsTheSame(oldItem: FilteredDTO.Item, newItem: FilteredDTO.Item): Boolean {
         return oldItem.kinopoiskId == newItem.kinopoiskId
     }
@@ -50,4 +52,5 @@ class DiffUtillCallbackSearchResult: DiffUtil.ItemCallback<FilteredDTO.Item>() {
     }
 
 }
-class SearchResultViewHolder(val binding: MoviePreviewViewBinding): ViewHolder(binding.root)
+
+class SearchResultViewHolder(val binding: MoviePreviewViewBinding) : ViewHolder(binding.root)

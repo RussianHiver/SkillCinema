@@ -10,7 +10,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
-import com.example.skillcinema.data.App
+import com.example.skillcinema.App
 import com.example.skillcinema.databinding.FragmentListOfWatchedFilmsBinding
 import com.example.skillcinema.presentation.DataViewModel
 import com.example.skillcinema.presentation.adapters.AdapterForListOfAllWatchedFilms
@@ -26,7 +26,7 @@ class ListOfWatchedFilmsFragment : Fragment() {
         (activity?.application as App).component.dataViewModelFactory()
     }
 
-    private val adapter by lazy { AdapterForListOfAllWatchedFilms { id -> openMoviePage(id) } }
+    private val adapter by lazy { AdapterForListOfAllWatchedFilms(context) { id -> openMoviePage(id) } }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

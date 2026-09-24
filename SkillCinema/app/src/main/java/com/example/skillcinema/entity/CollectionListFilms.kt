@@ -12,4 +12,4 @@ data class CollectionListFilms(
     val collectionId: Int,
     @ColumnInfo(name = "film_id")
     val filmId: Int,
-    )
+)

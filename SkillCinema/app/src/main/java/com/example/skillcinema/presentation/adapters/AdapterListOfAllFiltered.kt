@@ -10,9 +10,10 @@ import com.bumptech.glide.Glide
 import com.example.skillcinema.data.FilteredDTO
 import com.example.skillcinema.databinding.MoviePreviewViewBinding
 
-class AdapterListOfAllFiltered(val onClickMoviePage:(Int?) -> Unit): PagingDataAdapter<FilteredDTO.Item, FilteredViewHolder> (
-    DiffUtilCallbackFiltered()
-) {
+class AdapterListOfAllFiltered(val onClickMoviePage: (Int?) -> Unit) :
+    PagingDataAdapter<FilteredDTO.Item, FilteredViewHolder>(
+        DiffUtilCallbackFiltered()
+    ) {
     override fun onBindViewHolder(holder: FilteredViewHolder, position: Int) {
         val item = getItem(position)
 
@@ -40,18 +41,19 @@ class AdapterListOfAllFiltered(val onClickMoviePage:(Int?) -> Unit): PagingDataA
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FilteredViewHolder {
-        val binding = MoviePreviewViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding =
+            MoviePreviewViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return FilteredViewHolder(binding)
     }
 }
 
 
-class FilteredViewHolder(val binding: MoviePreviewViewBinding): ViewHolder(binding.root)
-class DiffUtilCallbackFiltered: DiffUtil.ItemCallback<FilteredDTO.Item>() {
-    override fun areItemsTheSame(oldItem: FilteredDTO.Item, newItem: FilteredDTO.Item): Boolean
-    = oldItem.kinopoiskId == newItem.kinopoiskId
+class FilteredViewHolder(val binding: MoviePreviewViewBinding) : ViewHolder(binding.root)
+class DiffUtilCallbackFiltered : DiffUtil.ItemCallback<FilteredDTO.Item>() {
+    override fun areItemsTheSame(oldItem: FilteredDTO.Item, newItem: FilteredDTO.Item): Boolean =
+        oldItem.kinopoiskId == newItem.kinopoiskId
 
-    override fun areContentsTheSame(oldItem: FilteredDTO.Item, newItem: FilteredDTO.Item): Boolean
-    = oldItem == newItem
+    override fun areContentsTheSame(oldItem: FilteredDTO.Item, newItem: FilteredDTO.Item): Boolean =
+        oldItem == newItem
 
 }

@@ -5,7 +5,11 @@ import androidx.paging.PagingState
 import com.example.skillcinema.data.FilteredDTO
 import com.example.skillcinema.domain.FilteredMovieUseCase
 
-class PagingSourceFiltered (val country: String, val genre: String, val filteredMovieUseCase: FilteredMovieUseCase) :
+class PagingSourceFiltered(
+    val country: String,
+    val genre: String,
+    val filteredMovieUseCase: FilteredMovieUseCase
+) :
     PagingSource<Int, FilteredDTO.Item>() {
 
     override fun getRefreshKey(state: PagingState<Int, FilteredDTO.Item>): Int = FIRST_PAGE
@@ -28,6 +32,7 @@ class PagingSourceFiltered (val country: String, val genre: String, val filtered
             onFailure = { LoadResult.Error(it) }
         )
     }
+
     companion object {
         private const val FIRST_PAGE = 1
     }
