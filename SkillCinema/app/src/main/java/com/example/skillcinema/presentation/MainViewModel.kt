@@ -35,6 +35,7 @@ import com.example.skillcinema.presentation.pagingsources.PagingSourceFiltered
 import com.example.skillcinema.presentation.pagingsources.PagingSourceGallery
 import com.example.skillcinema.presentation.pagingsources.PagingSourcePopular
 import com.example.skillcinema.presentation.pagingsources.PagingSourceSearchResult
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -90,6 +91,25 @@ class MainViewModel(
 
     suspend fun giveOneMovie(id: Int): MovieDataDTO {
         return oneMovieUseCase.getOneMovie(id)
+    }
+
+    fun loadMovie(movieId: Int) {
+        _filmUiState.value = FilmUiState.Loading(movieId)
+
+        viewModelScope.launch {
+            try {
+                val movie = oneMovieUseCase.getOneMovie(movieId)
+                _filmUiState.value = FilmUiState.Success(movie)
+            } catch (error: CancellationException) {
+                throw error
+            } catch (exception: Exception) {
+                _filmUiState.value =
+                    FilmUiState.Error(
+                        movieId = movieId,
+                        message = exception.message ?: "Не удалось загрузить фильм"
+                    )
+            }
+        }
     }
 
     suspend fun giveMovieStaffList(id: Int): List<StaffListDTO> {
