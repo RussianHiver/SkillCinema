@@ -38,6 +38,7 @@ import com.example.skillcinema.presentation.pagingsources.PagingSourceSearchResu
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -63,6 +64,9 @@ class MainViewModel(
     private var filteredCountry = MutableStateFlow("")
 
     val filmId: MutableStateFlow<Int> = MutableStateFlow(0)
+
+    private val _filmUiState = MutableStateFlow<FilmUiState>(FilmUiState.Initial)
+    val filmUiState = _filmUiState.asStateFlow()
 
     suspend fun givePremierList(): List<PremieresDTO.Item> {
         return premierMovieUseCase.getMoviesPremiers().items
