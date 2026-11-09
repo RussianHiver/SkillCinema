@@ -10,6 +10,6 @@ sealed interface FilmUiState {
 
     data class Success(val movie: MovieDataDTO) : FilmUiState
 
-    
+
 
 }
