@@ -64,6 +64,8 @@ class FilmPageFragment : Fragment() {
 
     private var isCollapsed = true
 
+    val args: FilmPageFragmentArgs by navArgs()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
@@ -80,7 +82,6 @@ class FilmPageFragment : Fragment() {
 
         context?.let { context ->
             if (checkForInternet(context)) {
-                val args: FilmPageFragmentArgs by navArgs()
 
                 viewLifecycleOwner.lifecycleScope.launch {
                     viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -344,6 +345,11 @@ class FilmPageFragment : Fragment() {
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     private fun convertFilmLength(length: Int): Map<String, Int> {
         val hours = length / 60
         val minutes = length % 60
@@ -436,10 +442,4 @@ class FilmPageFragment : Fragment() {
             else -> false
         }
     }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
-    }
-
 }

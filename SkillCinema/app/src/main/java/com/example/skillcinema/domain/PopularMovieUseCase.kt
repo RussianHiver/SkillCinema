@@ -2,7 +2,6 @@ package com.example.skillcinema.domain
 
 import com.example.skillcinema.data.MainRepository
 import com.example.skillcinema.data.PopularDTO
-import javax.inject.Inject
 
 class PopularMovieUseCase(private val mainRepository: MainRepository) {
 
